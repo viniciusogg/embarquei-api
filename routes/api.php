@@ -20,3 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resource('usuarios', 'UserController');
 
+// Route::middleware('auth:api')->resource('usuarios', 'UserController');

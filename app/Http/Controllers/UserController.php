@@ -3,9 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\UserService;
+use Illuminate\Http\Response;
+use Auth;
 
 class UserController extends Controller
 {
+    
+    private $userService;
+    
+    public function __construct(UserService $userService) 
+    {
+        $this->userService = $userService;
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +24,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(['name' => Auth::user()->name ]);
     }
 
     /**
@@ -24,8 +35,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = $request::all();
-        $user['password'] = bcrypt($user['password']);
+        $user = $request->all();
+        // $user['password'] = bcrypt($user['password']);
+        try{
+            $this->userService->create($user);
+            
+            return response()->json([$user], 200);
+        } 
+        catch (Exception $ex) {
+            return response()->json(['response' => $ex], 400);
+        }
+
     }
 
     /**

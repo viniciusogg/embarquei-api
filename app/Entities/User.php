@@ -2,9 +2,11 @@
 
 namespace App\Entities;
 
+use Doctrine\ORM\Mapping as ORM;
+
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
-// use Illuminate\Foundation\Auth\User as Authenticatable;
+
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Foundation\Auth\Access\Authorizable;
@@ -12,55 +14,47 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class User implements
-	AuthenticatableContract,
-	AuthorizableContract,
-	CanResetPasswordContract // extends Authenticatable
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="USER")
+ */
+class User implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
-	use HasApiTokens, Notifiable, Authenticatable, Authorizable, CanResetPassword;
+    use HasApiTokens, Notifiable, Authenticatable, Authorizable, CanResetPassword;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
+     * @ORM\Id
+     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
-    //protected $fillable = [
-    //    'name', 'email', 'password',
-    //];
+    private $id;
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
+     * @ORM\Column(type="string", nullable=false)
      */
-    //protected $hidden = [
-    //    'password', 'remember_token',
-    //];
-	
-	/**
-	 *
-	 * @ORM\Id
-	 * @ORM\Column(type="uuid", unique=true)
-	 * @ORM\GeneratedValue(strategy="CUSTOM")
-	 * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
-	 */
-	private $id;
-	
-	/**
-	 *
-	 * @ORM\Column(type="string", nullable=false)
-	 */
-	private $nome;
-	
-	private $matricula;
-	
-	private $email;
-	
-	private $senha;
+    private $name;
 
+    /**
+     * @ORM\Column(type="string", nullable=false, unique=true)
+     */
+    private $matricula;
+
+    /**
+     * @ORM\Column(type="string", nullable=false, unique=true)
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     */
+    private $password;
+
+    // ADICIONAR TIMESTAMP
+        
     /**
      * id
-     * @return Long
+     * @return String
      */
     public function getId()
     {
@@ -68,30 +62,21 @@ class User implements
     }
 
     /**
-     * id
-     * @param Long $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * nome
+     * name
      * @return String
      */
-    public function getNome()
+    public function getName()
     {
-        return $this->nome;
+        return $this->name;
     }
 
     /**
-     * nome
-     * @param String $nome
+     * name
+     * @param String $name
      */
-    public function setNome($nome)
+    public function setName($name)
     {
-        $this->nome = $nome;
+        $this->name = $name;
     }
 
     /**
@@ -131,21 +116,21 @@ class User implements
     }
 
     /**
-     * senha
+     * password
      * @return String
      */
-    public function getSenha()
+    public function getPassword()
     {
-        return $this->senha;
+        return $this->password;
     }
 
     /**
      * senha
-     * @param String $senha
+     * @param String $password
      */
-    public function setSenha($senha)
+    public function setPassword($password)
     {
-        $this->senha = $senha;
+        $this->password = $password;
     }
 
 }
