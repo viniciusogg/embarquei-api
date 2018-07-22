@@ -16,11 +16,19 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="USER")
+ * @ORM\Table(name="User")
  */
 class User implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
     use HasApiTokens, Notifiable, Authenticatable, Authorizable, CanResetPassword;
+
+    public function __construct($name, $matricula, $email, $password)
+    {
+        $this->setName($name);
+        $this->setMatricula($matricula);
+        $this->setEmail($email);
+        $this->setPassword($password);
+    }
 
     /**
      * @ORM\Id
@@ -28,27 +36,27 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", nullable=false, unique=true)
      */
-    private $matricula;
+    protected $matricula;
 
     /**
      * @ORM\Column(type="string", nullable=false, unique=true)
      */
-    private $email;
+    protected $email;
 
     /**
      * @ORM\Column(type="string", nullable=false)
      */
-    private $password;
+    protected $password;
 
     // ADICIONAR TIMESTAMP
         
@@ -60,7 +68,16 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
     {
         return $this->id;
     }
-
+    
+    /**
+     * id
+     * @param String $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+    
     /**
      * name
      * @return String
@@ -133,4 +150,9 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
         $this->password = $password;
     }
 
+    public function toArray()
+    {
+        return array('id' => $this->id, 'name' => $this->name, 
+            'matricula' => $this->matricula, 'email' => $this->email);
+    }
 }

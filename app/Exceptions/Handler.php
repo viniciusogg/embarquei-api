@@ -4,6 +4,9 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\ORM\EntityNotFoundException;
+use Doctrine\ORM\ORMInvalidArgumentException;
 
 class Handler extends ExceptionHandler
 {
@@ -46,6 +49,22 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof ConversionException)
+        {
+            return response()->json(['devError' => $exception->getMessage(),
+                    'userError' => 'Erro ao tentar converter propriedade'], 400);
+        }
+        else if ($exception instanceof EntityNotFoundException)
+        {
+            return response()->json(['devError' => $exception->getMessage(),
+                    'userError' => 'Recurso não encontrado'], 400);
+        }
+        else if ($exception instanceof ORMInvalidArgumentException)
+        {
+            return response()->json(['devError' => $exception->getMessage(),
+                    'userError' => 'Argumento inválido'], 400);
+        }
+        
         return parent::render($request, $exception);
     }
 }

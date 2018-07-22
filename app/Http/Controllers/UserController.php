@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 use App\Services\UserService;
 use Illuminate\Http\Response;
 use Auth;
+use App\Entities\User;
 
 class UserController extends Controller
 {
-    
     private $userService;
     
     public function __construct(UserService $userService) 
@@ -24,7 +24,14 @@ class UserController extends Controller
      */
     public function index()
     {
-        return response()->json(['name' => Auth::user()->name ]);
+        $users = $this->userService->findAll();
+
+        if (empty($users))
+        {
+            return response()->json('', 204);
+        }
+
+        return response()->json($users, 200);
     }
 
     /**
@@ -36,16 +43,10 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $user = $request->all();
-        // $user['password'] = bcrypt($user['password']);
-        try{
-            $this->userService->create($user);
-            
-            return response()->json([$user], 200);
-        } 
-        catch (Exception $ex) {
-            return response()->json(['response' => $ex], 400);
-        }
 
+        $this->userService->create($user);
+
+        return response()->json(['response' => 'Success'], 201);
     }
 
     /**
@@ -56,7 +57,14 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = $this->userService->findById($id);
+
+        if ($user)
+        {
+            return response()->json($user->toArray(), 200);
+        }
+
+        return response()->json(['response' => 'Usuário não encontrado'], 400);                
     }
 
     /**
@@ -67,8 +75,12 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
+    {        
+        $user = $request->all();
+        
+        $userUpdated = $this->userService->update($user, $id);
+
+        return response()->json([$userUpdated->toArray()], 200);
     }
 
     /**
@@ -79,6 +91,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->userService->delete($id);
+        
+        return response()->json('', 204);
     }
 }
