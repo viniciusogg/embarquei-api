@@ -2,33 +2,45 @@
 
 namespace App\Entities;
 
+use App\Entities\Traits\UsesPasswordGrant;
 use Doctrine\ORM\Mapping as ORM;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Laravel\Passport\HasApiTokens;
+use LaravelDoctrine\ORM\Auth\Authenticatable;
+use LaravelDoctrine\Extensions\Timestamps\Timestamps;
+use LaravelDoctrine\ORM\Notifications\Notifiable;
 
+/*
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
-
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Foundation\Auth\Access\Authorizable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+*/
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="User")
  */
-class User implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
+class User implements AuthenticatableContract, CanResetPasswordContract
 {
-    use HasApiTokens, Notifiable, Authenticatable, Authorizable, CanResetPassword;
+    use Authenticatable, CanResetPassword, Timestamps, Notifiable, HasApiTokens, UsesPasswordGrant;
 
-    public function __construct($name, $matricula, $email, $password)
+    /*public function __construct($name, $matricula, $email, $password)
     {
         $this->setName($name);
         $this->setMatricula($matricula);
         $this->setEmail($email);
         $this->setPassword($password);
+    }*/
+
+    public function __construct()
+    {
+        //
     }
+
 
     /**
      * @ORM\Id
@@ -154,5 +166,10 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
     {
         return array('id' => $this->id, 'name' => $this->name, 
             'matricula' => $this->matricula, 'email' => $this->email);
+    }
+    
+    public function getKey() 
+    {
+        return $this->getId();
     }
 }

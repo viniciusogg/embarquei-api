@@ -18,17 +18,30 @@ class UserService
 
     public function create($data)
     {
-        $user = new User(
-                $data['name'], $data['matricula'], 
-                $data['email'], Hash::make($data['password'])
-            );
+        $user = new User();
 
+        /*
+         * 
+         $data['name'], $data['matricula'], 
+         $data['email'], Hash::make($data['password'])   
+         */
+        
+        $user->setName($data['name']);
+        $user->setMatricula($data['matricula']);
+        $user->setEmail($data['email']);
+        $user->setPassword(Hash::make($data['password']));
+        
         $this->userRepository->create($user);
     }
 
     public function findById($id)
     {        
         return $this->userRepository->getById($id);        
+    }
+    
+    public function findByMatricula($matricula)
+    {
+        return $this->userRepository->getByMatricula($matricula);
     }
 
     public function findAll()

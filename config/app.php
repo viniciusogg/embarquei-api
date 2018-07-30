@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Embarquei'),
 
     /*
     |--------------------------------------------------------------------------
@@ -64,8 +64,8 @@ return [
     | ahead and set this to a sensible default for you out of the box.
     |
     */
-
-    'timezone' => 'UTC',
+    // default = UTC
+    'timezone' => 'America/Fortaleza',
 
     /*
     |--------------------------------------------------------------------------
@@ -77,8 +77,9 @@ return [
     | to any of the locales which will be supported by the application.
     |
     */
-
-    'locale' => 'en',
+    
+    //default en
+    'locale' => 'br',
 
     /*
     |--------------------------------------------------------------------------
@@ -91,7 +92,8 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    //default en
+    'fallback_locale' => 'br',
 
     /*
     |--------------------------------------------------------------------------
@@ -141,7 +143,8 @@ return [
         Illuminate\Pipeline\PipelineServiceProvider::class,
         Illuminate\Queue\QueueServiceProvider::class,
         Illuminate\Redis\RedisServiceProvider::class,
-        Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
+        //Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
+        \LaravelDoctrine\ORM\Auth\Passwords\PasswordResetServiceProvider::class,
         Illuminate\Session\SessionServiceProvider::class,
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
@@ -150,7 +153,8 @@ return [
         /*
          * Package Service Providers...
          */
-        
+        Laravel\Passport\PassportServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -160,6 +164,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         LaravelDoctrine\ORM\DoctrineServiceProvider::class,
+        LaravelDoctrine\Extensions\GedmoExtensionsServiceProvider::class,
+        LaravelDoctrine\Migrations\MigrationsServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class
     ],
 

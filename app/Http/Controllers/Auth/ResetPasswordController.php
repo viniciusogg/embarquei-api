@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Entities\User;
 use App\Http\Controllers\Controller;
+use EntityManager;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Support\Str;
 
 class ResetPasswordController extends Controller
 {
@@ -35,5 +38,16 @@ class ResetPasswordController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+    }
+    
+    protected function resetPassword($user, $password)
+    {
+        $user->setPassword(Hash::make($password));
+        $user->setRememberToken(Str::random(60));
+
+        EntityManager::persist($user);
+        EntityManager::flush();
+
+        $this->guard()->login($user);
     }
 }
