@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Services\UserService;
+use App\Services\AuthService;
 use App\Repositories\Abstraction\UserRepositoryInterface;
 use App\Repositories\Implementation\UserRepositoryConcrete;
 use App\Entities\User;
+use Laravel\Passport\Passport;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()  // REGISTRAR SERVICES AQUI
     {
+        Passport::ignoreMigrations();
         
         /**
          * REPOSITORIES
@@ -44,10 +47,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserService::class, function($app)
         {
             return new UserService(
-                $app->make('App\Repositories\Abstraction\UserRepositoryInterface')
+                    $app->make('App\Repositories\Abstraction\UserRepositoryInterface')
             );
         });
         
-        
+        $this->app->bind(AuthService::class, function($app)
+        {
+            return new AuthService($app);
+        });
     }
 }

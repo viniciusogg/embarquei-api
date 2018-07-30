@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use App\Entities\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use EntityManager;
 
 class RegisterController extends Controller
 {
@@ -50,7 +51,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255|uniqueApp\Entities\User',
             'matricula' => 'required|string|min:12|max:12',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -64,11 +65,23 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'matricula' => $data['matricula'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $user = new User();
+        
+        /**
+         * $data['name'],
+            $data['email'],
+            $data['matricula'],
+            Hash::make($data['password'])
+         */
+        
+        $user->setName($data['name']);
+        $user->setMatricula($data['matricula']);
+        $user->setEmail($data['email']);
+        $user->setPassword(Hash::make($data['password']));
+        
+        EntityManager::persist($user);
+        EntityManager::flush();
+        
+        return $user;
     }
 }
