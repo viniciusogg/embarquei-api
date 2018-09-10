@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Entities\User;
+use App\Entities\Usuario;
 use App\Http\Controllers\Controller;
 use EntityManager;
 use Illuminate\Foundation\Auth\ResetsPasswords;
@@ -24,7 +24,7 @@ class ResetPasswordController extends Controller
     use ResetsPasswords;
 
     /**
-     * Where to redirect users after resetting their password.
+     * Where to redirect Usuarios after resetting their password.
      *
      * @var string
      */
@@ -39,7 +39,7 @@ class ResetPasswordController extends Controller
     {
         $this->middleware('guest');
     }
-    
+
     protected function resetPassword($user, $password)
     {
         $user->setPassword(Hash::make($password));

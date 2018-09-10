@@ -81,7 +81,7 @@ class Handler extends ExceptionHandler
         else if ($exception instanceof InvalidCredentialsException)
         {
             return response()->json(['devError' => 'invalid_credentials', 
-                    'userError' => 'A matrícula ou a senha informada está incorreta.'], 401);
+                    'userError' => 'O número ou a senha informada está incorreta.'], 401);
         }
         
         // Tratamento da excessão lançada quando o cookie do 

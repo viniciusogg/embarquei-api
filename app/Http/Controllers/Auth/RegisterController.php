@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Entities\User;
+use App\Entities\Usuario;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -51,7 +51,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|uniqueApp\Entities\User',
+            'email' => 'required|string|email|max:255|uniqueApp\Entities\Usuario',
             'matricula' => 'required|string|min:12|max:12',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -61,27 +61,27 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return \App\User
+     * @return \App\Usuario
      */
     protected function create(array $data)
     {
-        $user = new User();
-        
+        $user = new Usuario();
+
         /**
          * $data['name'],
             $data['email'],
             $data['matricula'],
             Hash::make($data['password'])
          */
-        
+
         $user->setName($data['name']);
         $user->setMatricula($data['matricula']);
         $user->setEmail($data['email']);
         $user->setPassword(Hash::make($data['password']));
-        
+
         EntityManager::persist($user);
         EntityManager::flush();
-        
+
         return $user;
     }
 }

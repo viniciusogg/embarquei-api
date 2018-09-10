@@ -3,18 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\UserService;
-use Illuminate\Http\Response;
-use Auth;
-use App\Entities\User;
+use App\Services\VeiculoTransporteService;
 
-class UserController extends Controller
+class VeiculoTransporteController extends Controller
 {
-    private $userService;
+    private $veiculoTransporteService;
     
-    public function __construct(UserService $userService) 
+    public function __construct($veiculoTransporteService) 
     {
-        $this->userService = $userService;
+        $this->veiculoTransporteService = $veiculoTransporteService;
     }
     
     /**
@@ -24,14 +21,14 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = $this->userService->findAll();
+        $veiculosTransporte = $this->veiculoTransporteService->findAll();
 
-        if (empty($users))
+        if (empty($veiculosTransporte))
         {
             return response()->json('', 204);
         }
 
-        return response()->json($users, 200);
+        return response()->json($veiculosTransporte, 200);
     }
 
     /**
@@ -42,9 +39,9 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = $request->all();
+        $veiculoTransporte = $request->all();
 
-        $this->userService->create($user);
+        $this->veiculoTransporteService->create($veiculoTransporte);
 
         return response()->json(['response' => 'Success'], 201);
     }
@@ -57,14 +54,14 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = $this->userService->findById($id);
+        $veiculoTransporte = $this->veiculoTransporteService->findById($id);
 
-        if ($user)
+        if ($veiculoTransporte)
         {
-            return response()->json($user->toArray(), 200);
+            return response()->json($veiculoTransporte->toArray(), 200);
         }
 
-        return response()->json(['response' => 'Usuário não encontrado'], 400);                
+        return response()->json(['response' => 'Veiculo de transporte de ensino não encontrado'], 400);
     }
 
     /**
@@ -75,12 +72,12 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {        
-        $user = $request->all();
-        
-        $userUpdated = $this->userService->update($user, $id);
+    {
+        $veiculoTransporte = $request->all();
 
-        return response()->json([$userUpdated->toArray()], 200);
+        $veiculoTransporteAtualizado = $this->veiculoTransporteService->update($veiculoTransporte, $id);
+
+        return response()->json([$veiculoTransporteAtualizado->toArray()], 200);
     }
 
     /**
@@ -91,8 +88,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $this->userService->delete($id);
-        
+        $this->veiculoTransporteService->delete($id);
+
         return response()->json('', 204);
     }
 }
