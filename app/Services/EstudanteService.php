@@ -15,11 +15,11 @@ class EstudanteService
         $this->estudanteRepository = $estudanteRepository;
     }
 
-    public function create($data)
+    public function create($dados)
     {
-        $estudante = $this->criarInstanciaEstudante($data);
+        $estudante = $this->criarInstanciaEstudante($dados);
 
-        $this->estudanteRepository->create($estudante);
+        $this->estudanteRepository->create($estudante);        
     }
 
     public function findById($id)
@@ -40,19 +40,14 @@ class EstudanteService
         return $estudantes;
     }
 
-    public function update($data, $id)
+    public function update($dados, $id)
     {
-        // $senha = $data['senha'];
-
-        if (Hash::needsRehash($data['senha']))
+        if (Hash::needsRehash($dados['senha']))
         {
-            $data['senha'] = Hash::make($data['senha']);
+            $dados['senha'] = Hash::make($dados['senha']);
         }
-
-//        $usuario = new Usuario($data['nome'], $data['sobrenome'],
-//                $data['numeroCelular'], $senha);
         
-        $estudante = $this->criarInstanciaEstudante($data);
+        $estudante = $this->criarInstanciaEstudante($dados);
         $estudante->setId($id);
 
         return  $this->estudanteRepository->update($estudante);
@@ -63,22 +58,24 @@ class EstudanteService
         $this->estudanteRepository->delete($id);
     }
     
-    private function criarInstanciaEstudante($data)
+    private function criarInstanciaEstudante($dados)
     {
         $estudante = new Estudante();
 
-        $estudante->setNome($data['nome']);
-        $estudante->setSobrenome($data['sobrenome']);
-        $estudante->setNumeroCelular($data['numeroCelular']);
-        $estudante->setSenha(Hash::make($data['senha']));
-        $estudante->setFoto($data['foto']);
-        $estudante->setAtivo($data['ativo']);
+        $estudante->setNome($dados['nome']);
+        $estudante->setSobrenome($dados['sobrenome']);
+        $estudante->setNumeroCelular($dados['numeroCelular']);
+        $estudante->setSenha(Hash::make($dados['senha']));
+        $estudante->setFoto($dados['foto']);
+        $estudante->setAtivo($dados['ativo']);
         
-        $estudante->setComprovateMatricula($data['comprovateMatricula']);
-        $estudante->setCurso($data['curso']); // FAZER UMA ASSOCIAÇÃO COM CURSO JÁ EXISTENTE E ATUALIZAR
-        $estudante->setEndereco($data['endereco']);
-        $estudante->setHorariosSemanaisEstudante($data['horariosSemanaisEstudante']);
-        $estudante->setPontosParada($data['pontosParada']); // FAZER UMA ASSOCIAÇÃO COM CURSO JÁ EXISTENTE E ATUALIZAR
+        $estudante->setEndereco($dados['endereco']); // CASCATA
+        
+        $estudante->setComprovateMatricula($dados['comprovateMatricula']); // CASCATA
+        $estudante->setPontosParada($dados['pontosParada']); // ESTUDANTE É DONO DA ASSOCIAÇÃO
+        
+        $estudante->setCurso($dados['curso']); // FAZER UMA ASSOCIAÇÃO COM CURSO JÁ EXISTENTE E ATUALIZAR
+        $estudante->setHorariosSemanaisEstudante($dados['horariosSemanaisEstudante']); // CASCATA (HorarioSeman... é dono da associação)
         
         return $estudante;
     }

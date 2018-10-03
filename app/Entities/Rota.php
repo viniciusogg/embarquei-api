@@ -27,7 +27,7 @@ class Rota {
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\OneToMany(targetEntity="Trajeto", mappedBy="rota") 
+     * @ORM\OneToMany(targetEntity="Trajeto", mappedBy="rota", cascade={"all"}) 
      */
     protected $trajetos;
 

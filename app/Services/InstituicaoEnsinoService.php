@@ -16,11 +16,11 @@ class InstituicaoEnsinoService
         $this->instituicaoEnsinoRepository = $instituicaoEnsinoRepository;
     }
 
-    public function create($data)
+    public function create($dados)
     {
-        $instituicaoEnsino = $this->criarInstanciaInstituicaoEnsino($data);
+        $instituicaoEnsino = $this->criarInstanciaInstituicaoEnsino($dados);
 
-        $this->instituicaoEnsinoRepository->create($instituicaoEnsino);
+        $this->instituicaoEnsinoRepository->associarComCidade($instituicaoEnsino, $dados['endereco']['nomeCidade']);
     }
 
     public function findById($id)
@@ -67,10 +67,9 @@ class InstituicaoEnsinoService
     private function criarInstanciaInstituicaoEnsino($data)
     {
         $endereco = new Endereco();                
-        $endereco->setCidade($data['endereco']['cidade']);
         $endereco->setLogradouro($data['endereco']['logradouro']);
         $endereco->setBairro($data['endereco']['bairro']);        
-        
+               
         $instituicaoEnsino = new InstituicaoEnsino();
         $instituicaoEnsino->setNome($data['nome']);
 
@@ -81,6 +80,7 @@ class InstituicaoEnsinoService
             $novoCurso = new Curso();
             $novoCurso->setNome($curso['nome']);
             $novoCurso->setInstituicaoEnsino($instituicaoEnsino);
+            
             $cursos[] = $novoCurso;
         }
         

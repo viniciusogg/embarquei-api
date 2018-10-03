@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\VeiculoTransporteService;
+use App\Services\RotaService;
 
-class VeiculoTransporteController extends Controller
+class RotaController extends Controller
 {
-    private $veiculoTransporteService;
+    private $rotaService;
     
-    public function __construct(VeiculoTransporteService $veiculoTransporteService) 
+    public function __construct(RotaService $rotaService) 
     {
-        $this->veiculoTransporteService = $veiculoTransporteService;
+        $this->rotaService = $rotaService;
     }
     
     /**
@@ -21,14 +21,14 @@ class VeiculoTransporteController extends Controller
      */
     public function index()
     {
-        $veiculosTransporte = $this->veiculoTransporteService->findAll();
+        $rotas = $this->rotaService->findAll();
 
-        if (empty($veiculosTransporte))
+        if (empty($rotas))
         {
             return response()->json('', 204);
         }
 
-        return response()->json($veiculosTransporte, 200);
+        return response()->json($rotas, 200);
     }
 
     /**
@@ -39,9 +39,9 @@ class VeiculoTransporteController extends Controller
      */
     public function store(Request $request)
     {
-        $veiculoTransporte = $request->all();
+        $rota = $request->all();
 
-        $this->veiculoTransporteService-> create($veiculoTransporte);
+        $this->rotaService->create($rota);
 
         return response()->json(['response' => 'Success'], 201);
     }
@@ -54,14 +54,14 @@ class VeiculoTransporteController extends Controller
      */
     public function show($id)
     {
-        $veiculoTransporte = $this->veiculoTransporteService->findById($id);
+        $rota = $this->rotaService->findById($id);
 
-        if ($veiculoTransporte)
+        if ($rota)
         {
-            return response()->json($veiculoTransporte->toArray(), 200);
+            return response()->json($rota->toArray(), 200);
         }
 
-        return response()->json(['response' => 'Veiculo de transporte de ensino não encontrado'], 400);
+        return response()->json(['response' => 'Rota não encontrada'], 400);
     }
 
     /**
@@ -73,11 +73,11 @@ class VeiculoTransporteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $veiculoTransporte = $request->all();
+        $rota = $request->all();
 
-        $veiculoTransporteAtualizado = $this->veiculoTransporteService->update($veiculoTransporte, $id);
+        $rotaAtualizada = $this->rotaService->update($rota, $id);
 
-        return response()->json([$veiculoTransporteAtualizado->toArray()], 200);
+        return response()->json([$rotaAtualizada->toArray()], 200);
     }
 
     /**
@@ -88,7 +88,7 @@ class VeiculoTransporteController extends Controller
      */
     public function destroy($id)
     {
-        $this->veiculoTransporteService->delete($id);
+        $this->rotaService->delete($id);
 
         return response()->json('', 204);
     }

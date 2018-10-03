@@ -8,7 +8,12 @@ use App\Repositories\Abstraction\Repository;
 class EstudanteRepositoryConcrete extends Repository implements EstudanteRepositoryInterface
 {
 
-     protected function getTypeObject()
+    public function associarComEntidades() 
+    {
+        
+    }
+    
+    protected function getTypeObject()
     {
         return '\App\Entities\Estudante';
     }

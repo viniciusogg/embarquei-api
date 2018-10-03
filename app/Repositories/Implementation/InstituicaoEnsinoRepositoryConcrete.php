@@ -33,8 +33,8 @@ class InstituicaoEnsinoRepositoryConcrete extends Repository implements Institui
     public function  associarComMotorista($motorista, $nomesInstituicoes)
     {
         $instituicoesEnsino = [];
+        
         $motoristas = [];
-
         $motoristas[] = $motorista;
         
         $entityManager = $this->getEntityManager();
@@ -45,7 +45,7 @@ class InstituicaoEnsinoRepositoryConcrete extends Repository implements Institui
             foreach($nomesInstituicoes as $nomeInstituicao) 
             {
                 $instituicaoEnsino = $entityManager->getRepository($this->getTypeObject())->
-                    findOneBy(['nome' => $nomeInstituicao]);
+                        findOneBy(['nome' => $nomeInstituicao]);
                                 
                 $instituicaoEnsino->setMotoristas($motoristas);
                 
@@ -53,10 +53,10 @@ class InstituicaoEnsinoRepositoryConcrete extends Repository implements Institui
                 
                 $entityManager->merge($instituicaoEnsino);
             }
-            
             $motorista->setInstituicoesEnsino($instituicoesEnsino);
             
-            $this->getEntityManager()->getRepository('\App\Entities\Motorista')->getEntityManager()->persist($motorista);
+            $repositoryMotorista = $this->getEntityManager()->getRepository('\App\Entities\Motorista');
+            $repositoryMotorista->getEntityManager()->persist($motorista);
             
             $entityManager->flush();
             $entityManager->getConnection()->commit();
@@ -71,6 +71,41 @@ class InstituicaoEnsinoRepositoryConcrete extends Repository implements Institui
         {
             $entityManager->close();
         }
+    }
+    
+    public function associarComCidade($instituicaoEnsino, $nomeCidade)
+    {        
+        $entityManager = $this->getEntityManager();
+        $entityManager->getConnection()->beginTransaction();
+        
+        $cidadeRepository = $this->getEntityManager()->getRepository('\App\Entities\Cidade');
+        
+        try
+        {            
+            // TRATAR ERRO CASO NÃO EXISTA UMA CIDADE COM O NOME PASSADO    
+            $cidade = $cidadeRepository->findOneBy(['nome' => $nomeCidade]);
+            
+            $instituicaoEnsino->getEndereco()->setCidade($cidade);
+            
+            $cidade->getEnderecos()->add($instituicaoEnsino->getEndereco());
+            
+            // ATUALIZANDO CIDADE COM NOVO ENDEREÇO
+            $cidadeRepository->getEntityManager()->merge($cidade); 
+            
+            $entityManager->persist($instituicaoEnsino);
+            $entityManager->flush();
+            $entityManager->getConnection()->commit();
+        }
+        catch (Exception $ex)
+        {
+            $entityManager->getConnection()->rollback();
+            
+            throw $ex;
+        }
+        finally
+        {
+            $entityManager->close();
+        }        
     }
     
     protected function getTypeObject() 

@@ -62,10 +62,13 @@ abstract class Repository extends EntityRepository
         
         try
         {                                    
-            $query = $entityManager->
-                    createQuery('select t from ' . $this->getTypeObject() . ' t');   
+//            $query = $entityManager->
+//                    createQuery('select t from ' . $this->getTypeObject() . ' t');   
+//            
+//            return $query->getResult();
+            $result = $entityManager->getRepository($this->getTypeObject())->findAll();
             
-            return $query->getResult();
+            return $result;
         }
         catch (Exception $ex) 
         {

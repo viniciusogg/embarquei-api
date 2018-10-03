@@ -26,7 +26,20 @@ Route::apiResource('administradores', 'AdministradorController');//->middleware(
 
 Route::apiResource('instituicoesEnsino', 'InstituicaoEnsinoController');//->middleware('auth:api');
 
+//Route::apiResource('cidades', 'CidadeController');
+Route::group(['prefix' => 'cidades'], function()
+{
+    Route::post('/', 'CidadeController@store');
+    Route::get('/', 'CidadeController@index');
+    Route::get('/{id}', 'CidadeController@show');
+    Route::get('/nome/{nome}', 'CidadeController@showByNome');
+    Route::delete('/{id}', 'CidadeController@destroy');
+    Route::put('/{id}', 'CidadeController@update');
+});
+
 Route::apiResource('veiculosTransporte', 'VeiculoTransporteController');//->middleware('auth:api);
+
+Route::apiResource('rotas', 'RotaController');
 
 Route::post('estudantes', 'EstudanteController@store');
 Route::group(['prefix' => 'estudantes', 'middleware'=> 'auth:api'], function()

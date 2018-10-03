@@ -16,6 +16,7 @@ use App\Services\HorarioSemanalEstudanteService;
 use App\Services\MotoristaService;
 use App\Services\VeiculoTransporteService;
 use App\Services\AdministradorService;
+use App\Services\CidadeService;
 
 use App\Repositories\Abstraction\UsuarioRepositoryInterface;
 use App\Repositories\Abstraction\EstudanteRepositoryInterface;
@@ -28,6 +29,7 @@ use App\Repositories\Abstraction\HorarioSemanalEstudanteRepositoryInterface;
 use App\Repositories\Abstraction\MotoristaRepositoryInterface;
 use App\Repositories\Abstraction\VeiculoTransporteRepositoryInterface;
 use App\Repositories\Abstraction\AdministradorRepositoryInterface;
+use App\Repositories\Abstraction\CidadeRepositoryInterface;
 
 use App\Repositories\Implementation\UsuarioRepositoryConcrete;
 use App\Repositories\Implementation\EstudanteRepositoryConcrete;
@@ -38,8 +40,9 @@ use App\Repositories\Implementation\TrajetoRepositoryConcrete;
 use App\Repositories\Implementation\RotaRepositoryConcrete;
 use App\Repositories\Implementation\HorarioSemanalEstudanteRepositoryConcrete;
 use App\Repositories\Implementation\MotoristaRepositoryConcrete;
-use App\Repositories\Implementation\VeiculoTranponsporteRepositoryConcrete;
+use App\Repositories\Implementation\VeiculoTransporteRepositoryConcrete;
 use App\Repositories\Implementation\AdministradorRepositoryConcrete;
+use App\Repositories\Implementation\CidadeRepositoryConcrete;
 
 use App\Entities\InstituicaoEnsino;
 use App\Entities\Usuario;
@@ -52,6 +55,7 @@ use App\Entities\HorarioSemanalEstudante;
 use App\Entities\Motorista;
 use App\Entities\VeiculoTransporte;
 use App\Entities\Administrador;
+use App\Entities\Cidade;
 
 use Laravel\Passport\Passport;
 
@@ -156,6 +160,13 @@ class AppServiceProvider extends ServiceProvider
             );
         });        
         
+        $this->app->bind(CidadeRepositoryInterface::class, function($app) {
+            return new CidadeRepositoryConcrete(
+                $app['em'],
+                $app['em']->getClassMetaData(Cidade::class)
+            );
+        }); 
+        
         /**
          * SERVICES
          */
@@ -174,7 +185,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(EstudanteService::class, function($app)
         {
             return new EstudanteService(
-                    $app->make('App\Repositories\Abstraction\EstudanteRepositoryInterface')
+                    $app->make('App\Repositories\Abstraction\EstudanteRepositoryInterface'),
+                    new CursoService($app->make('App\Repositories\Abstraction\CursoRepositoryInterface')),
+                    new HorarioSemanalEstudanteService($app->
+                            make('App\Repositories\Abstraction\HorarioSemanalEstudanteRepositoryInterface'))
             );
         });
         
@@ -223,8 +237,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(MotoristaService::class, function($app)
         {
             return new MotoristaService(
-                    $app->make('App\Repositories\Abstraction\MotoristaRepositoryInterface'),
-                    new InstituicaoEnsinoService($app->make('App\Repositories\Abstraction\InstituicaoEnsinoRepositoryInterface'))
+                    $app->make('App\Repositories\Abstraction\MotoristaRepositoryInterface')
             );
         });
         
@@ -240,6 +253,13 @@ class AppServiceProvider extends ServiceProvider
             return new AdministradorService(
                     $app->make('App\Repositories\Abstraction\AdministradorRepositoryInterface'),
                     new InstituicaoEnsinoService($app->make('App\Repositories\Abstraction\InstituicaoEnsinoRepositoryInterface'))
+            );
+        });        
+
+        $this->app->bind(CidadeService::class, function($app)
+        {
+            return new CidadeService(
+                    $app->make('App\Repositories\Abstraction\CidadeRepositoryInterface')
             );
         });        
         

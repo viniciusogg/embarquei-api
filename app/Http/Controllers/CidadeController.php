@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\VeiculoTransporteService;
+use App\Services\CidadeService;
 
-class VeiculoTransporteController extends Controller
+class CidadeController extends Controller
 {
-    private $veiculoTransporteService;
+    private $cidadeService;
     
-    public function __construct(VeiculoTransporteService $veiculoTransporteService) 
+    public function __construct(CidadeService $cidadeService) 
     {
-        $this->veiculoTransporteService = $veiculoTransporteService;
+        $this->cidadeService = $cidadeService;
     }
     
     /**
@@ -21,14 +21,14 @@ class VeiculoTransporteController extends Controller
      */
     public function index()
     {
-        $veiculosTransporte = $this->veiculoTransporteService->findAll();
+        $cidades = $this->cidadeService->findAll();
 
-        if (empty($veiculosTransporte))
+        if (empty($cidades))
         {
             return response()->json('', 204);
         }
 
-        return response()->json($veiculosTransporte, 200);
+        return response()->json($cidades, 200);
     }
 
     /**
@@ -39,9 +39,9 @@ class VeiculoTransporteController extends Controller
      */
     public function store(Request $request)
     {
-        $veiculoTransporte = $request->all();
+        $cidade = $request->all();
 
-        $this->veiculoTransporteService-> create($veiculoTransporte);
+        $this->cidadeService->create($cidade);
 
         return response()->json(['response' => 'Success'], 201);
     }
@@ -54,16 +54,28 @@ class VeiculoTransporteController extends Controller
      */
     public function show($id)
     {
-        $veiculoTransporte = $this->veiculoTransporteService->findById($id);
+        $cidade = $this->cidadeService->findById($id);
 
-        if ($veiculoTransporte)
+        if ($cidade)
         {
-            return response()->json($veiculoTransporte->toArray(), 200);
+            return response()->json($cidade->toArray(), 200);
         }
 
-        return response()->json(['response' => 'Veiculo de transporte de ensino não encontrado'], 400);
+        return response()->json(['response' => 'Cidade não encontrada'], 400);
     }
 
+    public function showByNome($nome)
+    {
+        $cidade = $this->cidadeService->findByNome($nome);
+
+        if ($cidade)
+        {
+            return response()->json($cidade->toArray(), 200);
+        }
+
+        return response()->json(['response' => 'Cidade não encontrada'], 400);
+    }
+    
     /**
      * Update the specified resource in storage.
      *
@@ -73,11 +85,11 @@ class VeiculoTransporteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $veiculoTransporte = $request->all();
+        $cidade = $request->all();
 
-        $veiculoTransporteAtualizado = $this->veiculoTransporteService->update($veiculoTransporte, $id);
+        $cidadeAtualizada = $this->cidadeService->update($cidade, $id);
 
-        return response()->json([$veiculoTransporteAtualizado->toArray()], 200);
+        return response()->json([$cidadeAtualizada->toArray()], 200);
     }
 
     /**
@@ -88,7 +100,7 @@ class VeiculoTransporteController extends Controller
      */
     public function destroy($id)
     {
-        $this->veiculoTransporteService->delete($id);
+        $this->cidadeService->delete($id);
 
         return response()->json('', 204);
     }

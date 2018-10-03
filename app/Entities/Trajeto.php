@@ -30,13 +30,13 @@ class Trajeto {
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\OneToMany(targetEntity="PontoParada", mappedBy="trajeto") 
+     * @ORM\OneToMany(targetEntity="PontoParada", mappedBy="trajeto", cascade={"all"}) 
      */
     protected $pontosParada;
 
     /** 
      * @ORM\JoinColumn(nullable=false, name="rota_id")
-     * @ORM\ManyToOne(targetEntity="Rota", inversedBy="trajetos", cascade={"all"}) 
+     * @ORM\ManyToOne(targetEntity="Rota", inversedBy="trajetos") 
      */
     protected $rota;
 
@@ -70,6 +70,11 @@ class Trajeto {
         return $this->rota;
     }
 
+    public function getPontosParada()
+    {
+        return $this->pontosParada;
+    }
+    
     public function setId($id)
     {
         $this->id = $id;
@@ -94,6 +99,11 @@ class Trajeto {
     {
         $this->rota = $rota;
     }
+    
+    public function setPontosParada($pontosParada)
+    {
+        $this->pontosParada = $pontosParada;
+    }
 
     public function toArray()
     {
@@ -102,7 +112,8 @@ class Trajeto {
             'URLMapa' => $this->URLMapa,
             'tipo' => $this->tipo,
             'horarioTrajeto' => $this->horarioTrajeto,
-            'rota' => $this->rota
+            'rota' => $this->rota,
+            'pontosParada' => $this->pontosParada
          );
     }
 

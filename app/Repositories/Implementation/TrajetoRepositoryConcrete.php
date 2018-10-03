@@ -7,7 +7,7 @@ use App\Repositories\Abstraction\TrajetoRepositoryInterface;
 
 class TrajetoRepositoryConcrete extends Repository implements TrajetoRepositoryInterface
 {
-
+    
     protected function getTypeObject() 
     {
         return '\App\Entities\Trajeto';

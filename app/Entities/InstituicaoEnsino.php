@@ -9,8 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity 
  * @ORM\Table(name="instituicoes_ensino") 
  */
-class InstituicaoEnsino {
-
+class InstituicaoEnsino 
+{
      /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -24,7 +24,7 @@ class InstituicaoEnsino {
     
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\OneToMany(targetEntity="Curso", mappedBy="instituicaoEnsino", cascade={"all"}) 
+     * @ORM\OneToMany(targetEntity="Curso", mappedBy="instituicaoEnsino", cascade={"all"}, fetch="EAGER") 
      */
     protected $cursos;
 
@@ -135,9 +135,9 @@ class InstituicaoEnsino {
             'id' => $this->id,
             'nome' => $this->nome,
             'cursos' => $this->cursos,
-            'endereco' => $this->endereco,
+            'endereco' => $this->endereco->toArray(),
             'motoristas' => $this->motoristas,
-            'veiculosTransporte' => $this->veiculoTransporte,
+            'veiculosTransporte' => $this->veiculosTransporte,
             'listasPresenca' => $this->listasPresenca
         ];
     }

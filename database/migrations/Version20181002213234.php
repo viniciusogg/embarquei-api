@@ -5,7 +5,7 @@ namespace Database\Migrations;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema as Schema;
 
-class Version20180905224652 extends AbstractMigration
+class Version20181002213234 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -19,7 +19,7 @@ class Version20180905224652 extends AbstractMigration
         $this->addSql('CREATE TABLE usuarios (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', nome VARCHAR(255) NOT NULL, sobrenome VARCHAR(255) NOT NULL, numero_celular VARCHAR(255) NOT NULL, ativo TINYINT(1) NOT NULL, senha VARCHAR(255) NOT NULL, remember_token VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, discr VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_EF687F23A5CBB1E (numero_celular), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE mensageiros (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE motoristas (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', foto VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE enderecos (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', cidade VARCHAR(255) NOT NULL, logradouro VARCHAR(255) NOT NULL, bairro VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE enderecos (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', cidade_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', logradouro VARCHAR(255) NOT NULL, bairro VARCHAR(255) NOT NULL, INDEX IDX_FC4E02DA9586CC8 (cidade_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE cursos (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', instituicao_ensino_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', nome VARCHAR(255) NOT NULL, INDEX IDX_B2785A18CFA13933 (instituicao_ensino_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE rotas (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', nome VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE instituicao_ensino_rota (rota_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', instituicao_ensino_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', INDEX IDX_101CE2259F169B8 (rota_id), INDEX IDX_101CE225CFA13933 (instituicao_ensino_id), PRIMARY KEY(rota_id, instituicao_ensino_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
@@ -31,6 +31,7 @@ class Version20180905224652 extends AbstractMigration
         $this->addSql('CREATE TABLE estudante_renovacao_cadastro (renovacao_cadastro_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', estudante_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', INDEX IDX_6F05BA9C82BB25E (renovacao_cadastro_id), INDEX IDX_6F05BA93B4690DB (estudante_id), PRIMARY KEY(renovacao_cadastro_id, estudante_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE veiculos_transporte (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', capacidade INT NOT NULL, placa VARCHAR(255) NOT NULL, tipo VARCHAR(255) NOT NULL, cor VARCHAR(255) NOT NULL, imagem VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE notificacoes (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', remetente_id CHAR(36) DEFAULT NULL COMMENT \'(DC2Type:uuid)\', titulo VARCHAR(255) NOT NULL, descricao VARCHAR(255) NOT NULL, tipo VARCHAR(255) NOT NULL, data_envio DATETIME NOT NULL, INDEX IDX_EFFEE10DFA0A674B (remetente_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE cidades (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', nome VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE instituicoes_ensino (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', endereco_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', nome VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_165F7F181BB76823 (endereco_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE instituicao_ensino_motorista (instituicao_ensino_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', motorista_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', INDEX IDX_47954A5CCFA13933 (instituicao_ensino_id), INDEX IDX_47954A5C1959881F (motorista_id), PRIMARY KEY(instituicao_ensino_id, motorista_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE instituicao_ensino_veiculo_transporte (instituicao_ensino_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', veiculo_transporte_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', INDEX IDX_14D7541BCFA13933 (instituicao_ensino_id), INDEX IDX_14D7541B6120DAE4 (veiculo_transporte_id), PRIMARY KEY(instituicao_ensino_id, veiculo_transporte_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
@@ -42,6 +43,7 @@ class Version20180905224652 extends AbstractMigration
         $this->addSql('ALTER TABLE horarios_semanais_estudantes ADD CONSTRAINT FK_A3B1F63B3B4690DB FOREIGN KEY (estudante_id) REFERENCES estudantes (id)');
         $this->addSql('ALTER TABLE mensageiros ADD CONSTRAINT FK_22A7BA75BF396750 FOREIGN KEY (id) REFERENCES usuarios (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE motoristas ADD CONSTRAINT FK_5CFD06CDBF396750 FOREIGN KEY (id) REFERENCES usuarios (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE enderecos ADD CONSTRAINT FK_FC4E02DA9586CC8 FOREIGN KEY (cidade_id) REFERENCES cidades (id)');
         $this->addSql('ALTER TABLE cursos ADD CONSTRAINT FK_B2785A18CFA13933 FOREIGN KEY (instituicao_ensino_id) REFERENCES instituicoes_ensino (id)');
         $this->addSql('ALTER TABLE instituicao_ensino_rota ADD CONSTRAINT FK_101CE2259F169B8 FOREIGN KEY (rota_id) REFERENCES rotas (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE instituicao_ensino_rota ADD CONSTRAINT FK_101CE225CFA13933 FOREIGN KEY (instituicao_ensino_id) REFERENCES instituicoes_ensino (id) ON DELETE CASCADE');
@@ -95,6 +97,7 @@ class Version20180905224652 extends AbstractMigration
         $this->addSql('ALTER TABLE trajetos DROP FOREIGN KEY FK_528CA241E5CE6D0');
         $this->addSql('ALTER TABLE estudante_renovacao_cadastro DROP FOREIGN KEY FK_6F05BA9C82BB25E');
         $this->addSql('ALTER TABLE instituicao_ensino_veiculo_transporte DROP FOREIGN KEY FK_14D7541B6120DAE4');
+        $this->addSql('ALTER TABLE enderecos DROP FOREIGN KEY FK_FC4E02DA9586CC8');
         $this->addSql('ALTER TABLE cursos DROP FOREIGN KEY FK_B2785A18CFA13933');
         $this->addSql('ALTER TABLE instituicao_ensino_rota DROP FOREIGN KEY FK_101CE225CFA13933');
         $this->addSql('ALTER TABLE listas_presenca DROP FOREIGN KEY FK_F8161059CFA13933');
@@ -122,6 +125,7 @@ class Version20180905224652 extends AbstractMigration
         $this->addSql('DROP TABLE estudante_renovacao_cadastro');
         $this->addSql('DROP TABLE veiculos_transporte');
         $this->addSql('DROP TABLE notificacoes');
+        $this->addSql('DROP TABLE cidades');
         $this->addSql('DROP TABLE instituicoes_ensino');
         $this->addSql('DROP TABLE instituicao_ensino_motorista');
         $this->addSql('DROP TABLE instituicao_ensino_veiculo_transporte');

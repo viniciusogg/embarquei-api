@@ -15,7 +15,10 @@ class Endereco {
      */
     protected $id;
     
-    /** @ORM\Column(type="string", nullable=false) */
+    /**
+     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="Cidade", inversedBy="enderecos", fetch="EAGER") 
+     */
     protected $cidade;
     
     /** @ORM\Column(type="string", nullable=false) */
@@ -68,7 +71,7 @@ class Endereco {
     {
         return array(
             'id' => $this->id, 
-            'cidade' => $this->cidade, 
+            'cidade' => $this->cidade->toArray(), 
             'logradouro' => $this->logradouro, 
             'bairro' => $this->bairro
          );

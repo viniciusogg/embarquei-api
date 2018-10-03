@@ -10,20 +10,17 @@ use Illuminate\Support\Facades\Hash;
 class MotoristaService 
 {
     private $motoristaRepository;
-    private $instituicaoEnsinoService;
     
-    public function __construct(MotoristaRepositoryInterface $motoristaRepository,
-            InstituicaoEnsinoService $instituicaoEnsinoService)
+    public function __construct(MotoristaRepositoryInterface $motoristaRepository)
     {
         $this->motoristaRepository = $motoristaRepository;
-        $this->instituicaoEnsinoService = $instituicaoEnsinoService;
     }
 
-    public function create($data)
+    public function create($dados)
     {
-        $motorista = $this->criarInstanciaMotorista($data);
-
-        $this->instituicaoEnsinoService->associarComMotorista($motorista, $data['instituicoesEnsino']);        
+        $motorista = $this->criarInstanciaMotorista($dados);
+        
+        $this->motoristaRepository->associarComInstituicao($motorista, $dados['instituicoesEnsino']);        
     }
 
     public function findById($id)
@@ -44,19 +41,19 @@ class MotoristaService
         return $motoristas;
     }
 
-    public function update($data, $id)
+    public function update($dados, $id)
     {
         // $senha = $data['senha'];
 
-        if (Hash::needsRehash($data['senha']))
+        if (Hash::needsRehash($dados['senha']))
         {
-            $data['senha'] = Hash::make($data['senha']);
+            $dados['senha'] = Hash::make($dados['senha']);
         }
 
 //        $usuario = new Usuario($data['nome'], $data['sobrenome'],
 //                $data['numeroCelular'], $senha);
         
-        $motorista = $this->criarInstanciaMotorista($data);
+        $motorista = $this->criarInstanciaMotorista($dados);
         $motorista->setId($id);
 
         return  $this->motoristaRepository->update($motorista);
@@ -67,15 +64,15 @@ class MotoristaService
         $this->motoristaRepository->delete($id);
     }
     
-    private function criarInstanciaMotorista($data)
+    private function criarInstanciaMotorista($dados)
     {
         $motorista = new Motorista();
-        $motorista->setNome($data['nome']);
-        $motorista->setSobrenome($data['sobrenome']);
-        $motorista->setNumeroCelular($data['numeroCelular']);
-        $motorista->setSenha(Hash::make($data['senha']));
-        $motorista->setAtivo($data['ativo']); 
-        $motorista->setFoto($data['foto']);        
+        $motorista->setNome($dados['nome']);
+        $motorista->setSobrenome($dados['sobrenome']);
+        $motorista->setNumeroCelular($dados['numeroCelular']);
+        $motorista->setSenha(Hash::make($dados['senha']));
+        $motorista->setAtivo($dados['ativo']); 
+        $motorista->setFoto($dados['foto']);        
                 
         return $motorista;
     }
