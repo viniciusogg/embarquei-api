@@ -7,14 +7,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /** @ORM\Entity */
-class Motorista extends Mensageiro {
-
-    /** @ORM\Column(type="string") */
+class Motorista extends Mensageiro 
+{
+    /** @ORM\Column(type="string", unique=true) */
     protected $foto; // Caminho no sistema de arquivos
 
     /** 
      * @ORM\JoinColumn(nullable=true)
-     * @ORM\ManyToMany(targetEntity="InstituicaoEnsino", mappedBy="motoristas") 
+     * @ORM\ManyToMany(targetEntity="InstituicaoEnsino", mappedBy="motoristas", fetch="EAGER") 
      */
     protected $instituicoesEnsino;
 

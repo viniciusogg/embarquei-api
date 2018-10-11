@@ -16,7 +16,7 @@ class Trajeto {
      */
     protected $id;
 
-    /** @ORM\Column(type="string", nullable=false, name="url_mapa") */
+    /** @ORM\Column(type="string", nullable=false, name="url_mapa", unique=true) */
     protected $URLMapa;
 
     /** @ORM\Column(type="string", nullable=false) */
@@ -24,19 +24,19 @@ class Trajeto {
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\OneToOne(targetEntity="HorarioTrajeto", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="HorarioTrajeto", cascade={"all"}, fetch="EAGER")
      */
     protected $horarioTrajeto;
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\OneToMany(targetEntity="PontoParada", mappedBy="trajeto", cascade={"all"}) 
+     * @ORM\OneToMany(targetEntity="PontoParada", mappedBy="trajeto", cascade={"all"}, fetch="EAGER") 
      */
     protected $pontosParada;
 
     /** 
      * @ORM\JoinColumn(nullable=false, name="rota_id")
-     * @ORM\ManyToOne(targetEntity="Rota", inversedBy="trajetos") 
+     * @ORM\ManyToOne(targetEntity="Rota", inversedBy="trajetos", fetch="EAGER") 
      */
     protected $rota;
 

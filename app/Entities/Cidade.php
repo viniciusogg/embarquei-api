@@ -15,10 +15,13 @@ class Cidade
      */
     protected $id;
 
-    /** @ORM\Column(type="string", nullable=false) */
+    /** @ORM\Column(type="string", nullable=false, unique=true) */
     protected $nome;
     
-    /** @ORM\OneToMany(targetEntity="Endereco", mappedBy="cidade", cascade={"remove"}, fetch="LAZY") */
+    /** 
+     * @ORM\JoinColumn(unique=true)
+     * @ORM\OneToMany(targetEntity="Endereco", mappedBy="cidade", cascade={"remove"}, fetch="EAGER") 
+     */
     protected $enderecos;
 
     public function __construct()

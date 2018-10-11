@@ -8,8 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity 
  * @ORM\Table(name="notificacoes")
  */
-class Notificacao {
-
+class Notificacao 
+{
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -30,7 +30,10 @@ class Notificacao {
     /** @ORM\Column(type="datetime", nullable=false) */    
     protected $dataEnvio;
     
-    /** @ORM\ManyToOne(targetEntity="Mensageiro") */
+    /** 
+     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="Mensageiro", fetch="EAGER") 
+     */
     protected $remetente;
     
     public function getId() 

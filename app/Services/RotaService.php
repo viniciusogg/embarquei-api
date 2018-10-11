@@ -7,6 +7,7 @@ use App\Entities\Rota;
 use App\Entities\Trajeto;
 use App\Entities\HorarioTrajeto;
 use App\Entities\PontoParada;
+use App\Exceptions\NullFieldException;
 
 class RotaService 
 {
@@ -57,6 +58,11 @@ class RotaService
     
     private function criarInstanciaRota($dados)
     {
+        if(empty($dados['nomesInstituicoesEnsino']) || empty($dados['trajetos']))
+        {
+            throw new NullFieldException();
+        }
+        
         $rota = new Rota();
         $rota->setNome($dados['nome']);
 //        $rota->setInstituicoesEnsino(null);   
@@ -80,6 +86,7 @@ class RotaService
             {
                 $novoPontoParada = new PontoParada();
                 $novoPontoParada->setNome($pontoParada['nome']);
+                $novoPontoParada->setOrdem($pontoParada['ordem']);
                 $novoPontoParada->setTrajeto($novoTrajeto);
 
                 $pontosParada[] = $novoPontoParada;

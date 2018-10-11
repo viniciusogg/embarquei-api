@@ -6,8 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /** @ORM\Entity */
-class Rota {
-
+class Rota 
+{
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -21,13 +21,13 @@ class Rota {
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToMany(targetEntity="InstituicaoEnsino") 
+     * @ORM\ManyToMany(targetEntity="InstituicaoEnsino", fetch="EAGER") 
      */
     protected $instituicoesEnsino;
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\OneToMany(targetEntity="Trajeto", mappedBy="rota", cascade={"all"}) 
+     * @ORM\OneToMany(targetEntity="Trajeto", mappedBy="rota", cascade={"all"}, fetch="EAGER") 
      */
     protected $trajetos;
 

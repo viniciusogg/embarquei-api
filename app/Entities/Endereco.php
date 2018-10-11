@@ -17,7 +17,7 @@ class Endereco {
     
     /**
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="Cidade", inversedBy="enderecos", fetch="EAGER") 
+     * @ORM\ManyToOne(targetEntity="Cidade", inversedBy="enderecos", cascade={"persist"}, fetch="EAGER") 
      */
     protected $cidade;
     

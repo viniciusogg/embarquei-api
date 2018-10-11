@@ -4,44 +4,51 @@ namespace App\Repositories\Implementation;
 
 use App\Repositories\Abstraction\Repository;
 use App\Repositories\Abstraction\RotaRepositoryInterface;
-//use Doctrine\Common\Collections\ArrayCollection;
 use App\Entities\Rota;
+use App\Exceptions\NullFieldException;
 
 class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterface
 {
     public function associarComEntidades($rota, $nomesInstituicoesEnsino)
     {
+        $instituicoesEnsino = [];                
+        
         $entityManager = $this->getEntityManager();
         $entityManager->getConnection()->beginTransaction();
         
-        $repositoryInstituicaoEnsino = $this->getEntityManager()->getRepository('\App\Entities\InstituicaoEnsino');
-        $repositoryTrajeto = $this->getEntityManager()->getRepository('\App\Entities\Trajeto');
+        $repositoryInstituicaoEnsino = $entityManager->getRepository('\App\Entities\InstituicaoEnsino');
+        $repositoryTrajeto = $entityManager->getRepository('\App\Entities\Trajeto');
         
-//        $rota->setInstituicoesEnsino(new ArrayCollection());
-
         try
-        {
-//            $instituicoesEnsino = [];    
-            
-            $novaRota = new Rota();
-            
-            $novaRota = $rota;
-            
+        {  
             foreach($nomesInstituicoesEnsino as $nomeInstituicao) 
             {
-//                error_log($nomeInstituicao['nome']);
                 $instituicaoEnsino = $repositoryInstituicaoEnsino->findOneBy(['nome' => $nomeInstituicao['nome']]);
-                                
-                //$instituicoesEnsino[] = $instituicaoEnsino;             
-                
-                $novaRota->getInstituicoesEnsino()->add($instituicaoEnsino);
+
+                if ($instituicaoEnsino) 
+                {                
+                    $instituicoesEnsino[] = $instituicaoEnsino;
+                }
             }
+            
+            if (empty($instituicoesEnsino) || empty($rota->getTrajetos()))
+            {
+                throw new NullFieldException();
+            }
+            else
+            {
+                $rota->setInstituicoesEnsino($instituicoesEnsino);
+            }
+            
             $entityManager->persist($rota);
                         
-            foreach ($rota->getTrajetos() as $trajeto)
-            {
-                $repositoryTrajeto->getEntityManager()->persist($trajeto);
-            }
+//            if(!empty($rota->getTrajetos()))
+//            {
+                foreach ($rota->getTrajetos() as $trajeto)
+                {
+                    $repositoryTrajeto->getEntityManager()->persist($trajeto);
+                }
+//            }
             
             $entityManager->flush();
             $entityManager->getConnection()->commit();

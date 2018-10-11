@@ -9,8 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity 
  * @ORM\Table(name="pontos_parada")
  */
-class PontoParada {
-
+class PontoParada 
+{
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -19,18 +19,21 @@ class PontoParada {
      */
     protected $id;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="string", nullable=false) */
     protected $nome;
 
+    /** @ORM\Column(type="integer", nullable=false) */    
+    protected $ordem;
+    
     /** 
      * @ORM\JoinColumn(nullable=true)
-     * @ORM\ManyToMany(targetEntity="Estudante", mappedBy="pontosParada") 
+     * @ORM\ManyToMany(targetEntity="Estudante", mappedBy="pontosParada", fetch="EAGER") 
      */
     protected $estudantes;
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="Trajeto", inversedBy="pontosParada") 
+     * @ORM\ManyToOne(targetEntity="Trajeto", inversedBy="pontosParada", fetch="EAGER") 
      */
     protected $trajeto;
 
@@ -59,6 +62,11 @@ class PontoParada {
         return $this->estudantes;
     }
 
+    public function getOrdem() 
+    {
+        return $this->ordem;
+    }
+    
     public function setId($id)
     {
         $this->id = $id;
@@ -77,12 +85,18 @@ class PontoParada {
     {
         $this->trajeto = $trajeto;
     }
+    
+    public function setOrdem($ordem) 
+    {
+        $this->ordem = $ordem;
+    }
 
     public function toArray()
     {
         return array(
             'id' => $this->id,
             'nome' => $this->nome,
+            'ordem' => $this->ordem,
             'estudantes' => $this->estudantes,
             'trajeto' => $this->trajeto
          );

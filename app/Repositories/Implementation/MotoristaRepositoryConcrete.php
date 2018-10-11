@@ -17,12 +17,14 @@ class MotoristaRepositoryConcrete extends Repository implements MotoristaReposit
         
         $entityManager = $this->getEntityManager();
         $entityManager->getConnection()->beginTransaction();
-                
+        
+        $repositoryInstituicaoEnsino = $entityManager->getRepository('\App\Entities\InstituicaoEnsino');
+        
         try
         {
             foreach($nomesInstituicoes as $nomeInstituicao) 
             {                
-                $instituicaoEnsino = $entityManager->getRepository('\App\Entities\InstituicaoEnsino')->
+                $instituicaoEnsino = $repositoryInstituicaoEnsino->
                         findOneBy(['nome' => $nomeInstituicao['nome']]);
 
                 $instituicaoEnsino->getMotoristas()->add($motorista);

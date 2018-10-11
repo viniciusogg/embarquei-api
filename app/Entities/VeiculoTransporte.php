@@ -8,8 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity 
  * @ORM\Table(name="veiculos_transporte")
  */
-class VeiculoTransporte {
-
+class VeiculoTransporte 
+{
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -21,7 +21,7 @@ class VeiculoTransporte {
     /** @ORM\Column(type="integer", nullable=false) */
     protected $capacidade;
 
-    /** @ORM\Column(type="string", nullable=false) */
+    /** @ORM\Column(type="string", nullable=false, unique=true) */
     protected $placa;
 
     /** @ORM\Column(type="string", nullable=false) */
@@ -30,12 +30,12 @@ class VeiculoTransporte {
     /** @ORM\Column(type="string", nullable=false) */
     protected $cor;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="string", unique=true) */
     protected $imagem; // caminho no sistema de arquivos
 
     /** 
      * @ORM\JoinColumn(nullable=true)
-     * @ORM\ManyToMany(targetEntity="InstituicaoEnsino", mappedBy="veiculosTransporte") 
+     * @ORM\ManyToMany(targetEntity="InstituicaoEnsino", mappedBy="veiculosTransporte", fetch="EAGER") 
      */
     protected $instituicoesEnsino;
 

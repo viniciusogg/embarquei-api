@@ -8,8 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity
  * @ORM\Table(name="renovacoes_cadastro")
  */
-class RenovacaoCadastro {
-
+class RenovacaoCadastro 
+{
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -23,11 +23,11 @@ class RenovacaoCadastro {
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="Administrador") 
+     * @ORM\ManyToOne(targetEntity="Administrador", fetch="EAGER") 
      */
     protected $responsavel;
 
-    /** @ORM\ManyToMany(targetEntity="Estudante") */
+    /** @ORM\ManyToMany(targetEntity="Estudante", fetch="EAGER") */
     protected $estudantes;
 
     public function __construct()

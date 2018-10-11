@@ -8,7 +8,11 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\ORMInvalidArgumentException;
+use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
 use App\Exceptions\InvalidCredentialsException;
+use App\Exceptions\NullFieldException;
+use App\Exceptions\NaoEncontradoException;
+use App\Exceptions\VazioException;
 
 class Handler extends ExceptionHandler
 {
@@ -92,6 +96,28 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'devError' => $this->dataExceptionDev($exception),
                 'userError' => 'Sua sessão expirou, faça login novamente'], 400);
+        }
+        
+        // Tratamento da excessão lançada quando um campo é nulo      
+        else if ($exception instanceof NullFieldException || $exception instanceof NotNullConstraintViolationException)
+        {
+            return response()->json(['devError' => $this->dataExceptionDev($exception), 
+                'userError' => 'O campo não pode ser nulo.'], 401);
+        }
+        
+        // Tratamento da excessão lançada quando nenhum registro é encontrado para uma busca
+        // feita através de um dado específico (id, nome etc)
+        else if ($exception instanceof NaoEncontradoException) 
+        {
+            return response()->json(['devError' => $this->dataExceptionDev($exception),
+                    'userError' => $exception->getMessage()], 400);
+        }
+
+        // Tratamento da excessão lançada quando nenhum registro é encontrado em uma tabela
+        else if ($exception instanceof VazioException) 
+        {
+            return response()->json(['devError' => $this->dataExceptionDev($exception),
+                    'userError' => $exception->getMessage()], 400);
         }
         
         return parent::render($request, $exception);

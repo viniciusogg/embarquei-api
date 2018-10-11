@@ -5,6 +5,7 @@ namespace App\Repositories\Implementation;
 use App\Repositories\Abstraction\InstituicaoEnsinoRepositoryInterface;
 use App\Repositories\Abstraction\Repository;
 use App\Services\MotoristaService;
+use App\Exceptions\NaoEncontradoException;
 
 class InstituicaoEnsinoRepositoryConcrete extends Repository implements InstituicaoEnsinoRepositoryInterface 
 {
@@ -82,8 +83,12 @@ class InstituicaoEnsinoRepositoryConcrete extends Repository implements Institui
         
         try
         {            
-            // TRATAR ERRO CASO NÃO EXISTA UMA CIDADE COM O NOME PASSADO    
             $cidade = $cidadeRepository->findOneBy(['nome' => $nomeCidade]);
+            
+            if(!$cidade)
+            {
+                throw new NaoEncontradoException();
+            }
             
             $instituicaoEnsino->getEndereco()->setCidade($cidade);
             

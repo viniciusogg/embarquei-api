@@ -9,8 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity 
  * @ORM\Table(name="listas_presenca")
  */
-class ListaPresenca {
-
+class ListaPresenca 
+{
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -21,13 +21,13 @@ class ListaPresenca {
 
     /** 
      * @ORM\JoinColumn(nullable=true)
-     * @ORM\OneToMany(targetEntity="Checkin", mappedBy="listaPresenca") 
+     * @ORM\OneToMany(targetEntity="Checkin", mappedBy="listaPresenca", cascade={"remove"}, fetch="EAGER") 
      */
     protected $checkins;
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="InstituicaoEnsino", inversedBy="listasPresenca") 
+     * @ORM\ManyToOne(targetEntity="InstituicaoEnsino", inversedBy="listasPresenca", fetch="EAGER") 
      */
     protected $instituicaoEnsino;
 

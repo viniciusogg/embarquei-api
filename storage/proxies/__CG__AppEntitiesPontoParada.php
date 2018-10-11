@@ -64,10 +64,10 @@ class PontoParada extends \App\Entities\PontoParada implements \Doctrine\ORM\Pro
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'nome', 'estudantes', 'trajeto'];
+            return ['__isInitialized__', 'id', 'nome', 'ordem', 'estudantes', 'trajeto'];
         }
 
-        return ['__isInitialized__', 'id', 'nome', 'estudantes', 'trajeto'];
+        return ['__isInitialized__', 'id', 'nome', 'ordem', 'estudantes', 'trajeto'];
     }
 
     /**
@@ -224,6 +224,17 @@ class PontoParada extends \App\Entities\PontoParada implements \Doctrine\ORM\Pro
     /**
      * {@inheritDoc}
      */
+    public function getOrdem()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOrdem', []);
+
+        return parent::getOrdem();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setId($id)
     {
 
@@ -263,6 +274,17 @@ class PontoParada extends \App\Entities\PontoParada implements \Doctrine\ORM\Pro
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTrajeto', [$trajeto]);
 
         return parent::setTrajeto($trajeto);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setOrdem($ordem)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOrdem', [$ordem]);
+
+        return parent::setOrdem($ordem);
     }
 
     /**

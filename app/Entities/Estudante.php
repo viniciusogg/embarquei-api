@@ -7,38 +7,38 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /** @ORM\Entity */
-class Estudante extends Usuario {
-
-    /** @ORM\Column(type="string", nullable=false) */
+class Estudante extends Usuario 
+{
+    /** @ORM\Column(type="string", nullable=false, unique=true) */
     protected $foto; // Caminho no sistema de arquivos
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\OneToMany(targetEntity="HorarioSemanalEstudante", mappedBy="estudante", cascade={"all"}) 
+     * @ORM\OneToMany(targetEntity="HorarioSemanalEstudante", mappedBy="estudante", cascade={"all"}, fetch="EAGER") 
      */
     protected $horariosSemanaisEstudante;
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="Curso") 
+     * @ORM\ManyToOne(targetEntity="Curso", fetch="EAGER") 
      */
     protected $curso;
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\OneToOne(targetEntity="Endereco",  cascade={"all"}) 
+     * @ORM\OneToOne(targetEntity="Endereco",  cascade={"all"}, fetch="EAGER") 
      */
     protected $endereco;
 
     /** 
-     * @ORM\JoinColumn(nullable=false)
-     * @ORM\OneToOne(targetEntity="ComprovanteMatricula",  cascade={"all"}) 
+     * @ORM\JoinColumn(nullable=false, unique=true)
+     * @ORM\OneToOne(targetEntity="ComprovanteMatricula",  cascade={"all"}, fetch="EAGER") 
      */
     protected $comprovateMatricula;
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToMany(targetEntity="PontoParada", inversedBy="estudantes") 
+     * @ORM\ManyToMany(targetEntity="PontoParada", inversedBy="estudantes", fetch="EAGER") 
      */
     protected $pontosParada;
 

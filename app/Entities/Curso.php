@@ -20,7 +20,7 @@ class Curso {
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="InstituicaoEnsino", inversedBy="cursos") 
+     * @ORM\ManyToOne(targetEntity="InstituicaoEnsino", inversedBy="cursos", fetch="EAGER") 
      */
     protected $instituicaoEnsino;
 
@@ -56,7 +56,7 @@ class Curso {
         return array(
             'id' => $this->id,
             'nome' => $this->nome,
-            'instituicaoEnsino' => $this->instituicaoEnsino
+            'instituicaoEnsino' => $this->instituicaoEnsino->getNome()
          );
     }
 }

@@ -19,7 +19,7 @@ class Checkin
     protected $confirmado;
 
     /** 
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, unique=true)
      * @ORM\OneToOne(targetEntity="Estudante") 
      */
     protected $estudante;

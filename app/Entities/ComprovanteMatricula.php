@@ -18,7 +18,7 @@ class ComprovanteMatricula {
      */
     protected $id;
 
-    /** @ORM\Column(type="string", nullable=false) */
+    /** @ORM\Column(type="string", nullable=false, unique=true) */
     protected $caminhoSistemaArquivos;
 
     /** @ORM\Column(type="string", nullable=false) */
