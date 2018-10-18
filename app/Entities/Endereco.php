@@ -70,8 +70,7 @@ class Endereco {
     public function toArray()
     {
         return array(
-            'id' => $this->id, 
-            'cidade' => $this->cidade->toArray(), 
+            'id' => $this->id,
             'logradouro' => $this->logradouro, 
             'bairro' => $this->bairro
          );

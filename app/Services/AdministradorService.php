@@ -8,7 +8,7 @@ use App\Entities\Endereco;
 use Illuminate\Support\Facades\Hash;
 use App\Services\InstituicaoEnsinoService;
 
-class AdministradorService 
+class AdministradorService
 {
     private $administradorRepository;
     private $instituicaoEnsinoService;
@@ -34,7 +34,7 @@ class AdministradorService
 
     public function findByNumeroCelular($numeroCelular)
     {
-        return $this->usuarioRepository->getByNumeroCelular($numeroCelular);
+        return $this->administradorRepository->getByNumeroCelular($numeroCelular);
     }
 
     public function findAll()

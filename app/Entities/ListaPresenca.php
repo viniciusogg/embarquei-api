@@ -4,6 +4,7 @@ namespace App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Entities\Traits\CriaArrayObjetoTrait;
 
 /** 
  * @ORM\Entity 
@@ -11,6 +12,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class ListaPresenca 
 {
+    use CriaArrayObjetoTrait;
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -30,6 +33,12 @@ class ListaPresenca
      * @ORM\ManyToOne(targetEntity="InstituicaoEnsino", inversedBy="listasPresenca", fetch="EAGER") 
      */
     protected $instituicaoEnsino;
+
+    /** 
+     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="Cidade", fetch="EAGER") 
+     */    
+    protected $cidade;
 
     public function __construct()
     {
@@ -51,6 +60,11 @@ class ListaPresenca
         return $this->instituicaoEnsino;
     }
 
+    public function getCidade() 
+    {
+        return $this->cidade;
+    }
+        
     public function setId($id)
     {
         $this->id = $id;
@@ -66,12 +80,23 @@ class ListaPresenca
         $this->instituicaoEnsino = $instituicaoEnsino;
     }
 
+    public function setCidade($cidade) {
+        $this->cidade = $cidade;
+    }
+    
     public function toArray()
     {
         return array(
             'id' => $this->id,
-            'checkins' => $this->checkins,
-            'instituicaoEnsino' => $this->instituicaoEnsino
+            'checkins' => $this->retornarArrayObjetos($this->checkins),
+            'instituicaoEnsino' => [
+                'id' => $this->instituicaoEnsino->getId(), 
+                'nome' => $this->instituicaoEnsino->getNome()
+            ],
+            'cidade' => [
+                'id' => $this->cidade->getId(), 
+                'nome' => $this->cidade->getNome()
+            ]
          );
     }
 }

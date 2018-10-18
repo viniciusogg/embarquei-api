@@ -4,7 +4,10 @@ namespace App\Services;
 
 use App\Repositories\Abstraction\EstudanteRepositoryInterface;
 use App\Entities\Estudante;
+use App\Entities\ComprovanteMatricula;
+use App\Entities\HorarioSemanalEstudante;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class EstudanteService 
 {
@@ -19,7 +22,8 @@ class EstudanteService
     {
         $estudante = $this->criarInstanciaEstudante($dados);
 
-        $this->estudanteRepository->create($estudante);        
+        $this->estudanteRepository->
+                associarComEntidades($estudante, $dados['pontosParada'], $dados['curso']['id'], $dados['endereco']);        
     }
 
     public function findById($id)
@@ -27,6 +31,11 @@ class EstudanteService
         return $this->estudanteRepository->getById($id);
     }
 
+    public function findByNumeroCelular($numeroCelular)
+    {
+        return $this->estudanteRepository->getByNumeroCelular($numeroCelular);
+    }
+    
     public function findAll()
     {
         $result = $this->estudanteRepository->getAll();
@@ -61,21 +70,32 @@ class EstudanteService
     private function criarInstanciaEstudante($dados)
     {
         $estudante = new Estudante();
-
         $estudante->setNome($dados['nome']);
         $estudante->setSobrenome($dados['sobrenome']);
         $estudante->setNumeroCelular($dados['numeroCelular']);
         $estudante->setSenha(Hash::make($dados['senha']));
         $estudante->setFoto($dados['foto']);
         $estudante->setAtivo($dados['ativo']);
+                
+        $comprovanteMatricula = new ComprovanteMatricula();
+        $comprovanteMatricula->setCaminhoSistemaArquivos($dados['comprovanteMatricula']['arquivo']);
+        $comprovanteMatricula->setDataEnvio(Carbon::now());
+        $comprovanteMatricula->setJustificativa($dados['comprovanteMatricula']['justificativa']);
+        $comprovanteMatricula->setStatus($dados['comprovanteMatricula']['status']);
         
-        $estudante->setEndereco($dados['endereco']); // CASCATA
+        $estudante->setComprovanteMatricula($comprovanteMatricula);
+
+        $horariosSemanaisEstudante = [];
         
-        $estudante->setComprovateMatricula($dados['comprovateMatricula']); // CASCATA
-        $estudante->setPontosParada($dados['pontosParada']); // ESTUDANTE É DONO DA ASSOCIAÇÃO
-        
-        $estudante->setCurso($dados['curso']); // FAZER UMA ASSOCIAÇÃO COM CURSO JÁ EXISTENTE E ATUALIZAR
-        $estudante->setHorariosSemanaisEstudante($dados['horariosSemanaisEstudante']); // CASCATA (HorarioSeman... é dono da associação)
+        foreach($dados['horariosSemanaisEstudante'] as $horario) 
+        {
+            $instanciaHorario = new HorarioSemanalEstudante();
+            $instanciaHorario->setDiaSemana($horario['diaSemana']);
+            $instanciaHorario->setEstudante($estudante);
+            
+            $horariosSemanaisEstudante[] = $instanciaHorario;
+        }
+        $estudante->setHorariosSemanaisEstudante($horariosSemanaisEstudante);
         
         return $estudante;
     }

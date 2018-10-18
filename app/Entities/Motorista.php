@@ -5,10 +5,13 @@ namespace App\Entities;
 use App\Entities\Mensageiro;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Entities\Traits\CriaArrayObjetoTrait;
 
 /** @ORM\Entity */
 class Motorista extends Mensageiro 
 {
+    use CriaArrayObjetoTrait;
+    
     /** @ORM\Column(type="string", unique=true) */
     protected $foto; // Caminho no sistema de arquivos
 
@@ -51,7 +54,21 @@ class Motorista extends Mensageiro
             'sobrenome' => $this->sobrenome,
             'numeroCelular' => $this->numeroCelular,
             'foto' => $this->foto,
-            'instituicoesEnsino' => $this->instituicoesEnsino
+            'instituicoesEnsino' => $this->retornarArrayObjetos($this->instituicoesEnsino)
          );
+    }
+    
+    private function retornarArrayObjetos($objetos)
+    {
+        $array = [];
+        
+        foreach ($objetos as $objeto)
+        {
+            $array[] = [
+                'id' => $objeto->toArray()['id'],
+                'nome' => $objeto->toArray()['nome']
+            ];
+        }
+        return $array;
     }
 }

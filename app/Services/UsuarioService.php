@@ -33,10 +33,15 @@ class UsuarioService
     {
         return $this->usuarioRepository->getById($id);
     }
-
-    public function findByNumeroCelular($numeroCelular)
+    
+    public function getTipoByNumeroCelular($numeroCelular)
     {
-        return $this->usuarioRepository->getByNumeroCelular($numeroCelular);
+        return $this->usuarioRepository->getTipoByNumeroCelular($numeroCelular);
+    }
+    
+    public function getTipoById($id)
+    {
+        return $this->usuarioRepository->getTipoById($id);
     }
 
     public function findAll()

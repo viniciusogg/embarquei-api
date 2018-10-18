@@ -5,10 +5,13 @@ namespace App\Entities;
 use App\Entities\Usuario;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Entities\Traits\CriaArrayObjetoTrait;
 
 /** @ORM\Entity */
 class Estudante extends Usuario 
 {
+    use CriaArrayObjetoTrait;
+    
     /** @ORM\Column(type="string", nullable=false, unique=true) */
     protected $foto; // Caminho no sistema de arquivos
 
@@ -34,7 +37,7 @@ class Estudante extends Usuario
      * @ORM\JoinColumn(nullable=false, unique=true)
      * @ORM\OneToOne(targetEntity="ComprovanteMatricula",  cascade={"all"}, fetch="EAGER") 
      */
-    protected $comprovateMatricula;
+    protected $comprovanteMatricula;
 
     /** 
      * @ORM\JoinColumn(nullable=false)
@@ -68,9 +71,9 @@ class Estudante extends Usuario
         return $this->endereco;
     }
 
-    public function getComprovateMatricula()
+    public function getComprovanteMatricula()
     {
-        return $this->comprovateMatricula;
+        return $this->comprovanteMatricula;
     }
 
     public function getPontosParada()
@@ -98,9 +101,9 @@ class Estudante extends Usuario
         $this->endereco = $endereco;
     }
 
-    public function setComprovateMatricula($comprovateMatricula)
+    public function setComprovanteMatricula($comprovanteMatricula)
     {
-        $this->comprovateMatricula = $comprovateMatricula;
+        $this->comprovanteMatricula = $comprovanteMatricula;
     }
 
     public function setPontosParada($pontosParada)
@@ -116,11 +119,11 @@ class Estudante extends Usuario
             'sobrenome' => $this->sobrenome,
             'numeroCelular' => $this->numeroCelular,
             'foto' => $this->foto,
-            'horariosSemanaisEstudante' => $this->horariosSemanaisEstudante,
-            'curso' => $this->curso,
-            'endereco' => $this->endereco,
-            'comprovanteMatricula' => $this->comprovateMatricula,
-            'pontosParada' => $this->pontosParada
+            'horariosSemanaisEstudante' => $this->retornarArrayObjetos($this->horariosSemanaisEstudante),
+            'curso' => $this->curso->toArray(),
+            'endereco' => $this->endereco->toArray(),
+            'comprovanteMatricula' => $this->comprovanteMatricula->toArray(),
+            'pontosParada' => $this->retornarArrayObjetos($this->pontosParada)
          );
     }
 

@@ -20,7 +20,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-        \Barryvdh\Cors\HandleCors::class,
+//        \Barryvdh\Cors\HandleCors::class,
     ];
 
     /**

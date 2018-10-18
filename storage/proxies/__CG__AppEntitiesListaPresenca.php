@@ -64,10 +64,10 @@ class ListaPresenca extends \App\Entities\ListaPresenca implements \Doctrine\ORM
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'checkins', 'instituicaoEnsino'];
+            return ['__isInitialized__', 'id', 'checkins', 'instituicaoEnsino', 'cidade'];
         }
 
-        return ['__isInitialized__', 'id', 'checkins', 'instituicaoEnsino'];
+        return ['__isInitialized__', 'id', 'checkins', 'instituicaoEnsino', 'cidade'];
     }
 
     /**
@@ -213,6 +213,17 @@ class ListaPresenca extends \App\Entities\ListaPresenca implements \Doctrine\ORM
     /**
      * {@inheritDoc}
      */
+    public function getCidade()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCidade', []);
+
+        return parent::getCidade();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setId($id)
     {
 
@@ -241,6 +252,17 @@ class ListaPresenca extends \App\Entities\ListaPresenca implements \Doctrine\ORM
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInstituicaoEnsino', [$instituicaoEnsino]);
 
         return parent::setInstituicaoEnsino($instituicaoEnsino);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCidade($cidade)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCidade', [$cidade]);
+
+        return parent::setCidade($cidade);
     }
 
     /**

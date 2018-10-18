@@ -33,9 +33,18 @@ class CursoService
         return $curso;
     }
 
-    public function update($data, $id) { }
+    public function update($dados, $id) 
+    { 
+        $curso = $this->criarInstanciaCurso($dados);
+        $curso->setId($id);
 
-    public function delete($id) {}
+        return  $this->cursoRepository->update($curso);
+    }
+
+    public function delete($id) 
+    {
+        $this->cidadeRepository->delete($id);
+    }
     
-    private function criarInstanciaCurso($data) {}
+    private function criarInstanciaCurso($dados) {}
 }

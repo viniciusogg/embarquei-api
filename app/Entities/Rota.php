@@ -4,10 +4,13 @@ namespace App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Entities\Traits\CriaArrayObjetoTrait;
 
 /** @ORM\Entity */
 class Rota 
 {
+    use CriaArrayObjetoTrait;
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -82,8 +85,8 @@ class Rota
         return array(
             'id' => $this->id,
             'nome' => $this->nome,
-            'instituicoesEnsino' => $this->instituicoesEnsino,
-            'trajetos' => $this->trajetos
+            'instituicoesEnsino' => $this->retornarArrayObjetos($this->instituicoesEnsino),
+            'trajetos' => $this->retornarArrayObjetos($this->trajetos)
          );
     }
 

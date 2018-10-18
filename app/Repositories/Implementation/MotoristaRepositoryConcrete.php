@@ -2,11 +2,12 @@
 
 namespace App\Repositories\Implementation;
 
-use App\Repositories\Abstraction\Repository;
+use App\Repositories\Implementation\UsuarioRepositoryConcrete;
 use App\Repositories\Abstraction\MotoristaRepositoryInterface;
+use App\Exceptions\NaoEncontradoException;
 use Exception;
 
-class MotoristaRepositoryConcrete extends Repository implements MotoristaRepositoryInterface
+class MotoristaRepositoryConcrete extends UsuarioRepositoryConcrete implements MotoristaRepositoryInterface
 {
     public function  associarComInstituicao($motorista, $nomesInstituicoes)
     {
@@ -27,6 +28,11 @@ class MotoristaRepositoryConcrete extends Repository implements MotoristaReposit
                 $instituicaoEnsino = $repositoryInstituicaoEnsino->
                         findOneBy(['nome' => $nomeInstituicao['nome']]);
 
+                if(!$instituicaoEnsino) 
+                {
+                    throw new NaoEncontradoException();
+                }
+                
                 $instituicaoEnsino->getMotoristas()->add($motorista);
 
                 $instituicoesEnsino[] = $instituicaoEnsino;     

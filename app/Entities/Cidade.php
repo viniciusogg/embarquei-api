@@ -3,10 +3,13 @@
 namespace App\Entities;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Entities\Traits\CriaArrayObjetoTrait;
 
 /**  @ORM\Entity  */
 class Cidade 
 {
+    use CriaArrayObjetoTrait;
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -63,7 +66,8 @@ class Cidade
     {
         return array(
             'id' => $this->id, 
-            'nome' => $this->nome
+            'nome' => $this->nome,
+            'enderecos' => $this->retornarArrayObjetos($this->enderecos)
          );
     }
 }

@@ -4,10 +4,13 @@ namespace App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Entities\Traits\CriaArrayObjetoTrait;
 
 /** @ORM\Entity */
-class Trajeto {
-
+class Trajeto 
+{
+    use CriaArrayObjetoTrait;
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -112,8 +115,8 @@ class Trajeto {
             'URLMapa' => $this->URLMapa,
             'tipo' => $this->tipo,
             'horarioTrajeto' => $this->horarioTrajeto,
-            'rota' => $this->rota,
-            'pontosParada' => $this->pontosParada
+            'rota' => $this->rota->getId(),
+            'pontosParada' => $this->retornarArrayObjetos($this->pontosParada)
          );
     }
 

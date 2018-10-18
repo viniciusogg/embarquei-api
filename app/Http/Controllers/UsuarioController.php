@@ -24,14 +24,14 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-        $usuarios = $this->usuarioService->findAll();
-
-        if (empty($usuarios))
-        {
-            return response()->json('', 204);
-        }
-
-        return response()->json($usuarios, 200);
+//        $usuarios = $this->usuarioService->findAll();
+//
+//        if (empty($usuarios))
+//        {
+//            return response()->json('', 204);
+//        }
+//
+//        return response()->json($usuarios, 200);
     }
 
     /**
@@ -42,11 +42,11 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        $usuario = $request->all();
-
-        $this->usuarioService->create($usuario);
-
-        return response()->json(['response' => 'Success'], 201);
+//        $usuario = $request->all();
+//
+//        $this->usuarioService->create($usuario);
+//
+//        return response()->json(['response' => 'Success'], 201);
     }
 
     /**
@@ -57,14 +57,14 @@ class UsuarioController extends Controller
      */
     public function show($id)
     {
-        $usuario = $this->usuarioService->findById($id);
-
-        if ($usuario)
-        {
-            return response()->json($usuario->toArray(), 200);
-        }
-
-        return response()->json(['response' => 'Usuário não encontrado'], 400);
+//        $usuario = $this->usuarioService->findById($id);
+//
+//        if ($usuario)
+//        {
+//            return response()->json($usuario->toArray(), 200);
+//        }
+//
+//        return response()->json(['response' => 'Usuário não encontrado'], 400);
     }
 
     /**
@@ -76,11 +76,11 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $usuario = $request->all();
-
-        $usuarioAtualizado = $this->usuarioService->update($usuario, $id);
-
-        return response()->json([$usuarioAtualizado->toArray()], 200);
+//        $usuario = $request->all();
+//
+//        $usuarioAtualizado = $this->usuarioService->update($usuario, $id);
+//
+//        return response()->json([$usuarioAtualizado->toArray()], 200);
     }
 
     /**
@@ -91,8 +91,20 @@ class UsuarioController extends Controller
      */
     public function destroy($id)
     {
-        $this->usuarioService->delete($id);
+//        $this->usuarioService->delete($id);
+//
+//        return response()->json('', 204);
+    }
+    
+    public function tipoById($id)
+    {
+        $tipo = $this->usuarioService->getTipoById($id);
 
-        return response()->json('', 204);
+        if ($tipo)
+        {
+            return response()->json(['tipo' => $tipo], 200);
+        }
+
+        return response()->json(['response' => 'Usuário não encontrado'], 400);
     }
 }

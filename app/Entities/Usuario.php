@@ -17,9 +17,9 @@ use LaravelDoctrine\ORM\Notifications\Notifiable;
  * @ORM\Entity
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
- * @ORM\DiscriminatorMap({"est" = "Estudante"})
+ * @ORM\DiscriminatorMap({"est" = "Estudante", "mot"="Motorista", "usr"="Usuario", "admin"="Administrador"})
  */
-abstract class Usuario implements AuthenticatableContract, CanResetPasswordContract
+class Usuario implements AuthenticatableContract, CanResetPasswordContract
 {
     use Authenticatable, CanResetPassword, Timestamps, Notifiable, HasApiTokens, UsesPasswordGrant;
 

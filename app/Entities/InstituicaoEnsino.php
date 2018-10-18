@@ -139,9 +139,9 @@ class InstituicaoEnsino
             'nome' => $this->nome,
             'cursos' => $this->retornarArrayObjetos($this->cursos),
             'endereco' => $this->endereco->toArray(),
-            'motoristas' => $this->retornarArrayObjetos($this->motoristas),
-            'veiculosTransporte' => $this->retornarArrayObjetos($this->veiculosTransporte),
-            'listasPresenca' => $this->retornarArrayObjetos($this->listasPresenca)
+//            'motoristas' => $this->retornarArrayObjetos($this->motoristas),
+//            'veiculosTransporte' => $this->retornarArrayObjetos($this->veiculosTransporte),
+//            'listasPresenca' => $this->retornarArrayObjetos($this->listasPresenca)
         ];
     }
     

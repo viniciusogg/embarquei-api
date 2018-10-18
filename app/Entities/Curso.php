@@ -56,7 +56,7 @@ class Curso {
         return array(
             'id' => $this->id,
             'nome' => $this->nome,
-            'instituicaoEnsino' => $this->instituicaoEnsino->getNome()
+            'instituicaoEnsino' => $this->instituicaoEnsino->getId()
          );
     }
 }

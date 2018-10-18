@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Repositories\Abstraction\MotoristaRepositoryInterface;
-use App\Services\InstituicaoEnsinoService;
 use App\Entities\Motorista;
 use Illuminate\Support\Facades\Hash;
 
@@ -28,6 +27,11 @@ class MotoristaService
         return $this->motoristaRepository->getById($id);
     }
 
+    public function findByNumeroCelular($numeroCelular)
+    {
+        return $this->motoristaRepository->getByNumeroCelular($numeroCelular);
+    }
+    
     public function findAll()
     {
         $result = $this->motoristaRepository->getAll();

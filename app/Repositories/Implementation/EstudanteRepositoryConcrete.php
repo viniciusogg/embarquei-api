@@ -4,13 +4,70 @@ namespace App\Repositories\Implementation;
 
 use App\Repositories\Abstraction\EstudanteRepositoryInterface;
 use App\Repositories\Abstraction\Repository;
+use App\Repositories\Implementation\UsuarioRepositoryConcrete;
+use \App\Entities\Endereco;
+use Exception;
 
-class EstudanteRepositoryConcrete extends Repository implements EstudanteRepositoryInterface
+class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements EstudanteRepositoryInterface
 {
 
-    public function associarComEntidades() 
-    {
+    public function associarComEntidades($estudante, $idsPontosParada, $idCurso, $endereco) 
+    {        
+        $pontosParadaEstudante = [];
         
+        $entityManager = $this->getEntityManager();
+        $entityManager->getConnection()->beginTransaction();
+        
+        $repositoryPontoParada = $entityManager->getRepository('\App\Entities\PontoParada');
+        $repositoryCurso = $entityManager->getRepository('\App\Entities\Curso');
+        $repositoryCidade = $entityManager->getRepository('\App\Entities\Cidade');
+
+        try
+        {
+            foreach($idsPontosParada as $pontoParada)
+            {
+                $pontoParadaBuscado = $repositoryPontoParada->findOneBy(['id' => $pontoParada['id']]);
+
+                if(!$pontoParadaBuscado) 
+                {
+                    throw new NaoEncontradoException();
+                }
+
+                $pontosParadaEstudante[] = $pontoParadaBuscado;                
+            }
+            $cidade = $repositoryCidade->findOneBy(['id' => $endereco['cidadeId']]);
+            $curso = $repositoryCurso->findOneBy(['id' => $idCurso]);
+            
+            $instanciaEndereco = new Endereco();
+            $instanciaEndereco->setBairro($endereco['bairro']);
+            $instanciaEndereco->setLogradouro($endereco['logradouro']);
+            $instanciaEndereco->setCidade($cidade);
+            
+            $estudante->setEndereco($instanciaEndereco);
+            $estudante->setPontosParada($pontosParadaEstudante);
+            $estudante->setCurso($curso);
+                                    
+            $entityManager->persist($estudante);
+                        
+            foreach($pontosParadaEstudante as $pontoParadaEstudante)
+            {
+                $pontoParadaEstudante->getEstudantes()->add($estudante);
+                $repositoryPontoParada->getEntityManager()->merge($pontoParadaEstudante);
+            }
+            
+            $entityManager->flush();
+            $entityManager->getConnection()->commit();
+        }
+        catch (Exception $ex)
+        {
+            $entityManager->getConnection()->rollback();
+            
+            throw $ex;
+        }
+        finally
+        {
+            $entityManager->close();
+        }
     }
     
     protected function getTypeObject()

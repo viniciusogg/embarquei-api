@@ -12,7 +12,6 @@ trait CriaArrayObjetoTrait
         {
             $array[] = $objeto->toArray();
         }
-        
         return $array;
     }
 }

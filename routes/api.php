@@ -12,6 +12,7 @@
 */
 
 //Route::post('usuarios', 'UsuarioController@store');
+Route::get('usuarios/tipo-usuario/{id}', 'UsuarioController@tipoById')->middleware('auth:api');
 //Route::group(['prefix' => 'usuarios', 'middleware'=> 'auth:api'], function()
 //{
 //    Route::get('/', 'UsuarioController@index');
@@ -20,14 +21,16 @@
 //    Route::put('/{id}', 'UsuarioController@update');
 //});
 
-Route::apiResource('motoristas', 'MotoristaController');//->middleware('auth:api');
+Route::apiResource('motoristas', 'MotoristaController')->middleware('auth:api');
 
-Route::apiResource('administradores', 'AdministradorController');//->middleware('auth:api');
+Route::apiResource('administradores', 'AdministradorController')->middleware('auth:api');
 
-Route::apiResource('instituicoesEnsino', 'InstituicaoEnsinoController');//->middleware('auth:api');
+Route::apiResource('instituicoesEnsino', 'InstituicaoEnsinoController')->middleware('auth:api');
+
+Route::apiResource('cursos', 'CursoController');
 
 //Route::apiResource('cidades', 'CidadeController');
-Route::group(['prefix' => 'cidades'], function()
+Route::group(['prefix' => 'cidades', 'middleware'=> 'auth:api'],  function()
 {
     Route::post('/', 'CidadeController@store');
     Route::get('/', 'CidadeController@index');
@@ -37,9 +40,9 @@ Route::group(['prefix' => 'cidades'], function()
     Route::put('/{id}', 'CidadeController@update');
 });
 
-Route::apiResource('veiculosTransporte', 'VeiculoTransporteController');//->middleware('auth:api);
+Route::apiResource('veiculosTransporte', 'VeiculoTransporteController')->middleware('auth:api');
 
-Route::apiResource('rotas', 'RotaController');
+Route::apiResource('rotas', 'RotaController')->middleware('auth:api');
 
 Route::post('estudantes', 'EstudanteController@store');
 Route::group(['prefix' => 'estudantes', 'middleware'=> 'auth:api'], function()
@@ -52,9 +55,7 @@ Route::group(['prefix' => 'estudantes', 'middleware'=> 'auth:api'], function()
 
 
 Route::post('authenticate', 'AuthController@login');
-
-Route::post('authenticate/refresh', 'AuthController@refresh'); // ->name('login');
-
+Route::post('authenticate/refresh', 'AuthController@refresh')->name('login');
 Route::post('logout', 'AuthController@logout');
 
 /*

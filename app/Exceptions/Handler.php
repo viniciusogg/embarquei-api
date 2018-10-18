@@ -84,7 +84,7 @@ class Handler extends ExceptionHandler
         // usuário são inválidas
         else if ($exception instanceof InvalidCredentialsException)
         {
-            return response()->json(['devError' => 'invalid_credentials', 
+            return response()->json(['devError' => $this->dataExceptionDev($exception), 
                     'userError' => 'O número ou a senha informada está incorreta.'], 401);
         }
         
@@ -95,7 +95,7 @@ class Handler extends ExceptionHandler
         {            
             return response()->json([
                 'devError' => $this->dataExceptionDev($exception),
-                'userError' => 'Sua sessão expirou, faça login novamente'], 400);
+                'userError' => 'Faça login para acessar o sistema.'], 400);
         }
         
         // Tratamento da excessão lançada quando um campo é nulo      

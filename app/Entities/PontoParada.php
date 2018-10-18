@@ -4,6 +4,7 @@ namespace App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Entities\Traits\CriaArrayObjetoTrait;
 
 /** 
  * @ORM\Entity 
@@ -11,6 +12,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class PontoParada 
 {
+    use CriaArrayObjetoTrait;
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -97,8 +100,8 @@ class PontoParada
             'id' => $this->id,
             'nome' => $this->nome,
             'ordem' => $this->ordem,
-            'estudantes' => $this->estudantes,
-            'trajeto' => $this->trajeto
+//            'estudantes' => $this->retornarArrayObjetos($this->estudantes),
+            'trajeto' => $this->trajeto->getId()
          );
     }
 }

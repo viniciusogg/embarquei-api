@@ -5,7 +5,7 @@ namespace Database\Migrations;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema as Schema;
 
-class Version20181010232518 extends AbstractMigration
+class Version20181016163258 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -23,7 +23,7 @@ class Version20181010232518 extends AbstractMigration
         $this->addSql('CREATE TABLE cursos (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', instituicao_ensino_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', nome VARCHAR(255) NOT NULL, INDEX IDX_B2785A18CFA13933 (instituicao_ensino_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE rotas (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', nome VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE instituicao_ensino_rota (rota_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', instituicao_ensino_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', INDEX IDX_101CE2259F169B8 (rota_id), INDEX IDX_101CE225CFA13933 (instituicao_ensino_id), PRIMARY KEY(rota_id, instituicao_ensino_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE listas_presenca (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', instituicao_ensino_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', INDEX IDX_F8161059CFA13933 (instituicao_ensino_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE listas_presenca (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', instituicao_ensino_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', cidade_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', INDEX IDX_F8161059CFA13933 (instituicao_ensino_id), INDEX IDX_F81610599586CC8 (cidade_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE trajetos (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', horario_trajeto_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', rota_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', url_mapa VARCHAR(255) NOT NULL, tipo VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_528CA241AAC3B055 (url_mapa), UNIQUE INDEX UNIQ_528CA241E5CE6D0 (horario_trajeto_id), INDEX IDX_528CA2419F169B8 (rota_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE comprovantes_matricula (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', caminho_sistema_arquivos VARCHAR(255) NOT NULL, status VARCHAR(255) NOT NULL, data_envio DATETIME NOT NULL, justificativa VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_423DF07C227C5A45 (caminho_sistema_arquivos), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE horarios_trajeto (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', partida TIME NOT NULL, chegada TIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
@@ -36,7 +36,7 @@ class Version20181010232518 extends AbstractMigration
         $this->addSql('CREATE TABLE instituicao_ensino_motorista (instituicao_ensino_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', motorista_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', INDEX IDX_47954A5CCFA13933 (instituicao_ensino_id), INDEX IDX_47954A5C1959881F (motorista_id), PRIMARY KEY(instituicao_ensino_id, motorista_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE instituicao_ensino_veiculo_transporte (instituicao_ensino_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', veiculo_transporte_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', INDEX IDX_14D7541BCFA13933 (instituicao_ensino_id), INDEX IDX_14D7541B6120DAE4 (veiculo_transporte_id), PRIMARY KEY(instituicao_ensino_id, veiculo_transporte_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE checkins (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', estudante_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', lista_presenca_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', confirmado TINYINT(1) NOT NULL, UNIQUE INDEX UNIQ_9CE70FC53B4690DB (estudante_id), INDEX IDX_9CE70FC5A58DDEE9 (lista_presenca_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE estudantes (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', curso_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', endereco_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', comprovate_matricula_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', foto VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_E590D4DDEADC3BE5 (foto), INDEX IDX_E590D4DD87CB4A1F (curso_id), UNIQUE INDEX UNIQ_E590D4DD1BB76823 (endereco_id), UNIQUE INDEX UNIQ_E590D4DD14C583B7 (comprovate_matricula_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE estudantes (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', curso_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', endereco_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', comprovante_matricula_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', foto VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_E590D4DDEADC3BE5 (foto), INDEX IDX_E590D4DD87CB4A1F (curso_id), UNIQUE INDEX UNIQ_E590D4DD1BB76823 (endereco_id), UNIQUE INDEX UNIQ_E590D4DD91E6CFE (comprovante_matricula_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE estudante_ponto_parada (estudante_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', ponto_parada_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', INDEX IDX_DBA8DC1F3B4690DB (estudante_id), INDEX IDX_DBA8DC1F7139120E (ponto_parada_id), PRIMARY KEY(estudante_id, ponto_parada_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE administradores (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', endereco_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', UNIQUE INDEX UNIQ_BA7CABE61BB76823 (endereco_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE pontos_parada ADD CONSTRAINT FK_7AA975AA5FD436D8 FOREIGN KEY (trajeto_id) REFERENCES trajetos (id)');
@@ -48,6 +48,7 @@ class Version20181010232518 extends AbstractMigration
         $this->addSql('ALTER TABLE instituicao_ensino_rota ADD CONSTRAINT FK_101CE2259F169B8 FOREIGN KEY (rota_id) REFERENCES rotas (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE instituicao_ensino_rota ADD CONSTRAINT FK_101CE225CFA13933 FOREIGN KEY (instituicao_ensino_id) REFERENCES instituicoes_ensino (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE listas_presenca ADD CONSTRAINT FK_F8161059CFA13933 FOREIGN KEY (instituicao_ensino_id) REFERENCES instituicoes_ensino (id)');
+        $this->addSql('ALTER TABLE listas_presenca ADD CONSTRAINT FK_F81610599586CC8 FOREIGN KEY (cidade_id) REFERENCES cidades (id)');
         $this->addSql('ALTER TABLE trajetos ADD CONSTRAINT FK_528CA241E5CE6D0 FOREIGN KEY (horario_trajeto_id) REFERENCES horarios_trajeto (id)');
         $this->addSql('ALTER TABLE trajetos ADD CONSTRAINT FK_528CA2419F169B8 FOREIGN KEY (rota_id) REFERENCES rotas (id)');
         $this->addSql('ALTER TABLE renovacoes_cadastro ADD CONSTRAINT FK_B350766FBB9AF004 FOREIGN KEY (responsavel_id) REFERENCES administradores (id)');
@@ -63,7 +64,7 @@ class Version20181010232518 extends AbstractMigration
         $this->addSql('ALTER TABLE checkins ADD CONSTRAINT FK_9CE70FC5A58DDEE9 FOREIGN KEY (lista_presenca_id) REFERENCES listas_presenca (id)');
         $this->addSql('ALTER TABLE estudantes ADD CONSTRAINT FK_E590D4DD87CB4A1F FOREIGN KEY (curso_id) REFERENCES cursos (id)');
         $this->addSql('ALTER TABLE estudantes ADD CONSTRAINT FK_E590D4DD1BB76823 FOREIGN KEY (endereco_id) REFERENCES enderecos (id)');
-        $this->addSql('ALTER TABLE estudantes ADD CONSTRAINT FK_E590D4DD14C583B7 FOREIGN KEY (comprovate_matricula_id) REFERENCES comprovantes_matricula (id)');
+        $this->addSql('ALTER TABLE estudantes ADD CONSTRAINT FK_E590D4DD91E6CFE FOREIGN KEY (comprovante_matricula_id) REFERENCES comprovantes_matricula (id)');
         $this->addSql('ALTER TABLE estudantes ADD CONSTRAINT FK_E590D4DDBF396750 FOREIGN KEY (id) REFERENCES usuarios (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE estudante_ponto_parada ADD CONSTRAINT FK_DBA8DC1F3B4690DB FOREIGN KEY (estudante_id) REFERENCES estudantes (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE estudante_ponto_parada ADD CONSTRAINT FK_DBA8DC1F7139120E FOREIGN KEY (ponto_parada_id) REFERENCES pontos_parada (id) ON DELETE CASCADE');
@@ -93,11 +94,12 @@ class Version20181010232518 extends AbstractMigration
         $this->addSql('ALTER TABLE trajetos DROP FOREIGN KEY FK_528CA2419F169B8');
         $this->addSql('ALTER TABLE checkins DROP FOREIGN KEY FK_9CE70FC5A58DDEE9');
         $this->addSql('ALTER TABLE pontos_parada DROP FOREIGN KEY FK_7AA975AA5FD436D8');
-        $this->addSql('ALTER TABLE estudantes DROP FOREIGN KEY FK_E590D4DD14C583B7');
+        $this->addSql('ALTER TABLE estudantes DROP FOREIGN KEY FK_E590D4DD91E6CFE');
         $this->addSql('ALTER TABLE trajetos DROP FOREIGN KEY FK_528CA241E5CE6D0');
         $this->addSql('ALTER TABLE estudante_renovacao_cadastro DROP FOREIGN KEY FK_6F05BA9C82BB25E');
         $this->addSql('ALTER TABLE instituicao_ensino_veiculo_transporte DROP FOREIGN KEY FK_14D7541B6120DAE4');
         $this->addSql('ALTER TABLE enderecos DROP FOREIGN KEY FK_FC4E02DA9586CC8');
+        $this->addSql('ALTER TABLE listas_presenca DROP FOREIGN KEY FK_F81610599586CC8');
         $this->addSql('ALTER TABLE cursos DROP FOREIGN KEY FK_B2785A18CFA13933');
         $this->addSql('ALTER TABLE instituicao_ensino_rota DROP FOREIGN KEY FK_101CE225CFA13933');
         $this->addSql('ALTER TABLE listas_presenca DROP FOREIGN KEY FK_F8161059CFA13933');

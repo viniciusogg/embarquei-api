@@ -5,7 +5,6 @@ namespace App\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Application;
-use App\Services\UsuarioService;
 use App\Exceptions\InvalidCredentialsException;
 
 // FALTA FAZER A AUTENTICAÇÃO DO CLIENTE
@@ -32,22 +31,18 @@ class AuthService
      * @param string $numeroCelular
      * @param string $senha
      */
-    public function attemptLogin($numeroCelular, $senha, UsuarioService $usuarioService)
+    public function attemptLogin($numeroCelular, $senha)
     {
 
-        // VERIFICAR O TIPO DE USUÁRIO NO ACCESS TOKEN E FAZER A REQUISIÇÃO PARA O SERVICE ADEQUADO
+        // VERIFICAR O TIPO DE USUÁRIO NO ACCESS TOKEN E FAZER A CHAMADA PARA O SERVICE ADEQUADO
 
-        $usuario = $usuarioService->findByNumeroCelular($numeroCelular);
+//        $usuario = $usuarioService->findByNumeroCelular($numeroCelular);
 
-        if (!empty($usuario))
-        {
             return $this->proxy('password', [
                 'username' => $numeroCelular,
                 'password' => $senha
             ]);
-        }
 
-        throw new InvalidCredentialsException();
     }
 
     /**
@@ -85,22 +80,23 @@ class AuthService
             throw new InvalidCredentialsException();
         }
 
-        $response = json_decode($response->content(), true);
+        $newResponse = json_decode($response->content(), true);
 
         // Create a refresh token cookie
         $this->cookie->queue(
             self::REFRESH_TOKEN,
-            $response[self::REFRESH_TOKEN],
+            $newResponse[self::REFRESH_TOKEN],
             7200, // 5 days
-            null,
+            '/authenticate/refresh',
             null,
             false,
             true // HttpOnly
         );
-
+//      'name', 'value', $minutes, $path, $domain, $secure, $httpOnly
+        
         return [
-            'access_token' => $response['access_token'],
-            'expires_in' => $response['expires_in'],
+            'access_token' => $newResponse['access_token'],
+            'expires_in' => $newResponse['expires_in'],
         ];
     }
 

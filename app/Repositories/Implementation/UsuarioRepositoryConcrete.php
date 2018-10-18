@@ -2,8 +2,10 @@
 
 namespace App\Repositories\Implementation;
 
+use Illuminate\Support\Facades\DB;
 use App\Repositories\Abstraction\UsuarioRepositoryInterface;
 use App\Repositories\Abstraction\Repository;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Exception;
 
 class UsuarioRepositoryConcrete extends Repository implements UsuarioRepositoryInterface
@@ -29,8 +31,36 @@ class UsuarioRepositoryConcrete extends Repository implements UsuarioRepositoryI
             $entityManager->close();
         }
     }
+    
+    public function getTipoByNumeroCelular($numeroCelular) 
+    {        
+        try
+        {              
+            return DB::table('usuarios')->
+                    where('numero_celular', $numeroCelular)->
+                    value('discr');
+        }
+        catch (Exception $ex) 
+        {
+            throw $ex;
+        }
+    }
 
-    protected function getTypeObject()
+    public function getTipoById($id)
+    {        
+        try
+        {              
+            return DB::table('usuarios')->
+                    where('id', $id)->
+                    value('discr');
+        }
+        catch (Exception $ex) 
+        {
+            throw $ex;
+        }
+    }
+    
+    protected function getTypeObject() 
     {
         return '\App\Entities\Usuario';
     }

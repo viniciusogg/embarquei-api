@@ -75,7 +75,7 @@ class Checkin
             'id' => $this->id,
             'confirmado' => $this->confirmado,
             'estudante' => $this->estudante,
-            'listaPresenca' => $this->listaPresenca
+            'listaPresenca' => $this->listaPresenca->getId()
          );
     }
 }

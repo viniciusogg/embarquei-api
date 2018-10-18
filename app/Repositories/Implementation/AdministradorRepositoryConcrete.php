@@ -4,8 +4,9 @@ namespace App\Repositories\Implementation;
 
 use App\Repositories\Abstraction\Repository;
 use App\Repositories\Abstraction\AdministradorRepositoryInterface;
+use App\Repositories\Implementation\UsuarioRepositoryConcrete;
 
-class AdministradorRepositoryConcrete extends Repository implements AdministradorRepositoryInterface
+class AdministradorRepositoryConcrete extends UsuarioRepositoryConcrete implements AdministradorRepositoryInterface
 {
 
     protected function getTypeObject() 
