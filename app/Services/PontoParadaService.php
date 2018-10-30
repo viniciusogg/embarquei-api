@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Entities\PontoParada;
+use App\Repositories\Abstraction\PontoParadaRepositoryInterface;
 
 class PontoParadaService 
 {
@@ -54,5 +55,20 @@ class PontoParadaService
     private function criarInstanciaPontoParada($dados)
     {
 
+    }
+    
+    public function getPontosParadaByCidadeInstituicaoRota($cidadeId, $instituicaoId, $rotaId)
+    {
+        $result = $this->pontoParadaRepository->getPontosParadaByCidadeInstituicaoRota($cidadeId, $instituicaoId, $rotaId);
+
+        $pontosParada = array();
+        
+        foreach ($result as $pontoParada) 
+        {
+//            error_log($pontoParada->toArray());
+            $pontosParada[] = $pontoParada->toArray();
+        }
+        
+        return $pontosParada;
     }
 }

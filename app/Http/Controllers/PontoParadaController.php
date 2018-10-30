@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\PontoParadaService;
 
 class PontoParadaController extends Controller
 {
@@ -89,5 +90,13 @@ class PontoParadaController extends Controller
         $this->pontoParadaService->delete($id);
 
         return response()->json('', 204);
+    }
+    
+    public function buscarPontosParadaByCidadeInstituicaoRota($cidade, $instituicaoEnsino, $rota)
+    {  
+        $pontosParada = $this->pontoParadaService->
+                getPontosParadaByCidadeInstituicaoRota($cidade, $instituicaoEnsino, $rota);
+        
+        return response()->json($pontosParada, 200);
     }
 }

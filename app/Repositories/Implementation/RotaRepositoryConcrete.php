@@ -9,7 +9,7 @@ use App\Exceptions\NullFieldException;
 
 class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterface
 {
-    public function associarComEntidades($rota, $nomesInstituicoesEnsino)
+    public function associarComEntidades($rota, $nomesInstituicoesEnsino, $nomeCidade)
     {
         $instituicoesEnsino = [];                
         
@@ -18,6 +18,7 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
         
         $repositoryInstituicaoEnsino = $entityManager->getRepository('\App\Entities\InstituicaoEnsino');
         $repositoryTrajeto = $entityManager->getRepository('\App\Entities\Trajeto');
+        $repositoryCidade = $entityManager->getRepository('\App\Entities\Cidade');
         
         try
         {  
@@ -39,15 +40,26 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
             {
                 $rota->setInstituicoesEnsino($instituicoesEnsino);
             }
+
+            $cidade = $repositoryCidade->findOneBy(['nome' => $nomeCidade]);
+            
+            if (empty($cidade))
+            {
+                throw new NullFieldException();
+            }
+            else
+            {
+                $rota->setCidade($cidade);
+            }
             
             $entityManager->persist($rota);
                         
 //            if(!empty($rota->getTrajetos()))
 //            {
-                foreach ($rota->getTrajetos() as $trajeto)
-                {
-                    $repositoryTrajeto->getEntityManager()->persist($trajeto);
-                }
+            foreach ($rota->getTrajetos() as $trajeto)
+            {
+                $repositoryTrajeto->getEntityManager()->persist($trajeto);
+            }
 //            }
             
             $entityManager->flush();

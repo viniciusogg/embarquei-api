@@ -64,10 +64,10 @@ class Rota extends \App\Entities\Rota implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'nome', 'instituicoesEnsino', 'trajetos'];
+            return ['__isInitialized__', 'id', 'nome', 'instituicoesEnsino', 'trajetos', 'cidade'];
         }
 
-        return ['__isInitialized__', 'id', 'nome', 'instituicoesEnsino', 'trajetos'];
+        return ['__isInitialized__', 'id', 'nome', 'instituicoesEnsino', 'trajetos', 'cidade'];
     }
 
     /**
@@ -235,6 +235,17 @@ class Rota extends \App\Entities\Rota implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
+    public function getCidade()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCidade', []);
+
+        return parent::getCidade();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setId($id)
     {
 
@@ -274,6 +285,17 @@ class Rota extends \App\Entities\Rota implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTrajetos', [$trajetos]);
 
         return parent::setTrajetos($trajetos);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCidade($cidade)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCidade', [$cidade]);
+
+        return parent::setCidade($cidade);
     }
 
     /**

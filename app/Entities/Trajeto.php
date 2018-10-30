@@ -114,7 +114,7 @@ class Trajeto
             'id' => $this->id,
             'URLMapa' => $this->URLMapa,
             'tipo' => $this->tipo,
-            'horarioTrajeto' => $this->horarioTrajeto,
+            'horarioTrajeto' => $this->horarioTrajeto->toArray(),
             'rota' => $this->rota->getId(),
             'pontosParada' => $this->retornarArrayObjetos($this->pontosParada)
          );

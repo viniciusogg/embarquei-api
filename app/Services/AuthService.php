@@ -51,8 +51,12 @@ class AuthService
      */
     public function attemptRefresh()
     {
+//        error_log('Chamou attemptRefresh');
+        
         $refreshToken = $this->request->cookie(self::REFRESH_TOKEN);
 
+//        error_log('tentando renovar o token com refresh token...');
+        
         return $this->proxy(self::REFRESH_TOKEN, [
             self::REFRESH_TOKEN => $refreshToken
         ]);
@@ -72,6 +76,11 @@ class AuthService
             'grant_type'    => $grantType
         ]);
 
+        foreach ($data as $d)
+        {
+            error_log($d);
+        }
+        
         $request = Request::create('/oauth/token', 'POST', $dataRequest);
         $response = $this->app->handle($request);
 
@@ -87,10 +96,10 @@ class AuthService
             self::REFRESH_TOKEN,
             $newResponse[self::REFRESH_TOKEN],
             7200, // 5 days
-            '/authenticate/refresh',
-            null,
+            null, // /authenticate/refresh
+            null, // 127.0.0.1
             false,
-            true // HttpOnly
+            false // HttpOnly
         );
 //      'name', 'value', $minutes, $path, $domain, $secure, $httpOnly
         
@@ -109,6 +118,16 @@ class AuthService
         $this->revokeTokens($accessTokenId);
 
         $this->cookie->queue($this->cookie->forget(self::REFRESH_TOKEN));
+        
+        $this->cookie->queue(
+            self::REFRESH_TOKEN,
+            null,
+            1, // 5 days
+            null, // /authenticate/refresh
+            null, // 127.0.0.1
+            false,
+            true // HttpOnly
+        );
     }
 
     private function revokeTokens($id)

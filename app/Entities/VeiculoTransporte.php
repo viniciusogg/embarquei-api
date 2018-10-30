@@ -42,6 +42,12 @@ class VeiculoTransporte
      */
     protected $instituicoesEnsino;
 
+    /** 
+     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="Cidade", inversedBy="veiculosTransporte", fetch="EAGER") 
+     */
+    protected $cidade;
+    
     public function __construct()
     {
         $this->instituicoesEnsino = new ArrayCollection();
@@ -82,6 +88,11 @@ class VeiculoTransporte
         return $this->instituicoesEnsino;
     }
 
+    public function getCidade() 
+    {
+        return $this->cidade;
+    }
+        
     public function setId($id)
     {
         $this->id = $id;
@@ -116,6 +127,11 @@ class VeiculoTransporte
     {
         $this->instituicoesEnsino = $instituicoesEnsino;
     }
+    
+    public function setCidade($cidade) 
+    {
+        $this->cidade = $cidade;
+    }
 
     public function toArray()
     {
@@ -126,7 +142,8 @@ class VeiculoTransporte
             'tipo' => $this->tipo,
             'cor' => $this->cor,
             'imagem' => $this->imagem,
-            'instituicoesEnsino' => $this->instituicoesEnsino
+            'instituicoesEnsino' => $this->retornarArrayObjetos($this->instituicoesEnsino),
+            'cidade' => $this->cidade->id
          );
     }
 }

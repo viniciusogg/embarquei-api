@@ -22,7 +22,7 @@ class RotaService
     {
         $rota = $this->criarInstanciaRota($dados);
 
-        $this->rotaRepository->associarComEntidades($rota, $dados['nomesInstituicoesEnsino']);        
+        $this->rotaRepository->associarComEntidades($rota, $dados['nomesInstituicoesEnsino'], $dados['cidade']);        
     }
 
     public function findById($id)

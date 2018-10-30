@@ -81,4 +81,19 @@ class TrajetoService
                 
         return $trajeto;
     }
+    
+    public function getTrajetosByCidadeInstituicaoRota($cidadeId, $instituicaoId)
+    {  
+        $result = $this->trajetoRepository->getTrajetosByCidadeInstituicaoRota($cidadeId, $instituicaoId);
+
+        $trajetos = array();
+        
+        foreach ($result as $trajeto) 
+        {
+//            error_log($pontoParada->toArray());
+            $trajetos[] = $trajeto->toArray();
+        }
+        
+        return $trajetos;
+    }
 }

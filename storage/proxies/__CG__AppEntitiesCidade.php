@@ -64,10 +64,10 @@ class Cidade extends \App\Entities\Cidade implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'nome', 'enderecos'];
+            return ['__isInitialized__', 'id', 'nome', 'enderecos', 'veiculosTransporte'];
         }
 
-        return ['__isInitialized__', 'id', 'nome', 'enderecos'];
+        return ['__isInitialized__', 'id', 'nome', 'enderecos', 'veiculosTransporte'];
     }
 
     /**
@@ -213,6 +213,17 @@ class Cidade extends \App\Entities\Cidade implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
+    public function getVeiculosTransporte()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVeiculosTransporte', []);
+
+        return parent::getVeiculosTransporte();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setId($id)
     {
 
@@ -241,6 +252,17 @@ class Cidade extends \App\Entities\Cidade implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setEnderecos', [$enderecos]);
 
         return parent::setEnderecos($enderecos);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setVeiculosTransporte($veiculosTransporte)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setVeiculosTransporte', [$veiculosTransporte]);
+
+        return parent::setVeiculosTransporte($veiculosTransporte);
     }
 
     /**

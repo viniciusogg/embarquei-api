@@ -11,26 +11,17 @@
 |
 */
 
-//Route::post('usuarios', 'UsuarioController@store');
 Route::get('usuarios/tipo-usuario/{id}', 'UsuarioController@tipoById')->middleware('auth:api');
-//Route::group(['prefix' => 'usuarios', 'middleware'=> 'auth:api'], function()
-//{
-//    Route::get('/', 'UsuarioController@index');
-//    Route::get('/{id}', 'UsuarioController@show');
-//    Route::delete('/{id}', 'UsuarioController@destroy');
-//    Route::put('/{id}', 'UsuarioController@update');
-//});
 
 Route::apiResource('motoristas', 'MotoristaController')->middleware('auth:api');
 
 Route::apiResource('administradores', 'AdministradorController')->middleware('auth:api');
 
-Route::apiResource('instituicoesEnsino', 'InstituicaoEnsinoController')->middleware('auth:api');
+Route::apiResource('instituicoesEnsino', 'InstituicaoEnsinoController');//->middleware('auth:api');
 
 Route::apiResource('cursos', 'CursoController');
 
-//Route::apiResource('cidades', 'CidadeController');
-Route::group(['prefix' => 'cidades', 'middleware'=> 'auth:api'],  function()
+Route::group(['prefix' => 'cidades'],  function() // , 'middleware'=> 'auth:api'
 {
     Route::post('/', 'CidadeController@store');
     Route::get('/', 'CidadeController@index');
@@ -40,9 +31,13 @@ Route::group(['prefix' => 'cidades', 'middleware'=> 'auth:api'],  function()
     Route::put('/{id}', 'CidadeController@update');
 });
 
-Route::apiResource('veiculosTransporte', 'VeiculoTransporteController')->middleware('auth:api');
+Route::apiResource('veiculosTransporte', 'VeiculoTransporteController');//->middleware('auth:api');
 
-Route::apiResource('rotas', 'RotaController')->middleware('auth:api');
+Route::apiResource('rotas', 'RotaController');//->middleware('auth:api');
+
+Route::get('pontosParada/{cidade}/{instituicaoEnsino}/{rota}', 'PontoParadaController@buscarPontosParadaByCidadeInstituicaoRota');
+
+Route::get('trajetos/{cidade}/{instituicaoEnsino}', 'TrajetoController@buscarTrajetosByCidadeInstituicaoRota');
 
 Route::post('estudantes', 'EstudanteController@store');
 Route::group(['prefix' => 'estudantes', 'middleware'=> 'auth:api'], function()
@@ -54,9 +49,9 @@ Route::group(['prefix' => 'estudantes', 'middleware'=> 'auth:api'], function()
 });
 
 
-Route::post('authenticate', 'AuthController@login');
-Route::post('authenticate/refresh', 'AuthController@refresh')->name('login');
-Route::post('logout', 'AuthController@logout');
+Route::post('authenticate', 'AuthController@auth');
+Route::any('authenticate/refresh', 'AuthController@refresh');
+Route::delete('logout', 'AuthController@logout')->middleware('auth:api');
 
 /*
  *  quando a autenticação falha (access token inválido), automaticamente

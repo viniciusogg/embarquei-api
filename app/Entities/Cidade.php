@@ -26,10 +26,17 @@ class Cidade
      * @ORM\OneToMany(targetEntity="Endereco", mappedBy="cidade", cascade={"remove"}, fetch="EAGER") 
      */
     protected $enderecos;
+    
+    /**
+     * @ORM\JoinColumn(nullable=true)
+     * @ORM\OneToMany(targetEntity="VeiculoTransporte", mappedBy="cidade", cascade={"remove"}, fetch="EAGER") 
+     */
+    protected $veiculosTransporte;
 
     public function __construct()
     {
         $this->enderecos = new ArrayCollection();
+        $this->veiculosTransporte = new ArrayCollection();
     }
     
     public function getId() 
@@ -47,6 +54,11 @@ class Cidade
         return $this->enderecos;
     }
 
+    public function getVeiculosTransporte() 
+    {
+        return $this->veiculosTransporte;
+    }
+  
     public function setId($id) 
     {
         $this->id = $id;
@@ -62,12 +74,18 @@ class Cidade
         $this->enderecos = $enderecos;
     }
 
+    public function setVeiculosTransporte($veiculosTransporte) 
+    {
+        $this->veiculosTransporte = $veiculosTransporte;
+    }
+    
     public function toArray()
     {
         return array(
             'id' => $this->id, 
             'nome' => $this->nome,
-            'enderecos' => $this->retornarArrayObjetos($this->enderecos)
+//            'enderecos' => $this->retornarArrayObjetos($this->enderecos),
+//            'veiculosTransporte' => $this->retornarArrayObjetos($this->veiculosTransporte)
          );
     }
 }

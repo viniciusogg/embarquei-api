@@ -34,6 +34,12 @@ class Rota
      */
     protected $trajetos;
 
+    /**
+     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="Cidade", fetch="EAGER")
+     */
+    protected $cidade;
+    
     public function __construnct()
     {
         $this->instituicoesEnsino = new ArrayCollection();
@@ -59,6 +65,11 @@ class Rota
     {
         return $this->trajetos;
     }
+    
+    public function getCidade() 
+    {
+        return $this->cidade;
+    }
 
     public function setId($id)
     {
@@ -80,13 +91,22 @@ class Rota
         $this->trajetos = $trajetos;
     }
 
+    public function setCidade($cidade) 
+    {
+        $this->cidade = $cidade;
+    }
+    
     public function toArray()
     {
         return array(
             'id' => $this->id,
             'nome' => $this->nome,
             'instituicoesEnsino' => $this->retornarArrayObjetos($this->instituicoesEnsino),
-            'trajetos' => $this->retornarArrayObjetos($this->trajetos)
+            'trajetos' => $this->retornarArrayObjetos($this->trajetos),
+            'cidade' => [
+                'id' => $this->cidade->getId(), 
+                'nome' => $this->cidade->getNome()
+            ]
          );
     }
 

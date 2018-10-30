@@ -64,10 +64,10 @@ class VeiculoTransporte extends \App\Entities\VeiculoTransporte implements \Doct
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'capacidade', 'placa', 'tipo', 'cor', 'imagem', 'instituicoesEnsino'];
+            return ['__isInitialized__', 'id', 'capacidade', 'placa', 'tipo', 'cor', 'imagem', 'instituicoesEnsino', 'cidade'];
         }
 
-        return ['__isInitialized__', 'id', 'capacidade', 'placa', 'tipo', 'cor', 'imagem', 'instituicoesEnsino'];
+        return ['__isInitialized__', 'id', 'capacidade', 'placa', 'tipo', 'cor', 'imagem', 'instituicoesEnsino', 'cidade'];
     }
 
     /**
@@ -257,6 +257,17 @@ class VeiculoTransporte extends \App\Entities\VeiculoTransporte implements \Doct
     /**
      * {@inheritDoc}
      */
+    public function getCidade()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCidade', []);
+
+        return parent::getCidade();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setId($id)
     {
 
@@ -329,6 +340,17 @@ class VeiculoTransporte extends \App\Entities\VeiculoTransporte implements \Doct
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInstituicoesEnsino', [$instituicoesEnsino]);
 
         return parent::setInstituicoesEnsino($instituicoesEnsino);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCidade($cidade)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCidade', [$cidade]);
+
+        return parent::setCidade($cidade);
     }
 
     /**

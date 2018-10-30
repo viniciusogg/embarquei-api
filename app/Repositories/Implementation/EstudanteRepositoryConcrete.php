@@ -35,7 +35,7 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
 
                 $pontosParadaEstudante[] = $pontoParadaBuscado;                
             }
-            $cidade = $repositoryCidade->findOneBy(['id' => $endereco['cidadeId']]);
+            $cidade = $repositoryCidade->findOneBy(['id' => $endereco['cidade']]);
             $curso = $repositoryCurso->findOneBy(['id' => $idCurso]);
             
             $instanciaEndereco = new Endereco();

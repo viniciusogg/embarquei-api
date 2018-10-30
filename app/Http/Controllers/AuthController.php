@@ -32,6 +32,20 @@ class AuthController extends Controller
         $this->motoristaService = $motoristaService;
     }
 
+    public function auth(Request $request)
+    {
+        $numeroCelular = $request->get('numeroCelular');
+        
+        if(!$numeroCelular)
+        {
+            return $this->refresh();
+        }
+        else
+        {
+            return $this->login($request);
+        }
+    }
+    
     public function login(Request $request)
     {
         $numeroCelular = $request->get('numeroCelular');
@@ -52,16 +66,11 @@ class AuthController extends Controller
             'expires_in' => $dataTokens['expires_in']
         );
         
-        return response()->json($accessToken, 200);/*->withHeaders(
-                [
-                    'Access-Control-Allow-Credentials' => 'true', 
-                    'Access-Control-Allow-Origin' => 'http://localhost:4200'
-                ]
-            );*/
+        return response()->json($accessToken, 200);
     }
 
     public function refresh()
-    {
+    {        
         $dataTokens = $this->authService->attemptRefresh();
         
         $accessToken = array(
@@ -74,8 +83,12 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $accessToken = $request->header('access_token'); //get('access_token');
+        $authorizationHeader = $request->header('Authorization'); //get('access_token');
 
+        $accessToken = str_replace(' ', '', str_replace('Bearer', '', $authorizationHeader));
+        
+//        error_log($accessToken);
+        
         $id = (new Parser())->parse($accessToken)->getHeader('jti');
 
         $this->authService->logout($id);
