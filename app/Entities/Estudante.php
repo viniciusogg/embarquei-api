@@ -119,6 +119,7 @@ class Estudante extends Usuario
             'sobrenome' => $this->sobrenome,
             'numeroCelular' => $this->numeroCelular,
             'foto' => $this->foto,
+            'ativo' => $this->ativo,
             'horariosSemanaisEstudante' => $this->retornarArrayObjetos($this->horariosSemanaisEstudante),
             'curso' => $this->curso->toArray(),
             'endereco' => $this->endereco->toArray(),

@@ -26,8 +26,11 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
         {
             foreach($idsPontosParada as $pontoParada)
             {
-                $pontoParadaBuscado = $repositoryPontoParada->findOneBy(['id' => $pontoParada['id']]);
+                $idPontoParada = $pontoParada['id'];
+                $pontoParadaBuscado = $repositoryPontoParada->findOneBy(['id' => $idPontoParada]);
 
+                error_log($pontoParadaBuscado->getNome());
+                
                 if(!$pontoParadaBuscado) 
                 {
                     throw new NaoEncontradoException();
@@ -35,7 +38,7 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
 
                 $pontosParadaEstudante[] = $pontoParadaBuscado;                
             }
-            $cidade = $repositoryCidade->findOneBy(['id' => $endereco['cidade']]);
+            $cidade = $repositoryCidade->findOneBy(['id' => $endereco['cidade']['id']]);
             $curso = $repositoryCurso->findOneBy(['id' => $idCurso]);
             
             $instanciaEndereco = new Endereco();

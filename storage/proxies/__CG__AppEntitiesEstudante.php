@@ -64,10 +64,10 @@ class Estudante extends \App\Entities\Estudante implements \Doctrine\ORM\Proxy\P
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'foto', 'horariosSemanaisEstudante', 'curso', 'endereco', 'comprovanteMatricula', 'pontosParada', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'senha', 'rememberToken', 'createdAt', 'updatedAt', 'accessToken'];
+            return ['__isInitialized__', 'foto', 'horariosSemanaisEstudante', 'curso', 'endereco', 'comprovanteMatricula', 'pontosParada', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'password', 'rememberToken', 'createdAt', 'updatedAt', 'accessToken'];
         }
 
-        return ['__isInitialized__', 'foto', 'horariosSemanaisEstudante', 'curso', 'endereco', 'comprovanteMatricula', 'pontosParada', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'senha', 'rememberToken', 'createdAt', 'updatedAt', 'accessToken'];
+        return ['__isInitialized__', 'foto', 'horariosSemanaisEstudante', 'curso', 'endereco', 'comprovanteMatricula', 'pontosParada', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'password', 'rememberToken', 'createdAt', 'updatedAt', 'accessToken'];
     }
 
     /**
@@ -483,6 +483,28 @@ class Estudante extends \App\Entities\Estudante implements \Doctrine\ORM\Proxy\P
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAuthIdentifier', []);
 
         return parent::getAuthIdentifier();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPassword()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPassword', []);
+
+        return parent::getPassword();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setPassword($password)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPassword', [$password]);
+
+        return parent::setPassword($password);
     }
 
     /**

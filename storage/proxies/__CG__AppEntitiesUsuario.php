@@ -64,10 +64,10 @@ class Usuario extends \App\Entities\Usuario implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'senha', 'rememberToken', 'createdAt', 'updatedAt', 'accessToken'];
+            return ['__isInitialized__', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'password', 'rememberToken', 'createdAt', 'updatedAt', 'accessToken'];
         }
 
-        return ['__isInitialized__', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'senha', 'rememberToken', 'createdAt', 'updatedAt', 'accessToken'];
+        return ['__isInitialized__', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'password', 'rememberToken', 'createdAt', 'updatedAt', 'accessToken'];
     }
 
     /**
@@ -351,6 +351,28 @@ class Usuario extends \App\Entities\Usuario implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAuthIdentifier', []);
 
         return parent::getAuthIdentifier();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPassword()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPassword', []);
+
+        return parent::getPassword();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setPassword($password)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPassword', [$password]);
+
+        return parent::setPassword($password);
     }
 
     /**
