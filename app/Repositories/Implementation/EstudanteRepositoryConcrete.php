@@ -73,6 +73,36 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
         }
     }
     
+    public function getByCidade($cidadeId) 
+    {
+        $entityManager = $this->getEntityManager();
+
+        try
+        {
+            $query = $entityManager->createQuery(
+                'SELECT e FROM \App\Entities\Estudante e '
+//                    . 'JOIN App\Entities\Cidade c '
+                    . 'JOIN e.endereco en '
+                    . 'JOIN en.cidade c '
+                    . 'WHERE c.id = :cidadeId'
+            );
+            
+            $query->setParameter('cidadeId', $cidadeId);
+            
+            $estudantes = $query->getResult();
+            
+            return $estudantes;
+        }
+        catch (Exception $ex)
+        {
+            throw $ex;
+        }
+        finally
+        {
+            $entityManager->close();
+        }  
+    }
+    
     protected function getTypeObject()
     {
         return '\App\Entities\Estudante';

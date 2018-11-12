@@ -36,6 +36,20 @@ class EstudanteService
         return $this->estudanteRepository->getByNumeroCelular($numeroCelular);
     }
     
+    public function findByCidade($cidadeId)
+    {        
+        $result = $this->estudanteRepository->getByCidade($cidadeId);
+        
+        $estudantes = array();
+        
+        foreach ($result as $estudante) 
+        {
+            $estudantes[] = $estudante->toArray();
+        }
+        
+        return $estudantes;
+    }
+    
     public function findAll()
     {
         $result = $this->estudanteRepository->getAll();

@@ -15,7 +15,7 @@ Route::get('usuarios/tipo-usuario/{id}', 'UsuarioController@tipoById')->middlewa
 
 Route::apiResource('motoristas', 'MotoristaController')->middleware('auth:api');
 
-Route::apiResource('administradores', 'AdministradorController')->middleware('auth:api');
+Route::apiResource('administradores', 'AdministradorController');//->middleware('auth:api');
 
 Route::apiResource('instituicoesEnsino', 'InstituicaoEnsinoController');//->middleware('auth:api');
 
@@ -46,6 +46,7 @@ Route::group(['prefix' => 'estudantes', 'middleware'=> 'auth:api'], function()
     Route::get('/{id}', 'EstudanteController@show');
     Route::delete('/{id}', 'EstudanteController@destroy');
     Route::put('/{id}', 'EstudanteController@update');
+    Route::get('/cidade/{cidadeId}', 'EstudanteController@filtrarPorCidade');
 });
 
 

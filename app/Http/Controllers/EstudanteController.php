@@ -65,6 +65,18 @@ class EstudanteController extends Controller
         return response()->json(['response' => 'Estudante não encontrado'], 400);
     }
 
+    public function filtrarPorCidade($cidadeId)
+    {
+        $estudantes = $this->estudanteService->findByCidade($cidadeId);
+        
+        if (empty($estudantes))
+        {
+            return response()->json('', 204);
+        }
+
+        return response()->json($estudantes, 200);  
+    }
+    
     /**
      * Update the specified resource in storage.
      *

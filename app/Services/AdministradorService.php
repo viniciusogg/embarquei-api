@@ -20,11 +20,11 @@ class AdministradorService
         $this->instituicaoEnsinoService = $instituicaoEnsinoService;
     }
 
-    public function create($data)
+    public function create($dados)
     {
-        $administrador = $this->criarInstanciaAdministrador($data);
+        $administrador = $this->criarInstanciaAdministrador($dados);
 
-        $this->administradorRepository->create($administrador);
+        $this->administradorRepository->associarComEndereco($administrador, $dados['endereco']);
     }
 
     public function findById($id)
@@ -72,20 +72,14 @@ class AdministradorService
         $this->administradorRepository->delete($id);
     }
     
-    private function criarInstanciaAdministrador($data)
-    {
-        $endereco = new Endereco();                
-        $endereco->setCidade($data['endereco']['cidade']);
-        $endereco->setLogradouro($data['endereco']['logradouro']);
-        $endereco->setBairro($data['endereco']['bairro']);        
-        
+    private function criarInstanciaAdministrador($dados)
+    {        
         $administrador = new Administrador();
-        $administrador->setNome($data['nome']);
-        $administrador->setSobrenome($data['sobrenome']);
-        $administrador->setNumeroCelular($data['numeroCelular']);
-        $administrador->setSenha(Hash::make($data['senha']));
-        $administrador->setAtivo($data['ativo']);
-        $administrador->setEndereco($endereco);
+        $administrador->setNome($dados['nome']);
+        $administrador->setSobrenome($dados['sobrenome']);
+        $administrador->setNumeroCelular($dados['numeroCelular']);
+        $administrador->setSenha(Hash::make($dados['senha']));
+        $administrador->setAtivo(true);
         
         return $administrador;
     }

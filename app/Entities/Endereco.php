@@ -72,7 +72,8 @@ class Endereco {
         return array(
             'id' => $this->id,
             'logradouro' => $this->logradouro, 
-            'bairro' => $this->bairro
+            'bairro' => $this->bairro,
+            'cidadeId' => $this->cidade->getId()
          );
     }
 }
