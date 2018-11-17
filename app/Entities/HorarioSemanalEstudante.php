@@ -20,6 +20,9 @@ class HorarioSemanalEstudante {
     /** @ORM\Column(type="string", nullable=false) */
     protected $diaSemana;
 
+    /** @ORM\Column(type="boolean", nullable=false) */
+    protected $temAula;
+    
     /** 
      * @ORM\JoinColumn(nullable=false)
      * @ORM\ManyToOne(targetEntity="Estudante", inversedBy="horariosSemanaisEstudante") 
@@ -36,6 +39,11 @@ class HorarioSemanalEstudante {
         return $this->diaSemana;
     }
 
+    public function getTemAula()
+    {
+        return $this->temAula;
+    }
+    
     public function getEstudante()
     {
         return $this->estudante;
@@ -50,6 +58,11 @@ class HorarioSemanalEstudante {
     {
         $this->diaSemana = $diaSemana;
     }
+    
+    public function setTemAula($temAula)
+    {
+        $this->temAula = $temAula;
+    }
 
     public function setEstudante($estudante)
     {
@@ -61,6 +74,7 @@ class HorarioSemanalEstudante {
         return array(
             'id' => $this->id,
             'diaSemana' => $this->diaSemana,
+            'temAula' => $this->temAula,
             'estudante' => $this->estudante->getId()
          );
     }

@@ -220,6 +220,17 @@ class ComprovanteMatricula extends \App\Entities\ComprovanteMatricula implements
     /**
      * {@inheritDoc}
      */
+    public function setId($id)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setId', [$id]);
+
+        return parent::setId($id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setCaminhoSistemaArquivos($caminhoSistemaArquivos)
     {
 

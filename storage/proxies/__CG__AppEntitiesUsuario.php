@@ -64,10 +64,10 @@ class Usuario extends \App\Entities\Usuario implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'password', 'rememberToken', 'createdAt', 'updatedAt', 'accessToken'];
+            return ['__isInitialized__', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'password', 'rememberToken', 'accessToken'];
         }
 
-        return ['__isInitialized__', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'password', 'rememberToken', 'createdAt', 'updatedAt', 'accessToken'];
+        return ['__isInitialized__', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'password', 'rememberToken', 'accessToken'];
     }
 
     /**
@@ -439,50 +439,6 @@ class Usuario extends \App\Entities\Usuario implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'sendPasswordResetNotification', [$token]);
 
         return parent::sendPasswordResetNotification($token);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getCreatedAt()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCreatedAt', []);
-
-        return parent::getCreatedAt();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getUpdatedAt()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUpdatedAt', []);
-
-        return parent::getUpdatedAt();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setCreatedAt(\DateTime $createdAt)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreatedAt', [$createdAt]);
-
-        return parent::setCreatedAt($createdAt);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setUpdatedAt(\DateTime $updatedAt)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUpdatedAt', [$updatedAt]);
-
-        return parent::setUpdatedAt($updatedAt);
     }
 
     /**

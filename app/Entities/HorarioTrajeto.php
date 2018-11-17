@@ -58,8 +58,8 @@ class HorarioTrajeto {
     {
         return array(
             'id' => $this->id,
-            'partida' => $this->partida,
-            'chegada' => $this->chegada
+            'partida' => $this->partida->format('H:i'),
+            'chegada' => $this->chegada->format('H:i')
          );
     }
     

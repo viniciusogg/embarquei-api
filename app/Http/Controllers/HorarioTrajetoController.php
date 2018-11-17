@@ -3,16 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\EstudanteService;
+use App\Services\HorarioTrajetoService;
 
-class EstudanteController extends Controller
+class HorarioTrajetoController extends Controller
 {
+    private $horarioTrajetoService;
     
-    private $estudanteService;
-    
-    public function __construct(EstudanteService $estudanteService) 
+    public function __construct(HorarioTrajetoService $horarioTrajetoService) 
     {
-        $this->estudanteService = $estudanteService;
+        $this->horarioTrajetoService = $horarioTrajetoService;
     }
     
     /**
@@ -22,14 +21,14 @@ class EstudanteController extends Controller
      */
     public function index()
     {
-        $estudantes = $this->estudanteService->findAll();
+        $horariosTrajeto = $this->horarioTrajetoService->findAll();
 
-        if (empty($estudantes))
+        if (empty($horariosTrajeto))
         {
             return response()->json('', 204);
         }
 
-        return response()->json($estudantes, 200);
+        return response()->json($horariosTrajeto, 200);
     }
 
     /**
@@ -40,9 +39,9 @@ class EstudanteController extends Controller
      */
     public function store(Request $request)
     {
-        $estudante = $request->all();
+        $horarioTrajeto = $request->all();
 
-        $this->estudanteService->create($estudante);
+        $this->horarioTrajetoService->create($horarioTrajeto);
 
         return response()->json(['response' => 'Success'], 201);
     }
@@ -55,26 +54,14 @@ class EstudanteController extends Controller
      */
     public function show($id)
     {
-        $estudante = $this->estudanteService->findById($id);
+        $horarioTrajeto = $this->horarioTrajetoService->findById($id);
 
-        if ($estudante)
+        if ($horarioTrajeto)
         {
-            return response()->json($estudante->toArray(), 200);
+            return response()->json($horarioTrajeto->toArray(), 200);
         }
 
-        return response()->json(['response' => 'Estudante não encontrado'], 400);
-    }
-
-    public function filtrarPorCidade($cidadeId)
-    {
-        $estudantes = $this->estudanteService->findByCidade($cidadeId);
-        
-        if (empty($estudantes))
-        {
-            return response()->json('', 204);
-        }
-
-        return response()->json($estudantes, 200);  
+        return response()->json(['response' => 'Horario do trajeto não encontrado'], 400);
     }
     
     /**
@@ -86,13 +73,11 @@ class EstudanteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $estudante = $request->all();
+        $horarioTrajeto = $request->all();
 
-        $estudanteAtualizado = $this->estudanteService->update($estudante, $id);
-
-//        error_log('atualizando...');
+        $horarioTrajetoAtualizado = $this->horarioTrajetoService->update($horarioTrajeto, $id);
         
-        return response()->json([$estudanteAtualizado->toArray()], 200);
+        return response()->json([$horarioTrajetoAtualizado->toArray()], 200);
     }
 
     /**
@@ -103,7 +88,7 @@ class EstudanteController extends Controller
      */
     public function destroy($id)
     {
-        $this->estudanteService->delete($id);
+        $this->horarioTrajetoService->delete($id);
 
         return response()->json('', 204);
     }

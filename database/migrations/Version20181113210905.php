@@ -5,7 +5,7 @@ namespace Database\Migrations;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema as Schema;
 
-class Version20181106192703 extends AbstractMigration
+class Version20181113210905 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -15,8 +15,8 @@ class Version20181106192703 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE pontos_parada (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', trajeto_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', nome VARCHAR(255) NOT NULL, ordem INT NOT NULL, INDEX IDX_7AA975AA5FD436D8 (trajeto_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE horarios_semanais_estudantes (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', estudante_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', dia_semana VARCHAR(255) NOT NULL, INDEX IDX_A3B1F63B3B4690DB (estudante_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE usuarios (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', nome VARCHAR(255) NOT NULL, sobrenome VARCHAR(255) NOT NULL, numero_celular VARCHAR(255) NOT NULL, ativo TINYINT(1) NOT NULL, password VARCHAR(255) NOT NULL, remember_token VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, discr VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_EF687F23A5CBB1E (numero_celular), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE horarios_semanais_estudantes (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', estudante_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', dia_semana VARCHAR(255) NOT NULL, tem_aula TINYINT(1) NOT NULL, INDEX IDX_A3B1F63B3B4690DB (estudante_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE usuarios (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', nome VARCHAR(255) NOT NULL, sobrenome VARCHAR(255) NOT NULL, numero_celular VARCHAR(255) NOT NULL, ativo TINYINT(1) NOT NULL, password VARCHAR(255) NOT NULL, remember_token VARCHAR(255) DEFAULT NULL, discr VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_EF687F23A5CBB1E (numero_celular), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE mensageiros (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE motoristas (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', foto VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_5CFD06CDEADC3BE5 (foto), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE enderecos (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', cidade_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', logradouro VARCHAR(255) NOT NULL, bairro VARCHAR(255) NOT NULL, INDEX IDX_FC4E02DA9586CC8 (cidade_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');

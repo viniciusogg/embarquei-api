@@ -49,6 +49,11 @@ class ComprovanteMatricula {
     {
         return $this->justificativa;
     }
+    
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
     public function setCaminhoSistemaArquivos($caminhoSistemaArquivos)
     {
@@ -76,7 +81,7 @@ class ComprovanteMatricula {
             'id' => $this->id,
             'caminhoSistemaArquivos' => $this->caminhoSistemaArquivos,
             'status' => $this->status,
-            'dataEnvio' => $this->dataEnvio,
+            'dataEnvio' => $this->dataEnvio->format('d/m/Y H:i'),
             'justificativa' => $this->justificativa,
          );
     }

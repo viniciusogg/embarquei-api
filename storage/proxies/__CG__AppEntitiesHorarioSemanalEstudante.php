@@ -64,10 +64,10 @@ class HorarioSemanalEstudante extends \App\Entities\HorarioSemanalEstudante impl
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'diaSemana', 'estudante'];
+            return ['__isInitialized__', 'id', 'diaSemana', 'temAula', 'estudante'];
         }
 
-        return ['__isInitialized__', 'id', 'diaSemana', 'estudante'];
+        return ['__isInitialized__', 'id', 'diaSemana', 'temAula', 'estudante'];
     }
 
     /**
@@ -202,6 +202,17 @@ class HorarioSemanalEstudante extends \App\Entities\HorarioSemanalEstudante impl
     /**
      * {@inheritDoc}
      */
+    public function getTemAula()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTemAula', []);
+
+        return parent::getTemAula();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getEstudante()
     {
 
@@ -230,6 +241,17 @@ class HorarioSemanalEstudante extends \App\Entities\HorarioSemanalEstudante impl
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDiaSemana', [$diaSemana]);
 
         return parent::setDiaSemana($diaSemana);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTemAula($temAula)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTemAula', [$temAula]);
+
+        return parent::setTemAula($temAula);
     }
 
     /**

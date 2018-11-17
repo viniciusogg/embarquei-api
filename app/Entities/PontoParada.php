@@ -30,7 +30,7 @@ class PontoParada
     
     /** 
      * @ORM\JoinColumn(nullable=true)
-     * @ORM\ManyToMany(targetEntity="Estudante", mappedBy="pontosParada", fetch="EAGER") 
+     * @ORM\ManyToMany(targetEntity="Estudante",  mappedBy="pontosParada", fetch="EAGER") 
      */
     protected $estudantes;
 
@@ -101,7 +101,10 @@ class PontoParada
             'nome' => $this->nome,
             'ordem' => $this->ordem,
 //            'estudantes' => $this->retornarArrayObjetos($this->estudantes),
-            'trajeto' => $this->trajeto->getId()
+            'trajeto' => [
+                'id' => $this->trajeto->getId(), 
+                'tipo' => $this->trajeto->getTipo()
+            ]
          );
     }
 }

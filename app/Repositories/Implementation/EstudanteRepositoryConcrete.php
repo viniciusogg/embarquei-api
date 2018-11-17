@@ -5,7 +5,8 @@ namespace App\Repositories\Implementation;
 use App\Repositories\Abstraction\EstudanteRepositoryInterface;
 use App\Repositories\Abstraction\Repository;
 use App\Repositories\Implementation\UsuarioRepositoryConcrete;
-use \App\Entities\Endereco;
+use App\Entities\Endereco;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 
 class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements EstudanteRepositoryInterface
@@ -28,8 +29,6 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
             {
                 $idPontoParada = $pontoParada['id'];
                 $pontoParadaBuscado = $repositoryPontoParada->findOneBy(['id' => $idPontoParada]);
-
-                error_log($pontoParadaBuscado->getNome());
                 
                 if(!$pontoParadaBuscado) 
                 {
@@ -60,6 +59,71 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
             
             $entityManager->flush();
             $entityManager->getConnection()->commit();
+        }
+        catch (Exception $ex)
+        {
+            $entityManager->getConnection()->rollback();
+            
+            throw $ex;
+        }
+        finally
+        {
+            $entityManager->close();
+        }
+    }
+    
+    public function atualizar($estudante, $idsPontosParada, $idCurso, $endereco)    
+    {
+//        $pontosParadaEstudante = new ArrayCollection();
+        $pontosParadaEstudante = [];
+        
+        $entityManager = $this->getEntityManager();
+        $entityManager->getConnection()->beginTransaction();
+        
+        $repositoryPontoParada = $entityManager->getRepository('\App\Entities\PontoParada');
+        $repositoryCurso = $entityManager->getRepository('\App\Entities\Curso');
+        $repositoryCidade = $entityManager->getRepository('\App\Entities\Cidade');
+
+        try
+        {
+            foreach($idsPontosParada as $pontoParada)
+            {
+                $idPontoParada = $pontoParada['id'];
+                $pontoParadaBuscado = $repositoryPontoParada->findOneBy(['id' => $idPontoParada]);
+                
+                if(!$pontoParadaBuscado) 
+                {
+                    throw new NaoEncontradoException();
+                }
+//                $pontosParadaEstudante->add($pontoParadaBuscado);
+                $pontosParadaEstudante[] = $pontoParadaBuscado;                
+            }
+            $cidade = $repositoryCidade->findOneBy(['id' => $endereco['cidade']['id']]);
+            $curso = $repositoryCurso->findOneBy(['id' => $idCurso]);
+                        
+            $instanciaEndereco = new Endereco();
+            $instanciaEndereco->setId($endereco['id']);
+            $instanciaEndereco->setBairro($endereco['bairro']);
+            $instanciaEndereco->setLogradouro($endereco['logradouro']);
+            $instanciaEndereco->setCidade($cidade);
+            
+            $estudante->setEndereco($instanciaEndereco);
+            $estudante->setPontosParada($pontosParadaEstudante);
+            $estudante->setCurso($curso);
+                        
+            $entityManager->clear();
+            $estudanteAtualizado = $entityManager->merge($estudante);
+                        
+            foreach($pontosParadaEstudante as $pontoParadaEstudante)
+            {
+                $pontoParadaEstudante->getEstudantes()->add($estudanteAtualizado);
+                $repositoryPontoParada->getEntityManager()->merge($pontoParadaEstudante);
+            }
+            
+            $entityManager->flush();
+            $entityManager->getConnection()->commit();
+            
+            return $estudanteAtualizado;
         }
         catch (Exception $ex)
         {

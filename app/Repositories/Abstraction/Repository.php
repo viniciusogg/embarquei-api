@@ -102,7 +102,10 @@ abstract class Repository extends EntityRepository
     {    
         $entityManager = $this->getEntityManager();
         $entityManager->getConnection()->beginTransaction();
-                
+        
+//        error_log($object);
+//        print_r($object);
+        
         try
         {
             $result = $entityManager->merge($object);

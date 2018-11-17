@@ -18,6 +18,8 @@ use App\Services\VeiculoTransporteService;
 use App\Services\AdministradorService;
 use App\Services\CidadeService;
 
+use App\Services\HorarioTrajetoService;
+
 use App\Repositories\Abstraction\UsuarioRepositoryInterface;
 use App\Repositories\Abstraction\EstudanteRepositoryInterface;
 use App\Repositories\Abstraction\CursoRepositoryInterface;
@@ -30,6 +32,8 @@ use App\Repositories\Abstraction\MotoristaRepositoryInterface;
 use App\Repositories\Abstraction\VeiculoTransporteRepositoryInterface;
 use App\Repositories\Abstraction\AdministradorRepositoryInterface;
 use App\Repositories\Abstraction\CidadeRepositoryInterface;
+
+use App\Repositories\Abstraction\HorarioTrajetoRepositoryInterface;
 
 use App\Repositories\Implementation\UsuarioRepositoryConcrete;
 use App\Repositories\Implementation\EstudanteRepositoryConcrete;
@@ -44,6 +48,8 @@ use App\Repositories\Implementation\VeiculoTransporteRepositoryConcrete;
 use App\Repositories\Implementation\AdministradorRepositoryConcrete;
 use App\Repositories\Implementation\CidadeRepositoryConcrete;
 
+use App\Repositories\Implementation\HorarioTrajetoRepositoryConcrete;
+
 use App\Entities\InstituicaoEnsino;
 use App\Entities\Usuario;
 use App\Entities\Estudante;
@@ -56,6 +62,8 @@ use App\Entities\Motorista;
 use App\Entities\VeiculoTransporte;
 use App\Entities\Administrador;
 use App\Entities\Cidade;
+
+use App\Entities\HorarioTrajeto;
 
 use Laravel\Passport\Passport;
 
@@ -167,6 +175,13 @@ class AppServiceProvider extends ServiceProvider
             );
         }); 
         
+        $this->app->bind(HorarioTrajetoRepositoryInterface::class, function($app) {
+            return new HorarioTrajetoRepositoryConcrete(
+                    $app['em'],
+                    $app['em']->getClassMetaData(HorarioTrajeto::class)
+            );
+        });
+        
         /**
          * SERVICES
          */
@@ -263,5 +278,11 @@ class AppServiceProvider extends ServiceProvider
             );
         });        
         
+        $this->app->bind(HorarioTrajeto::class, function($app)
+        {
+            return new HorarioService(
+                    $app->make('App\Repositories\Abstraction\HorarioTrajetoRepositoryInterface')
+            );
+        });  
     }
 }

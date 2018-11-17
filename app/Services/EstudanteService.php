@@ -3,11 +3,13 @@
 namespace App\Services;
 
 use App\Repositories\Abstraction\EstudanteRepositoryInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use App\Entities\Estudante;
 use App\Entities\ComprovanteMatricula;
 use App\Entities\HorarioSemanalEstudante;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use DateTime;
 
 class EstudanteService 
 {
@@ -64,16 +66,12 @@ class EstudanteService
     }
 
     public function update($dados, $id)
-    {
-        if (Hash::needsRehash($dados['senha']))
-        {
-            $dados['senha'] = Hash::make($dados['senha']);
-        }
-        
+    {  
         $estudante = $this->criarInstanciaEstudante($dados);
         $estudante->setId($id);
-
-        return  $this->estudanteRepository->update($estudante);
+  
+        return  $this->estudanteRepository->
+                atualizar($estudante, $dados['pontosParada'], $dados['curso']['id'], $dados['endereco']);
     }
 
     public function delete($id)
@@ -87,27 +85,50 @@ class EstudanteService
         $estudante->setNome($dados['nome']);
         $estudante->setSobrenome($dados['sobrenome']);
         $estudante->setNumeroCelular($dados['numeroCelular']);
-        $estudante->setSenha(Hash::make($dados['senha']));
+ 
+        if (isset($dados['senha']) && Hash::needsRehash($dados['senha']))
+        {
+            $dados['senha'] = Hash::make($dados['senha']);
+            $estudante->setSenha($dados['senha']);
+        }
         $estudante->setFoto($dados['foto']);
         $estudante->setAtivo($dados['ativo']);
                 
         $comprovanteMatricula = new ComprovanteMatricula();
-        $comprovanteMatricula->setCaminhoSistemaArquivos($dados['comprovanteMatricula']['arquivo']);
-        $comprovanteMatricula->setDataEnvio(Carbon::now());
+        
+        if (isset($dados['comprovanteMatricula']['id']))
+        {
+            $comprovanteMatricula->setId($dados['comprovanteMatricula']['id']);
+            $comprovanteMatricula->setDataEnvio(new DateTime($dados['comprovanteMatricula']['dataEnvio']));
+//            $comprovanteMatricula->setDataEnvio(Carbon::now());         
+        }
+        else
+        {
+            $comprovanteMatricula->setDataEnvio(Carbon::now());            
+        }
+        $comprovanteMatricula->setCaminhoSistemaArquivos($dados['comprovanteMatricula']['caminhoSistemaArquivos']);
         $comprovanteMatricula->setJustificativa($dados['comprovanteMatricula']['justificativa']);
         $comprovanteMatricula->setStatus($dados['comprovanteMatricula']['status']);
         
         $estudante->setComprovanteMatricula($comprovanteMatricula);
 
-        $horariosSemanaisEstudante = [];
+        $horariosSemanaisEstudante = new ArrayCollection();
+//        $horariosSemanaisEstudante = [];
         
         foreach($dados['horariosSemanaisEstudante'] as $horario) 
         {
             $instanciaHorario = new HorarioSemanalEstudante();
+            
+            if (isset($horario['id']))
+            {
+                $instanciaHorario->setId($horario['id']);
+            }
+            $instanciaHorario->setTemAula($horario['temAula']);
             $instanciaHorario->setDiaSemana($horario['diaSemana']);
             $instanciaHorario->setEstudante($estudante);
             
-            $horariosSemanaisEstudante[] = $instanciaHorario;
+            $horariosSemanaisEstudante->add($instanciaHorario);
+//            $horariosSemanaisEstudante[] = $instanciaHorario;            
         }
         $estudante->setHorariosSemanaisEstudante($horariosSemanaisEstudante);
         

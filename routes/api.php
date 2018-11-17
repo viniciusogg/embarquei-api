@@ -61,6 +61,7 @@ Route::delete('logout', 'AuthController@logout')->middleware('auth:api');
  */
 Route::any('login', 'AuthController@refresh')->name('login');
 
+Route::apiResource('horarioTrajeto', 'HorarioTrajetoController');
 
 // CRIAR UM MIDDLEWARE QUE FILTRE AS REQUISIÇÕES DE ACORDO COM O ADMIN QUE FEZ,
 // E RETORNE APENAS OS DADOS DE INTERESSE DELE

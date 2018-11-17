@@ -10,7 +10,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Laravel\Passport\HasApiTokens;
 use LaravelDoctrine\ORM\Auth\Authenticatable;
-use LaravelDoctrine\Extensions\Timestamps\Timestamps;
+//use LaravelDoctrine\Extensions\Timestamps\Timestamps;
 use LaravelDoctrine\ORM\Notifications\Notifiable;
 
 /**
@@ -21,7 +21,7 @@ use LaravelDoctrine\ORM\Notifications\Notifiable;
  */
 class Usuario implements AuthenticatableContract, CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword, Timestamps, Notifiable, HasApiTokens, UsesPasswordGrant;
+    use Authenticatable, CanResetPassword, Notifiable, HasApiTokens, UsesPasswordGrant; // Timestamps,
 
     /**
      * @ORM\Id

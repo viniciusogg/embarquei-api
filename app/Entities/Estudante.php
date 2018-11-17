@@ -34,7 +34,7 @@ class Estudante extends Usuario
     protected $endereco;
 
     /** 
-     * @ORM\JoinColumn(nullable=false, unique=true)
+     * @ORM\JoinColumn(nullable=false)
      * @ORM\OneToOne(targetEntity="ComprovanteMatricula",  cascade={"all"}, fetch="EAGER") 
      */
     protected $comprovanteMatricula;
@@ -111,6 +111,11 @@ class Estudante extends Usuario
         $this->pontosParada = $pontosParada;
     }
 
+    public function __toString()
+    {
+        return json_encode($this->toArray());
+    }
+    
     public function toArray()
     {
         return array(
