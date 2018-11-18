@@ -6,7 +6,6 @@ use App\Repositories\Abstraction\EstudanteRepositoryInterface;
 use App\Repositories\Abstraction\Repository;
 use App\Repositories\Implementation\UsuarioRepositoryConcrete;
 use App\Entities\Endereco;
-use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 
 class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements EstudanteRepositoryInterface
@@ -74,7 +73,6 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
     
     public function atualizar($estudante, $idsPontosParada, $idCurso, $endereco)    
     {
-//        $pontosParadaEstudante = new ArrayCollection();
         $pontosParadaEstudante = [];
         
         $entityManager = $this->getEntityManager();
@@ -95,7 +93,6 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
                 {
                     throw new NaoEncontradoException();
                 }
-//                $pontosParadaEstudante->add($pontoParadaBuscado);
                 $pontosParadaEstudante[] = $pontoParadaBuscado;                
             }
             $cidade = $repositoryCidade->findOneBy(['id' => $endereco['cidade']['id']]);
@@ -137,6 +134,39 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
         }
     }
     
+    public function alterarStatus($id, $dados)
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->getConnection()->beginTransaction();
+
+        try
+        {
+            $estudanteDesatualizado = $entityManager->find($this->getTypeObject(), $id);
+            
+            $estudanteDesatualizado->setAtivo($dados['ativo']);
+            $estudanteDesatualizado->getComprovanteMatricula()->setJustificativa($dados['justificativaComprovante']);
+            $estudanteDesatualizado->getComprovanteMatricula()->setStatus($dados['statusComprovante']);
+            
+            $estudanteAtualizado = $entityManager->merge($estudanteDesatualizado);
+            
+            $entityManager->flush();
+            $entityManager->getConnection()->commit();
+            
+            return $estudanteAtualizado;
+        } 
+        catch (Exception $ex) 
+        {
+            $entityManager->getConnection()->rollback();
+            
+            throw $ex;
+        }
+        finally 
+        {
+            $entityManager->close();
+        }
+    }
+
+    
     public function getByCidade($cidadeId) 
     {
         $entityManager = $this->getEntityManager();
@@ -145,12 +175,9 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
         {
             $query = $entityManager->createQuery(
                 'SELECT e FROM \App\Entities\Estudante e '
-//                    . 'JOIN App\Entities\Cidade c '
-                    . 'JOIN e.endereco en '
-                    . 'JOIN en.cidade c '
+                    . 'JOIN e.endereco en JOIN en.cidade c '
                     . 'WHERE c.id = :cidadeId'
             );
-            
             $query->setParameter('cidadeId', $cidadeId);
             
             $estudantes = $query->getResult();

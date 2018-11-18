@@ -89,10 +89,8 @@ class EstudanteController extends Controller
         $estudante = $request->all();
 
         $estudanteAtualizado = $this->estudanteService->update($estudante, $id);
-
-//        error_log('atualizando...');
         
-        return response()->json([$estudanteAtualizado->toArray()], 200);
+        return response()->json($estudanteAtualizado->toArray(), 200);
     }
 
     /**
@@ -106,5 +104,12 @@ class EstudanteController extends Controller
         $this->estudanteService->delete($id);
 
         return response()->json('', 204);
+    }
+    
+    public function alterarStatus(Request $request, $id)
+    {
+        $estudanteAtualizado = $this->estudanteService->alterarStatus($id, $request->all());
+        
+        return response()->json($estudanteAtualizado->toArray(), 200);
     }
 }

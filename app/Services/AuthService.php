@@ -33,10 +33,7 @@ class AuthService
      */
     public function attemptLogin($numeroCelular, $senha)
     {
-
         // VERIFICAR O TIPO DE USUÁRIO NO ACCESS TOKEN E FAZER A CHAMADA PARA O SERVICE ADEQUADO
-
-//        $usuario = $usuarioService->findByNumeroCelular($numeroCelular);
 
             return $this->proxy('password', [
                 'username' => $numeroCelular,
@@ -50,12 +47,8 @@ class AuthService
      * has been saved in a cookie
      */
     public function attemptRefresh()
-    {
-//        error_log('Chamou attemptRefresh');
-        
+    {        
         $refreshToken = $this->request->cookie(self::REFRESH_TOKEN);
-
-//        error_log('tentando renovar o token com refresh token...');
         
         return $this->proxy(self::REFRESH_TOKEN, [
             self::REFRESH_TOKEN => $refreshToken
@@ -75,11 +68,6 @@ class AuthService
             'client_secret' => env('EMBARQUEI_PASSWORD_GRANT_CLIENT_SECRET'),
             'grant_type'    => $grantType
         ]);
-
-        foreach ($data as $d)
-        {
-            error_log($d);
-        }
         
         $request = Request::create('/oauth/token', 'POST', $dataRequest);
         $response = $this->app->handle($request);

@@ -11,6 +11,8 @@
 |
 */
 
+Route::apiResource('horarioTrajeto', 'HorarioTrajetoController');
+
 Route::get('usuarios/tipo-usuario/{id}', 'UsuarioController@tipoById')->middleware('auth:api');
 
 Route::apiResource('motoristas', 'MotoristaController')->middleware('auth:api');
@@ -47,6 +49,7 @@ Route::group(['prefix' => 'estudantes', 'middleware'=> 'auth:api'], function()
     Route::delete('/{id}', 'EstudanteController@destroy');
     Route::put('/{id}', 'EstudanteController@update');
     Route::get('/cidade/{cidadeId}', 'EstudanteController@filtrarPorCidade');
+    Route::put('/ativo/{id}', 'EstudanteController@alterarStatus');
 });
 
 
@@ -61,7 +64,6 @@ Route::delete('logout', 'AuthController@logout')->middleware('auth:api');
  */
 Route::any('login', 'AuthController@refresh')->name('login');
 
-Route::apiResource('horarioTrajeto', 'HorarioTrajetoController');
 
 // CRIAR UM MIDDLEWARE QUE FILTRE AS REQUISIÇÕES DE ACORDO COM O ADMIN QUE FEZ,
 // E RETORNE APENAS OS DADOS DE INTERESSE DELE

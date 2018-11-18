@@ -79,6 +79,11 @@ class EstudanteService
         $this->estudanteRepository->delete($id);
     }
     
+    public function alterarStatus($id, $dados)
+    {
+        return $this->estudanteRepository->alterarStatus($id, $dados);
+    }
+    
     private function criarInstanciaEstudante($dados)
     {
         $estudante = new Estudante();
@@ -100,7 +105,6 @@ class EstudanteService
         {
             $comprovanteMatricula->setId($dados['comprovanteMatricula']['id']);
             $comprovanteMatricula->setDataEnvio(new DateTime($dados['comprovanteMatricula']['dataEnvio']));
-//            $comprovanteMatricula->setDataEnvio(Carbon::now());         
         }
         else
         {
@@ -113,7 +117,6 @@ class EstudanteService
         $estudante->setComprovanteMatricula($comprovanteMatricula);
 
         $horariosSemanaisEstudante = new ArrayCollection();
-//        $horariosSemanaisEstudante = [];
         
         foreach($dados['horariosSemanaisEstudante'] as $horario) 
         {
@@ -128,7 +131,6 @@ class EstudanteService
             $instanciaHorario->setEstudante($estudante);
             
             $horariosSemanaisEstudante->add($instanciaHorario);
-//            $horariosSemanaisEstudante[] = $instanciaHorario;            
         }
         $estudante->setHorariosSemanaisEstudante($horariosSemanaisEstudante);
         
