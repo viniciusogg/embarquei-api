@@ -6,6 +6,8 @@ use App\Repositories\Abstraction\EstudanteRepositoryInterface;
 use App\Repositories\Abstraction\Repository;
 use App\Repositories\Implementation\UsuarioRepositoryConcrete;
 use App\Entities\Endereco;
+use App\Entities\Checkin;
+use App\Entities\ListaPresenca;
 use Exception;
 
 class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements EstudanteRepositoryInterface
@@ -138,7 +140,7 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
     {
         $entityManager = $this->getEntityManager();
         $entityManager->getConnection()->beginTransaction();
-
+        
         try
         {
             $estudanteDesatualizado = $entityManager->find($this->getTypeObject(), $id);
@@ -148,8 +150,16 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
             $estudanteDesatualizado->getComprovanteMatricula()->setStatus($dados['statusComprovante']);
             
             $estudanteAtualizado = $entityManager->merge($estudanteDesatualizado);
-            
+
             $entityManager->flush();
+            
+            if ($dados['ativo']) /* ADICIONANDO ESTUDANTE NA LISETA DE PRESENÇA */
+            {
+                $this->adicionarNaListaDePresenca($estudanteAtualizado, $entityManager);
+            }
+            else{ /* REMOVENDO ESTUDANTE DA LISETA DE PRESENÇA */
+                $this->removerDaListaDePresenca($estudanteAtualizado, $entityManager);
+            }            
             $entityManager->getConnection()->commit();
             
             return $estudanteAtualizado;
@@ -166,6 +176,60 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
         }
     }
 
+    private function adicionarNaListaDePresenca($estudante, $entityManager)
+    {
+        $repositoryListaPresenca = $entityManager->getRepository('\App\Entities\ListaPresenca');
+        
+        $cidadeId = $estudante->getEndereco()->getCidade()->getId();
+        $instituicaoId = $estudante->getCurso()->getInstituicaoEnsino()->getId();
+
+        $checkinAluno = new Checkin();
+        $checkinAluno->setEstudante($estudante);
+        $checkinAluno->setConfirmado(false);
+
+        $query = $entityManager->createQuery(
+            'SELECT lp FROM \App\Entities\ListaPresenca lp '
+                . 'JOIN lp.cidade c JOIN lp.instituicaoEnsino ie '
+                . 'WHERE c.id = :cidadeId AND ie.id = :instituicaoId'
+        );
+
+        $query->setParameters(array('cidadeId' => $cidadeId, 'instituicaoId' => $instituicaoId));
+
+        $listaEncontrada = $query->getSingleResult();
+
+        if (!$listaEncontrada) // CRIA UMA LISTA DE PRESENÇA
+        {
+            $repositoryInstituicaoEnsino = $entityManager->getRepository('\App\Entities\InstituicaoEnsino');
+            $repositoryCidade = $entityManager->getRepository('\App\Entities\Cidade');
+
+            $instituicaoEnsino = $repositoryInstituicaoEnsino->findOneBy(['id' => $instituicaoId]);
+            $cidade = $repositoryCidade->findOneBy(['id' => $cidadeId]);
+
+            $listaEncontrada = new ListaPresenca();
+            $listaEncontrada->setInstituicaoEnsino($instituicaoEnsino);
+            $listaEncontrada->setCidade($cidade);
+
+            $repositoryListaPresenca->getEntityManager()->persist($listaEncontrada);
+            $repositoryListaPresenca->getEntityManager()->flush();
+        }
+        $listaEncontrada->getCheckins()->add($checkinAluno);
+        $checkinAluno->setListaPresenca($listaEncontrada);
+
+        $repositoryListaPresenca->getEntityManager()->clear();
+        $repositoryListaPresenca->getEntityManager()->merge($listaEncontrada);
+        $repositoryListaPresenca->getEntityManager()->flush();
+    }
+    
+    private function removerDaListaDePresenca($estudante, $entityManager)
+    {
+        $repositoryCheckin = $entityManager->getRepository('\App\Entities\Checkin');
+
+        $checkin = $repositoryCheckin->findOneBy(['estudante' => $estudante]);
+
+        $repositoryCheckin->getEntityManager()->remove($checkin);
+
+        $repositoryCheckin->getEntityManager()->flush();
+    }
     
     public function getByCidade($cidadeId) 
     {

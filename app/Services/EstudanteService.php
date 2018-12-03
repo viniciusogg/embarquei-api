@@ -10,11 +10,13 @@ use App\Entities\HorarioSemanalEstudante;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use DateTime;
+use App\Services\ListaPresencaService;
+use App\Entities\Checkin;
 
 class EstudanteService 
 {
     private $estudanteRepository;
-
+    
     public function __construct(EstudanteRepositoryInterface $estudanteRepository)
     {
         $this->estudanteRepository = $estudanteRepository;
@@ -81,7 +83,13 @@ class EstudanteService
     
     public function alterarStatus($id, $dados)
     {
-        return $this->estudanteRepository->alterarStatus($id, $dados);
+        $estudante = $this->estudanteRepository->alterarStatus($id, $dados);
+
+//        $checkin->setListaPresenca($listaPresenca)
+        
+//        $this->listaPresencaService->adicionarAluno($checkinAluno, $cidadeId, $instituicaoId);
+        
+        return $estudante;
     }
     
     private function criarInstanciaEstudante($dados)

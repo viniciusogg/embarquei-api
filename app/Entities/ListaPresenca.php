@@ -24,7 +24,7 @@ class ListaPresenca
 
     /** 
      * @ORM\JoinColumn(nullable=true)
-     * @ORM\OneToMany(targetEntity="Checkin", mappedBy="listaPresenca", cascade={"remove"}, fetch="EAGER") 
+     * @ORM\OneToMany(targetEntity="Checkin", mappedBy="listaPresenca", cascade={"remove", "merge"}, fetch="EAGER") 
      */
     protected $checkins;
 
