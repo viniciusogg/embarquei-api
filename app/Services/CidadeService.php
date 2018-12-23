@@ -30,13 +30,7 @@ class CidadeService
     {
         $result = $this->cidadeRepository->getAll();
 
-        $cidades = array();
-
-        foreach ($result as $cidade) {
-            $cidades[] = $cidade->toArray();
-        }
-
-        return $cidades;
+        return $this->criarArrayCidades($result);
     }
     
     public function findByNome($nome)
@@ -44,9 +38,15 @@ class CidadeService
         return $this->cidadeRepository->getByNome($nome);
     }
 
+    public function buscarCidadesComRotas()
+    {
+        $result = $this->cidadeRepository->buscarCidadesComRotas();
+
+        return $this->criarArrayCidades($result);
+    }
+    
     public function update($dados, $id)
     {
-        
         $cidade = $this->criarInstanciaCidade($dados);
         $cidade->setId($id);
 
@@ -64,5 +64,15 @@ class CidadeService
         $cidade->setNome($dados['nome']);
         
         return $cidade;
+    }
+    
+    private function criarArrayCidades($dados)
+    {
+        $cidades = array();
+
+        foreach ($dados as $cidade) {
+            $cidades[] = $cidade->toArray();
+        }        
+        return $cidades;
     }
 }

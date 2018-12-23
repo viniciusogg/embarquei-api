@@ -27,8 +27,9 @@ Route::group(['prefix' => 'cidades'],  function() // , 'middleware'=> 'auth:api'
 {
     Route::post('/', 'CidadeController@store');
     Route::get('/', 'CidadeController@index');
-    Route::get('/{id}', 'CidadeController@show');
     Route::get('/nome/{nome}', 'CidadeController@showByNome');
+    Route::get('/comRota', 'CidadeController@buscarCidadesComRotas');
+    Route::get('/{id}', 'CidadeController@show');
     Route::delete('/{id}', 'CidadeController@destroy');
     Route::put('/{id}', 'CidadeController@update');
 });

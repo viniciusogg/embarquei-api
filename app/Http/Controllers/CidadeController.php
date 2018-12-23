@@ -27,7 +27,6 @@ class CidadeController extends Controller
         {
             return response()->json('', 204);
         }
-
         return response()->json($cidades, 200);
     }
 
@@ -60,7 +59,6 @@ class CidadeController extends Controller
         {
             return response()->json($cidade->toArray(), 200);
         }
-
         return response()->json(['response' => 'Cidade não encontrada'], 400);
     }
 
@@ -72,8 +70,18 @@ class CidadeController extends Controller
         {
             return response()->json($cidade->toArray(), 200);
         }
-
         return response()->json(['response' => 'Cidade não encontrada'], 400);
+    }
+    
+    public function buscarCidadesComRotas()
+    {
+        $cidades = $this->cidadeService->buscarCidadesComRotas();
+        
+        if (empty($cidades))
+        {
+            return response()->json('', 204);
+        }
+        return response()->json($cidades, 200);
     }
     
     /**
