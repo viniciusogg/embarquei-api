@@ -19,6 +19,7 @@ use App\Services\AdministradorService;
 use App\Services\CidadeService;
 use App\Services\HorarioTrajetoService;
 use App\Services\ListaPresencaService;
+use App\Services\CheckinService;
 
 use App\Repositories\Abstraction\UsuarioRepositoryInterface;
 use App\Repositories\Abstraction\EstudanteRepositoryInterface;
@@ -34,6 +35,7 @@ use App\Repositories\Abstraction\AdministradorRepositoryInterface;
 use App\Repositories\Abstraction\CidadeRepositoryInterface;
 use App\Repositories\Abstraction\HorarioTrajetoRepositoryInterface;
 use App\Repositories\Abstraction\ListaPresencaRepositoryInterface;
+use App\Repositories\Abstraction\CheckinRepositoryInterface;
 
 use App\Repositories\Implementation\UsuarioRepositoryConcrete;
 use App\Repositories\Implementation\EstudanteRepositoryConcrete;
@@ -49,7 +51,7 @@ use App\Repositories\Implementation\AdministradorRepositoryConcrete;
 use App\Repositories\Implementation\CidadeRepositoryConcrete;
 use App\Repositories\Implementation\HorarioTrajetoRepositoryConcrete;
 use App\Repositories\Implementation\ListaPresencaRepositoryConcrete;
-
+use App\Repositories\Implementation\CheckinRepositoryConcrete;
 
 use App\Entities\InstituicaoEnsino;
 use App\Entities\Usuario;
@@ -65,6 +67,7 @@ use App\Entities\Administrador;
 use App\Entities\Cidade;
 use App\Entities\HorarioTrajeto;
 use App\Entities\ListaPresenca;
+use App\Entities\Checkin;
 
 use Laravel\Passport\Passport;
 
@@ -189,6 +192,13 @@ class AppServiceProvider extends ServiceProvider
                     $app['em']->getClassMetaData(ListaPresenca::class)
             );
         });
+
+        $this->app->bind(CheckinRepositoryInterface::class, function($app) {
+            return new CheckinRepositoryConcrete(
+                $app['em'],
+                $app['em']->getClassMetaData(Checkin::class)
+            );
+        });
         
         /**
          * SERVICES
@@ -299,6 +309,13 @@ class AppServiceProvider extends ServiceProvider
         {
             return new ListaPresencaService(
                     $app->make('App\Repositories\Abstraction\ListaPresencaRepositoryInterface')
+            );
+        });
+
+        $this->app->bind(CheckinService::class, function($app)
+        {
+            return new CheckinService(
+                $app->make('App\Repositories\Abstraction\CheckinRepositoryInterface')
             );
         });
     }

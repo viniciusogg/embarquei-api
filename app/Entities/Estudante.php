@@ -11,8 +11,11 @@ use App\Entities\Traits\CriaArrayObjetoTrait;
 class Estudante extends Usuario 
 {
     use CriaArrayObjetoTrait;
-    
-    /** @ORM\Column(type="string", nullable=false, unique=true) */
+
+    /**
+     * @ORM\JoinColumn(nullable=false, unique=true)
+     * @ORM\OneToOne(targetEntity="Imagem", cascade={"all"}, fetch="EAGER")
+     */
     protected $foto; // Caminho no sistema de arquivos
 
     /** 
@@ -123,7 +126,7 @@ class Estudante extends Usuario
             'nome' => $this->nome,
             'sobrenome' => $this->sobrenome,
             'numeroCelular' => $this->numeroCelular,
-            'foto' => $this->foto,
+            'foto' => $this->foto->toArray(),
             'ativo' => $this->ativo,
             'horariosSemanaisEstudante' => $this->retornarArrayObjetos($this->horariosSemanaisEstudante),
             'curso' => $this->curso->toArray(),

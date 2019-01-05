@@ -10,8 +10,7 @@ use App\Entities\HorarioSemanalEstudante;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use DateTime;
-use App\Services\ListaPresencaService;
-use App\Entities\Checkin;
+use App\Entities\Imagem;
 
 class EstudanteService 
 {
@@ -26,8 +25,10 @@ class EstudanteService
     {
         $estudante = $this->criarInstanciaEstudante($dados);
 
-        $this->estudanteRepository->
-                associarComEntidades($estudante, $dados['pontosParada'], $dados['curso']['id'], $dados['endereco']);        
+        $estudanteSalvo = $this->estudanteRepository->
+                associarComEntidades($estudante, $dados['pontosParada'], $dados['curso']['id'], $dados['endereco']);
+
+        return $estudanteSalvo;
     }
 
     public function findById($id)
@@ -104,7 +105,16 @@ class EstudanteService
             $dados['senha'] = Hash::make($dados['senha']);
             $estudante->setSenha($dados['senha']);
         }
-        $estudante->setFoto($dados['foto']);
+
+        $foto = new Imagem();
+
+        if (isset($dados['foto']['id']))
+        {
+            $foto->setId($dados['foto']['id']);
+        }
+        $foto->setCaminhoSistemaArquivos($dados['foto']['caminhoSistemaArquivos']);
+
+        $estudante->setFoto($foto);
         $estudante->setAtivo($dados['ativo']);
                 
         $comprovanteMatricula = new ComprovanteMatricula();

@@ -12,7 +12,10 @@ class Motorista extends Mensageiro
 {
     use CriaArrayObjetoTrait;
     
-    /** @ORM\Column(type="string", unique=true) */
+    /**
+     * @ORM\JoinColumn(nullable=false, unique=true)
+     * @ORM\OneToOne(targetEntity="Imagem", cascade={"all"}, fetch="EAGER")
+     */
     protected $foto; // Caminho no sistema de arquivos
 
     /** 
@@ -53,7 +56,7 @@ class Motorista extends Mensageiro
             'nome' => $this->nome,
             'sobrenome' => $this->sobrenome,
             'numeroCelular' => $this->numeroCelular,
-            'foto' => $this->foto,
+            'foto' => $this->foto->toArray(),
             'instituicoesEnsino' => $this->retornarArrayObjetos($this->instituicoesEnsino)
          );
     }

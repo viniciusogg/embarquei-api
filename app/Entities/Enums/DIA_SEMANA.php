@@ -2,8 +2,8 @@
 
 namespace App\Entities\Enums;
 
-abstract class DIA_SEMANA {
-
+abstract class DIA_SEMANA
+{
     const SEGUNDA = 'SEGUNDA';
     const TERCA = 'TERCA';
     const QUARTA = 'QUARTA';

@@ -5,6 +5,8 @@ namespace App\Entities;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Entities\Traits\CriaArrayObjetoTrait;
+use App\Entities\Enums\TIPO_TRAJETO as TIPO_TRAJETO;
+use App\Exceptions\ValorEnumInvalidoException;
 
 /** @ORM\Entity */
 class Trajeto 
@@ -90,6 +92,12 @@ class Trajeto
 
     public function setTipo($tipo)
     {
+        $tiposTrajeto = array(TIPO_TRAJETO::IDA, TIPO_TRAJETO::VOLTA);
+
+        if (!in_array($tipo, $tiposTrajeto))
+        {
+            throw new ValorEnumInvalidoException("TIPO_TRAJETO");
+        }
         $this->tipo = $tipo;
     }
 

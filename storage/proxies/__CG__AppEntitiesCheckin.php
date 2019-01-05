@@ -64,10 +64,10 @@ class Checkin extends \App\Entities\Checkin implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'confirmado', 'estudante', 'listaPresenca'];
+            return ['__isInitialized__', 'id', 'status', 'dataUltimaAtualizacao', 'estudante', 'listaPresenca'];
         }
 
-        return ['__isInitialized__', 'id', 'confirmado', 'estudante', 'listaPresenca'];
+        return ['__isInitialized__', 'id', 'status', 'dataUltimaAtualizacao', 'estudante', 'listaPresenca'];
     }
 
     /**
@@ -191,12 +191,12 @@ class Checkin extends \App\Entities\Checkin implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function getConfirmado()
+    public function getStatus()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getConfirmado', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStatus', []);
 
-        return parent::getConfirmado();
+        return parent::getStatus();
     }
 
     /**
@@ -235,12 +235,12 @@ class Checkin extends \App\Entities\Checkin implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function setConfirmado($confirmado)
+    public function setStatus($status)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setConfirmado', [$confirmado]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setStatus', [$status]);
 
-        return parent::setConfirmado($confirmado);
+        return parent::setStatus($status);
     }
 
     /**

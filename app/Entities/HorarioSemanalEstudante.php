@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Entities;
+
 use Doctrine\ORM\Mapping as ORM;
+use App\Entities\Enums\DIA_SEMANA as DIA_SEMANA;
+use App\Exceptions\ValorEnumInvalidoException;
 
 /** 
  * @ORM\Entity 
@@ -56,6 +59,13 @@ class HorarioSemanalEstudante {
 
     public function setDiaSemana($diaSemana)
     {
+        $diasSemana = array(DIA_SEMANA::SEGUNDA, DIA_SEMANA::TERCA,
+            DIA_SEMANA::QUARTA, DIA_SEMANA::QUINTA, DIA_SEMANA::SEXTA);
+
+        if (!in_array($diaSemana, $diasSemana))
+        {
+            throw new ValorEnumInvalidoException("DIA_SEMANA");
+        }
         $this->diaSemana = $diaSemana;
     }
     

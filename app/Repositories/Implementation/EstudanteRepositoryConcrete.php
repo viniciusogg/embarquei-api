@@ -5,14 +5,15 @@ namespace App\Repositories\Implementation;
 use App\Repositories\Abstraction\EstudanteRepositoryInterface;
 use App\Repositories\Abstraction\Repository;
 use App\Repositories\Implementation\UsuarioRepositoryConcrete;
+use App\Entities\Enums\STATUS_CHECKIN;
 use App\Entities\Endereco;
 use App\Entities\Checkin;
 use App\Entities\ListaPresenca;
 use Exception;
+use Carbon\Carbon;
 
 class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements EstudanteRepositoryInterface
 {
-
     public function associarComEntidades($estudante, $idsPontosParada, $idCurso, $endereco) 
     {        
         $pontosParadaEstudante = [];
@@ -51,7 +52,7 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
             $estudante->setCurso($curso);
                                     
             $entityManager->persist($estudante);
-                        
+
             foreach($pontosParadaEstudante as $pontoParadaEstudante)
             {
                 $pontoParadaEstudante->getEstudantes()->add($estudante);
@@ -60,6 +61,8 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
             
             $entityManager->flush();
             $entityManager->getConnection()->commit();
+
+            return $entityManager->merge($estudante);
         }
         catch (Exception $ex)
         {
@@ -157,7 +160,7 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
             {
                 $this->adicionarNaListaDePresenca($estudanteAtualizado, $entityManager);
             }
-            else{ /* REMOVENDO ESTUDANTE DA LISETA DE PRESENÇA */
+            else{ /* REMOVENDO ESTUDANTE DA LISTA DE PRESENÇA */
                 $this->removerDaListaDePresenca($estudanteAtualizado, $entityManager);
             }            
             $entityManager->getConnection()->commit();
@@ -185,7 +188,8 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
 
         $checkinAluno = new Checkin();
         $checkinAluno->setEstudante($estudante);
-        $checkinAluno->setConfirmado(false);
+        $checkinAluno->setStatus(STATUS_CHECKIN::AGUARDANDO_CONFIRMACAO);
+        $checkinAluno->setDataUltimaAtualizacao(Carbon::now());
 
         $query = $entityManager->createQuery(
             'SELECT lp FROM \App\Entities\ListaPresenca lp '
@@ -195,7 +199,7 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
 
         $query->setParameters(array('cidadeId' => $cidadeId, 'instituicaoId' => $instituicaoId));
 
-        $listaEncontrada = $query->getSingleResult();
+        $listaEncontrada = $query->getOneOrNullResult();
 
         if (!$listaEncontrada) // CRIA UMA LISTA DE PRESENÇA
         {
@@ -243,9 +247,9 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
                     . 'WHERE c.id = :cidadeId'
             );
             $query->setParameter('cidadeId', $cidadeId);
-            
+
             $estudantes = $query->getResult();
-            
+
             return $estudantes;
         }
         catch (Exception $ex)

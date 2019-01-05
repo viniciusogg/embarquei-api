@@ -40,11 +40,11 @@ class EstudanteController extends Controller
      */
     public function store(Request $request)
     {
-        $estudante = $request->all();
+        $dadosEstudante = $request->all();
 
-        $this->estudanteService->create($estudante);
+        $estudanteSalvo = $this->estudanteService->create($dadosEstudante);
 
-        return response()->json(['response' => 'Success'], 201);
+        return response()->json($estudanteSalvo->toArray(), 200);
     }
 
     /**

@@ -8,8 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity 
  * @ORM\Table(name="horarios_trajeto")
  */
-class HorarioTrajeto {
-
+class HorarioTrajeto
+{
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)

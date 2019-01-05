@@ -3,6 +3,8 @@
 namespace App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Entities\Enums\TIPO_NOTIFICACAO as TIPO_NOTIFICACAO;
+use App\Exceptions\ValorEnumInvalidoException;
 
 /** 
  * @ORM\Entity 
@@ -83,6 +85,14 @@ class Notificacao
 
     public function setTipo($tipo) 
     {
+        $tiposNotificacoes = array(TIPO_NOTIFICACAO::ATRASO_TRANSPORTE, TIPO_NOTIFICACAO::AUSENCIA_TRANSPORTE,
+            TIPO_NOTIFICACAO::CONFIRMACAO_PRESENCA, TIPO_NOTIFICACAO::MUDANCA_MOTORISTA, TIPO_NOTIFICACAO::MUDANCA_ROTA,
+            TIPO_NOTIFICACAO::MUDANCA_VEICULO, TIPO_NOTIFICACAO::RENOVACAO_CADASTRO);
+
+        if (!in_array($tipo, $tiposNotificacoes))
+        {
+            throw new ValorEnumInvalidoException("TIPO_NOTIFICACAO");
+        }
         $this->tipo = $tipo;
     }
 

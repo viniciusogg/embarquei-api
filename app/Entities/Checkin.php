@@ -3,6 +3,8 @@
 namespace App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Entities\Enums\STATUS_CHECKIN as STATUS_CHECKIN;
+use App\Exceptions\ValorEnumInvalidoException;
 
 /** @ORM\Entity */
 class Checkin 
@@ -15,8 +17,11 @@ class Checkin
      */
     protected $id;
 
-    /** @ORM\Column(type="boolean", nullable=false) */
-    protected $confirmado;
+    /** @ORM\Column(type="string", nullable=false) */
+    protected $status;
+
+    /** @ORM\Column(type="datetime", nullable=false) */
+    protected $dataUltimaAtualizacao;
 
     /** 
      * @ORM\JoinColumn(nullable=false, unique=true)
@@ -34,9 +39,9 @@ class Checkin
         return $this->id;
     }
 
-    public function getConfirmado()
+    public function getStatus()
     {
-        return $this->confirmado;
+        return $this->status;
     }
 
     public function getEstudante()
@@ -49,14 +54,26 @@ class Checkin
         return $this->listaPresenca;
     }
 
+    public function getDataUltimaAtualizacao()
+    {
+        return $this->dataUltimaAtualizacao;
+    }
+
     public function setId($id)
     {
         $this->id = $id;
     }
 
-    public function setConfirmado($confirmado)
+    public function setStatus($status)
     {
-        $this->confirmado = $confirmado;
+        $tiposStatusCheckin = array(STATUS_CHECKIN::AGUARDANDO_CONFIRMACAO, STATUS_CHECKIN::CONFIRMADO,
+            STATUS_CHECKIN::EMBARCOU);
+
+        if (!in_array($status, $tiposStatusCheckin))
+        {
+            throw new ValorEnumInvalidoException("STATUS_CHECKIN");
+        }
+        $this->status = $status;
     }
 
     public function setEstudante($estudante)
@@ -69,11 +86,17 @@ class Checkin
         $this->listaPresenca = $listaPresenca;
     }
 
+    public function setDataUltimaAtualizacao($dataUltimaAtualizacao)
+    {
+        $this->dataUltimaAtualizacao = $dataUltimaAtualizacao;
+    }
+
     public function toArray()
     {
         return array(
             'id' => $this->id,
-            'confirmado' => $this->confirmado,
+            'status' => $this->status,
+            'dataUltimaAtualizacao' => $this->dataUltimaAtualizacao->format('d/m/Y H:i'),
             'estudante' => $this->estudante,
             'listaPresenca' => $this->listaPresenca->getId()
          );

@@ -13,6 +13,7 @@ use App\Exceptions\InvalidCredentialsException;
 use App\Exceptions\NullFieldException;
 use App\Exceptions\NaoEncontradoException;
 use App\Exceptions\VazioException;
+use App\Exceptions\ValorEnumInvalidoException;
 
 class Handler extends ExceptionHandler
 {
@@ -119,7 +120,14 @@ class Handler extends ExceptionHandler
             return response()->json(['devError' => $this->dataExceptionDev($exception),
                     'userError' => $exception->getMessage()], 400);
         }
-        
+
+        // Tratamento da excessão lançada quando um valor inválido é passado para uma propriedade ENUM
+        else if ($exception instanceof ValorEnumInvalidoException)
+        {
+            return response()->json(['devError' => $this->dataExceptionDev($exception),
+                    'userError' => $exception->getMessage()], 400);
+        }
+
         return parent::render($request, $exception);
     }
     

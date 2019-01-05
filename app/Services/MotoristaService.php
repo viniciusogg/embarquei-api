@@ -74,8 +74,24 @@ class MotoristaService
         $motorista->setNome($dados['nome']);
         $motorista->setSobrenome($dados['sobrenome']);
         $motorista->setNumeroCelular($dados['numeroCelular']);
-        $motorista->setSenha(Hash::make($dados['senha']));
-        $motorista->setAtivo($dados['ativo']); 
+
+        if (isset($dados['senha']) && Hash::needsRehash($dados['senha']))
+        {
+            $dados['senha'] = Hash::make($dados['senha']);
+            $motorista->setSenha($dados['senha']);
+        }
+
+        $foto = new Imagem();
+
+        if (isset($dados['foto']))
+        {
+            $foto->setId($dados['foto']['id']);
+        }
+        $foto->setCaminhoSistemaArquivos($dados['foto']['caminhoSistemaArquivos']);
+
+        $motorista->setFoto($foto);
+
+        $motorista->setAtivo($dados['ativo']);
         $motorista->setFoto($dados['foto']);        
                 
         return $motorista;

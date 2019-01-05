@@ -23,6 +23,16 @@ Route::apiResource('instituicoesEnsino', 'InstituicaoEnsinoController');//->midd
 
 Route::apiResource('cursos', 'CursoController');
 
+Route::group(['prefix' => 'checkin'], function() //->middleware('auth:api');
+{
+    Route::post('/', 'CheckinController@store');
+    Route::get('/', 'CheckinController@index');
+    Route::get('/estudante/{id}', 'CheckinController@buscarPorEstudante');
+    Route::get('/{id}', 'CheckinController@show');
+    Route::put('/{id}', 'CheckinController@update');
+    Route::delete('/{id}', 'CheckinController@destroy');
+});
+
 Route::group(['prefix' => 'cidades'],  function() // , 'middleware'=> 'auth:api'
 {
     Route::post('/', 'CidadeController@store');
@@ -30,8 +40,8 @@ Route::group(['prefix' => 'cidades'],  function() // , 'middleware'=> 'auth:api'
     Route::get('/nome/{nome}', 'CidadeController@showByNome');
     Route::get('/comRota', 'CidadeController@buscarCidadesComRotas');
     Route::get('/{id}', 'CidadeController@show');
-    Route::delete('/{id}', 'CidadeController@destroy');
     Route::put('/{id}', 'CidadeController@update');
+    Route::delete('/{id}', 'CidadeController@destroy');
 });
 
 Route::apiResource('veiculosTransporte', 'VeiculoTransporteController');//->middleware('auth:api');
@@ -43,7 +53,7 @@ Route::get('pontosParada/{cidade}/{instituicaoEnsino}/{rota}', 'PontoParadaContr
 Route::get('trajetos/{cidade}/{instituicaoEnsino}', 'TrajetoController@buscarTrajetosByCidadeInstituicaoRota');
 
 Route::post('estudantes', 'EstudanteController@store');
-Route::group(['prefix' => 'estudantes', 'middleware'=> 'auth:api'], function()
+Route::group(['prefix' => 'estudantes', 'middleware' => 'auth:api'], function()
 {
     Route::get('/', 'EstudanteController@index');
     Route::get('/{id}', 'EstudanteController@show');

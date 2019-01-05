@@ -3,13 +3,15 @@
 namespace App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Entities\Enums\STATUS_COMPROVANTE as STATUS_COMPROVANTE;
+use App\Exceptions\ValorEnumInvalidoException;
 
 /** 
  * @ORM\Entity 
  * @ORM\Table(name="comprovantes_matricula")
  */
-class ComprovanteMatricula {
-
+class ComprovanteMatricula
+{
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -62,6 +64,13 @@ class ComprovanteMatricula {
 
     public function setStatus($status)
     {
+        $tiposStatusComprovante = array(STATUS_COMPROVANTE::APROVADO,
+            STATUS_COMPROVANTE::EM_ANALISE, STATUS_COMPROVANTE::RECUSADO);
+
+        if (!in_array($status, $tiposStatusComprovante))
+        {
+            throw new ValorEnumInvalidoException("STATUS_COMPROVANTE");
+        }
         $this->status = $status;
     }
 

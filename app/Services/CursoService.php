@@ -30,7 +30,7 @@ class CursoService
             $cursos[] = $curso->toArray();
         }
 
-        return $curso;
+        return $cursos;
     }
 
     public function update($dados, $id) 

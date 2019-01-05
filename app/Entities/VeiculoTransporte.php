@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Entities;
+
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Entities\Traits\CriaArrayObjetoTrait;
+use App\Entities\Enums\TIPO_VEICULO as TIPO_VEICULO;
+use App\Exceptions\ValorEnumInvalidoException;
 
 /** 
  * @ORM\Entity 
@@ -33,8 +36,11 @@ class VeiculoTransporte
     /** @ORM\Column(type="string", nullable=false) */
     protected $cor;
 
-    /** @ORM\Column(type="string", unique=true) */
-    protected $imagem; // caminho no sistema de arquivos
+    /**
+     * @ORM\JoinColumn(nullable=true, unique=true)
+     * @ORM\OneToOne(targetEntity="Imagem", cascade={"all"}, fetch="EAGER")
+     */
+    protected $foto; // caminho no sistema de arquivos
 
     /** 
      * @ORM\JoinColumn(nullable=true)
@@ -78,9 +84,9 @@ class VeiculoTransporte
         return $this->cor;
     }
 
-    public function getImagem()
+    public function getFoto()
     {
-        return $this->imagem;
+        return $this->foto;
     }
 
     public function getInstituicoesEnsino()
@@ -110,6 +116,12 @@ class VeiculoTransporte
 
     public function setTipo($tipo)
     {
+        $tiposVeiculos = array(TIPO_VEICULO::ONIBUS, TIPO_VEICULO::VAN);
+
+        if (!in_array($tipo, $tiposVeiculos))
+        {
+            throw new ValorEnumInvalidoException("TIPO_VEICULO");
+        }
         $this->tipo = $tipo;
     }
 
@@ -118,9 +130,9 @@ class VeiculoTransporte
         $this->cor = $cor;
     }
 
-    public function setImagem($imagem)
+    public function setFoto($foto)
     {
-        $this->imagem = $imagem;
+        $this->foto = $foto;
     }
 
     public function setInstituicoesEnsino($instituicoesEnsino)
@@ -141,7 +153,7 @@ class VeiculoTransporte
             'placa' => $this->placa,
             'tipo' => $this->tipo,
             'cor' => $this->cor,
-            'imagem' => $this->imagem,
+            'foto' => $this->foto->toArray(),
             'instituicoesEnsino' => $this->retornarArrayObjetos($this->instituicoesEnsino),
             'cidade' => $this->cidade->id
          );
