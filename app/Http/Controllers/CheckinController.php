@@ -68,7 +68,13 @@ class CheckinController extends Controller
 
         if ($checkin)
         {
-            return response()->json($checkin->toArray(), 200);
+            return response()->json(array(
+                'id' => $checkin->getId(),
+                'status' => $checkin->getStatus(),
+                'dataUltimaAtualizacao' => $checkin->getDataUltimaAtualizacao()->format('d/m/Y H:i'),
+                'estudanteId' => $checkin->getEstudante()->getId(),
+                'listaPresencaId' => $checkin->getListaPresenca()->getId()
+            ), 200);
         }
         return response()->json(['response' => 'Checkin não encontrado'], 400);
     }

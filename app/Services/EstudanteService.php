@@ -26,7 +26,7 @@ class EstudanteService
         $estudante = $this->criarInstanciaEstudante($dados);
 
         $estudanteSalvo = $this->estudanteRepository->
-                associarComEntidades($estudante, $dados['pontosParada'], $dados['curso']['id'], $dados['endereco']);
+            cadastrar($estudante, $dados['pontosParada'], $dados['curso']['id'], $dados['endereco']);
 
         return $estudanteSalvo;
     }
@@ -73,8 +73,10 @@ class EstudanteService
         $estudante = $this->criarInstanciaEstudante($dados);
         $estudante->setId($id);
   
-        return  $this->estudanteRepository->
-                atualizar($estudante, $dados['pontosParada'], $dados['curso']['id'], $dados['endereco']);
+        $estudante = $this->estudanteRepository->
+            atualizar($estudante, $dados['pontosParada'], $dados['curso']['id'], $dados['endereco']);
+
+        return $estudante;
     }
 
     public function delete($id)
@@ -105,7 +107,6 @@ class EstudanteService
             $dados['senha'] = Hash::make($dados['senha']);
             $estudante->setSenha($dados['senha']);
         }
-
         $foto = new Imagem();
 
         if (isset($dados['foto']['id']))

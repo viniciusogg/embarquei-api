@@ -97,8 +97,8 @@ class Checkin
             'id' => $this->id,
             'status' => $this->status,
             'dataUltimaAtualizacao' => $this->dataUltimaAtualizacao->format('d/m/Y H:i'),
-            'estudante' => $this->estudante,
-            'listaPresenca' => $this->listaPresenca->getId()
+            'estudante' => $this->estudante->toArray(),
+            'listaPresencaId' => $this->listaPresenca->getId()
          );
     }
 }

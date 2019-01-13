@@ -85,7 +85,7 @@ class HorarioSemanalEstudante {
             'id' => $this->id,
             'diaSemana' => $this->diaSemana,
             'temAula' => $this->temAula,
-            'estudante' => $this->estudante->getId()
+//            'estudanteId' => $this->estudante->getId()
          );
     }
 }

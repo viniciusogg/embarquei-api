@@ -17,13 +17,13 @@ Route::get('usuarios/tipo-usuario/{id}', 'UsuarioController@tipoById')->middlewa
 
 Route::apiResource('motoristas', 'MotoristaController')->middleware('auth:api');
 
-Route::apiResource('administradores', 'AdministradorController');//->middleware('auth:api');
+Route::apiResource('administradores', 'AdministradorController')->middleware('auth:api');
 
-Route::apiResource('instituicoesEnsino', 'InstituicaoEnsinoController');//->middleware('auth:api');
+Route::apiResource('instituicoesEnsino', 'InstituicaoEnsinoController');
 
 Route::apiResource('cursos', 'CursoController');
 
-Route::group(['prefix' => 'checkin'], function() //->middleware('auth:api');
+Route::group(['prefix' => 'checkin', 'middleware'=> 'auth:api'], function() //->middleware('auth:api');
 {
     Route::post('/', 'CheckinController@store');
     Route::get('/', 'CheckinController@index');
@@ -33,20 +33,23 @@ Route::group(['prefix' => 'checkin'], function() //->middleware('auth:api');
     Route::delete('/{id}', 'CheckinController@destroy');
 });
 
-Route::group(['prefix' => 'cidades'],  function() // , 'middleware'=> 'auth:api'
+Route::get('cidades/comRota', 'CidadeController@buscarCidadesComRotas');
+Route::group(['prefix' => 'cidades', 'middleware'=> 'auth:api'],  function() // , 'middleware'=> 'auth:api'
 {
     Route::post('/', 'CidadeController@store');
     Route::get('/', 'CidadeController@index');
     Route::get('/nome/{nome}', 'CidadeController@showByNome');
-    Route::get('/comRota', 'CidadeController@buscarCidadesComRotas');
+//    Route::get('/comRota', 'CidadeController@buscarCidadesComRotas');
     Route::get('/{id}', 'CidadeController@show');
     Route::put('/{id}', 'CidadeController@update');
     Route::delete('/{id}', 'CidadeController@destroy');
 });
 
-Route::apiResource('veiculosTransporte', 'VeiculoTransporteController');//->middleware('auth:api');
+Route::apiResource('listaPresenca', 'ListaPresencaController')->middleware('auth:api');;
 
-Route::apiResource('rotas', 'RotaController');//->middleware('auth:api');
+Route::apiResource('veiculosTransporte', 'VeiculoTransporteController')->middleware('auth:api');
+
+Route::apiResource('rotas', 'RotaController')->middleware('auth:api');
 
 Route::get('pontosParada/{cidade}/{instituicaoEnsino}/{rota}', 'PontoParadaController@buscarPontosParadaByCidadeInstituicaoRota');
 

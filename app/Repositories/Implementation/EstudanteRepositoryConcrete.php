@@ -14,7 +14,7 @@ use Carbon\Carbon;
 
 class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements EstudanteRepositoryInterface
 {
-    public function associarComEntidades($estudante, $idsPontosParada, $idCurso, $endereco) 
+    public function cadastrar($estudante, $idsPontosParada, $idCurso, $endereco)
     {        
         $pontosParadaEstudante = [];
         
@@ -89,6 +89,12 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
 
         try
         {
+            if ($estudante->getSenha() === null)
+            {
+                $senha = $entityManager->find($this->getTypeObject(), $estudante->getId())->getSenha();
+                $estudante->setSenha($senha);
+            }
+
             foreach($idsPontosParada as $pontoParada)
             {
                 $idPontoParada = $pontoParada['id'];
@@ -121,10 +127,10 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
                 $pontoParadaEstudante->getEstudantes()->add($estudanteAtualizado);
                 $repositoryPontoParada->getEntityManager()->merge($pontoParadaEstudante);
             }
-            
             $entityManager->flush();
             $entityManager->getConnection()->commit();
-            
+
+//            error_log($estudanteAtualizado->getEndereco()->getCidade()->getId());
             return $estudanteAtualizado;
         }
         catch (Exception $ex)
@@ -156,7 +162,7 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
 
             $entityManager->flush();
             
-            if ($dados['ativo']) /* ADICIONANDO ESTUDANTE NA LISETA DE PRESENÇA */
+            if ($dados['ativo']) /* ADICIONANDO ESTUDANTE NA LISTA DE PRESENÇA */
             {
                 $this->adicionarNaListaDePresenca($estudanteAtualizado, $entityManager);
             }

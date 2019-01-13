@@ -8,7 +8,7 @@ interface EstudanteRepositoryInterface
 
     public function getByCidade($cidadeId);
     
-    public function associarComEntidades($estudante, $idsPontosParada, $idCurso, $endereco);
+    public function cadastrar($estudante, $idsPontosParada, $idCurso, $endereco);
     
     public function atualizar($estudante, $idsPontosParada, $idCurso, $endereco);
     

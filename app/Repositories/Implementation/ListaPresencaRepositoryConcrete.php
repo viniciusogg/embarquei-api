@@ -9,8 +9,7 @@ use Exception;
 
 class ListaPresencaRepositoryConcrete extends Repository implements ListaPresencaRepositoryInterface
 {
-    
-    public function associarComEntitidades($listaPresenca, $cidadeId, $instituicaoId)
+    public function cadastrar($listaPresenca, $cidadeId, $instituicaoId)
     {
         $entityManager = $this->getEntityManager();
         $entityManager->getConnection()->beginTransaction();

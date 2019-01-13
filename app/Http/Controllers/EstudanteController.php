@@ -7,7 +7,6 @@ use App\Services\EstudanteService;
 
 class EstudanteController extends Controller
 {
-    
     private $estudanteService;
     
     public function __construct(EstudanteService $estudanteService) 
@@ -28,7 +27,6 @@ class EstudanteController extends Controller
         {
             return response()->json('', 204);
         }
-
         return response()->json($estudantes, 200);
     }
 
@@ -61,7 +59,6 @@ class EstudanteController extends Controller
         {
             return response()->json($estudante->toArray(), 200);
         }
-
         return response()->json(['response' => 'Estudante não encontrado'], 400);
     }
 

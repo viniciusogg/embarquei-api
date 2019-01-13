@@ -82,8 +82,8 @@ class Cidade
     public function toArray()
     {
         return array(
-            'id' => $this->id, 
-            'nome' => $this->nome,
+            'id' => $this->id,
+            'nome' => $this->nome
 //            'enderecos' => $this->retornarArrayObjetos($this->enderecos),
 //            'veiculosTransporte' => $this->retornarArrayObjetos($this->veiculosTransporte)
          );
