@@ -5,6 +5,7 @@ namespace App\Repositories\Implementation;
 use App\Repositories\Abstraction\EstudanteRepositoryInterface;
 use App\Repositories\Abstraction\Repository;
 use App\Repositories\Implementation\UsuarioRepositoryConcrete;
+use Doctrine\Common\Collections\ArrayCollection;
 use App\Entities\Enums\STATUS_CHECKIN;
 use App\Entities\Endereco;
 use App\Entities\Checkin;
@@ -130,7 +131,6 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
             $entityManager->flush();
             $entityManager->getConnection()->commit();
 
-//            error_log($estudanteAtualizado->getEndereco()->getCidade()->getId());
             return $estudanteAtualizado;
         }
         catch (Exception $ex)
@@ -161,7 +161,7 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
             $estudanteAtualizado = $entityManager->merge($estudanteDesatualizado);
 
             $entityManager->flush();
-            
+
             if ($dados['ativo']) /* ADICIONANDO ESTUDANTE NA LISTA DE PRESENÇA */
             {
                 $this->adicionarNaListaDePresenca($estudanteAtualizado, $entityManager);
@@ -176,7 +176,7 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
         catch (Exception $ex) 
         {
             $entityManager->getConnection()->rollback();
-            
+
             throw $ex;
         }
         finally 
@@ -188,7 +188,7 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
     private function adicionarNaListaDePresenca($estudante, $entityManager)
     {
         $repositoryListaPresenca = $entityManager->getRepository('\App\Entities\ListaPresenca');
-        
+
         $cidadeId = $estudante->getEndereco()->getCidade()->getId();
         $instituicaoId = $estudante->getCurso()->getInstituicaoEnsino()->getId();
 
@@ -202,7 +202,6 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
                 . 'JOIN lp.cidade c JOIN lp.instituicaoEnsino ie '
                 . 'WHERE c.id = :cidadeId AND ie.id = :instituicaoId'
         );
-
         $query->setParameters(array('cidadeId' => $cidadeId, 'instituicaoId' => $instituicaoId));
 
         $listaEncontrada = $query->getOneOrNullResult();
@@ -221,13 +220,15 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
 
             $repositoryListaPresenca->getEntityManager()->persist($listaEncontrada);
             $repositoryListaPresenca->getEntityManager()->flush();
+            $listaSalva = $repositoryListaPresenca->getEntityManager()->merge($listaEncontrada);
+            $listaEncontrada = $listaSalva;
         }
         $listaEncontrada->getCheckins()->add($checkinAluno);
         $checkinAluno->setListaPresenca($listaEncontrada);
 
-        $repositoryListaPresenca->getEntityManager()->clear();
-        $repositoryListaPresenca->getEntityManager()->merge($listaEncontrada);
-        $repositoryListaPresenca->getEntityManager()->flush();
+        $entityManager->clear();
+        $entityManager->merge($checkinAluno);
+        $entityManager->flush();
     }
     
     private function removerDaListaDePresenca($estudante, $entityManager)

@@ -33,7 +33,7 @@ class Checkin
      * @ORM\JoinColumn(nullable=false)
      * @ORM\ManyToOne(targetEntity="ListaPresenca", inversedBy="checkins") 
      */
-    protected $listaPresenca;
+    protected $listaPresenca; // CHECKIN É DONA DA ASSOCIAÇÃO
 
     public function getId() {
         return $this->id;

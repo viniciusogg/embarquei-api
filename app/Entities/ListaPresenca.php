@@ -42,7 +42,7 @@ class ListaPresenca
 
     public function __construct()
     {
-        $this->checkins =  new ArrayCollection();
+        $this->checkins = new ArrayCollection();
     }
 
     public function getId()

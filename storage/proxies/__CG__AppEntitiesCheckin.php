@@ -224,6 +224,17 @@ class Checkin extends \App\Entities\Checkin implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
+    public function getDataUltimaAtualizacao()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDataUltimaAtualizacao', []);
+
+        return parent::getDataUltimaAtualizacao();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setId($id)
     {
 
@@ -263,6 +274,17 @@ class Checkin extends \App\Entities\Checkin implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setListaPresenca', [$listaPresenca]);
 
         return parent::setListaPresenca($listaPresenca);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDataUltimaAtualizacao($dataUltimaAtualizacao)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDataUltimaAtualizacao', [$dataUltimaAtualizacao]);
+
+        return parent::setDataUltimaAtualizacao($dataUltimaAtualizacao);
     }
 
     /**
