@@ -64,10 +64,10 @@ class Motorista extends \App\Entities\Motorista implements \Doctrine\ORM\Proxy\P
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'foto', 'instituicoesEnsino', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'password', 'rememberToken', 'accessToken'];
+            return ['__isInitialized__', 'foto', 'cidade', 'instituicoesEnsino', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'password', 'rememberToken', 'accessToken'];
         }
 
-        return ['__isInitialized__', 'foto', 'instituicoesEnsino', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'password', 'rememberToken', 'accessToken'];
+        return ['__isInitialized__', 'foto', 'cidade', 'instituicoesEnsino', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'password', 'rememberToken', 'accessToken'];
     }
 
     /**
@@ -193,6 +193,28 @@ class Motorista extends \App\Entities\Motorista implements \Doctrine\ORM\Proxy\P
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInstituicoesEnsino', []);
 
         return parent::getInstituicoesEnsino();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCidade()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCidade', []);
+
+        return parent::getCidade();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCidade($cidade): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCidade', [$cidade]);
+
+        parent::setCidade($cidade);
     }
 
     /**

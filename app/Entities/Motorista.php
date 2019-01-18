@@ -18,6 +18,12 @@ class Motorista extends Mensageiro
      */
     protected $foto; // Caminho no sistema de arquivos
 
+    /**
+     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity="Cidade", fetch="EAGER")
+     */
+    protected $cidade;
+
     /** 
      * @ORM\JoinColumn(nullable=true)
      * @ORM\ManyToMany(targetEntity="InstituicaoEnsino", mappedBy="motoristas", fetch="EAGER") 
@@ -39,6 +45,16 @@ class Motorista extends Mensageiro
         return $this->instituicoesEnsino;
     }
 
+    public function getCidade()
+    {
+        return $this->cidade;
+    }
+
+    public function setCidade($cidade): void
+    {
+        $this->cidade = $cidade;
+    }
+
     public function setFoto($foto)
     {
         $this->foto = $foto;
@@ -56,6 +72,7 @@ class Motorista extends Mensageiro
             'nome' => $this->nome,
             'sobrenome' => $this->sobrenome,
             'numeroCelular' => $this->numeroCelular,
+            'cidade' => $this->cidade->toArray(),
             'foto' => $this->foto->toArray(),
             'instituicoesEnsino' => $this->retornarArrayObjetos($this->instituicoesEnsino)
          );

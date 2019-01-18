@@ -5,7 +5,7 @@ namespace Database\Migrations;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema as Schema;
 
-class Version20190103183008 extends AbstractMigration
+class Version20190117220426 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -23,7 +23,7 @@ class Version20190103183008 extends AbstractMigration
         $this->addSql('CREATE TABLE pontos_parada (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', trajeto_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', nome VARCHAR(255) NOT NULL, ordem INT NOT NULL, INDEX IDX_7AA975AA5FD436D8 (trajeto_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE mensageiros (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE administradores (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', endereco_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', UNIQUE INDEX UNIQ_BA7CABE61BB76823 (endereco_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE motoristas (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', foto_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', UNIQUE INDEX UNIQ_5CFD06CD7ABFA656 (foto_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE motoristas (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', foto_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', cidade_id CHAR(36) DEFAULT NULL COMMENT \'(DC2Type:uuid)\', UNIQUE INDEX UNIQ_5CFD06CD7ABFA656 (foto_id), INDEX IDX_5CFD06CD9586CC8 (cidade_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE renovacoes_cadastro (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', responsavel_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', ativa TINYINT(1) NOT NULL, INDEX IDX_B350766FBB9AF004 (responsavel_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE estudante_renovacao_cadastro (renovacao_cadastro_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', estudante_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', INDEX IDX_6F05BA9C82BB25E (renovacao_cadastro_id), INDEX IDX_6F05BA93B4690DB (estudante_id), PRIMARY KEY(renovacao_cadastro_id, estudante_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE enderecos (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', cidade_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', logradouro VARCHAR(255) NOT NULL, bairro VARCHAR(255) NOT NULL, INDEX IDX_FC4E02DA9586CC8 (cidade_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
@@ -53,6 +53,7 @@ class Version20190103183008 extends AbstractMigration
         $this->addSql('ALTER TABLE administradores ADD CONSTRAINT FK_BA7CABE61BB76823 FOREIGN KEY (endereco_id) REFERENCES enderecos (id)');
         $this->addSql('ALTER TABLE administradores ADD CONSTRAINT FK_BA7CABE6BF396750 FOREIGN KEY (id) REFERENCES usuarios (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE motoristas ADD CONSTRAINT FK_5CFD06CD7ABFA656 FOREIGN KEY (foto_id) REFERENCES imagens (id)');
+        $this->addSql('ALTER TABLE motoristas ADD CONSTRAINT FK_5CFD06CD9586CC8 FOREIGN KEY (cidade_id) REFERENCES cidades (id)');
         $this->addSql('ALTER TABLE motoristas ADD CONSTRAINT FK_5CFD06CDBF396750 FOREIGN KEY (id) REFERENCES usuarios (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE renovacoes_cadastro ADD CONSTRAINT FK_B350766FBB9AF004 FOREIGN KEY (responsavel_id) REFERENCES administradores (id)');
         $this->addSql('ALTER TABLE estudante_renovacao_cadastro ADD CONSTRAINT FK_6F05BA9C82BB25E FOREIGN KEY (renovacao_cadastro_id) REFERENCES renovacoes_cadastro (id) ON DELETE CASCADE');
@@ -110,6 +111,7 @@ class Version20190103183008 extends AbstractMigration
         $this->addSql('ALTER TABLE instituicao_ensino_rota DROP FOREIGN KEY FK_101CE2259F169B8');
         $this->addSql('ALTER TABLE trajetos DROP FOREIGN KEY FK_528CA2419F169B8');
         $this->addSql('ALTER TABLE pontos_parada DROP FOREIGN KEY FK_7AA975AA5FD436D8');
+        $this->addSql('ALTER TABLE motoristas DROP FOREIGN KEY FK_5CFD06CD9586CC8');
         $this->addSql('ALTER TABLE enderecos DROP FOREIGN KEY FK_FC4E02DA9586CC8');
         $this->addSql('ALTER TABLE rotas DROP FOREIGN KEY FK_C067190B9586CC8');
         $this->addSql('ALTER TABLE veiculos_transporte DROP FOREIGN KEY FK_ECF39B379586CC8');
