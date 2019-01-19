@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Repositories\Abstraction\MotoristaRepositoryInterface;
-use App\Entities\Motorista;
 use Illuminate\Support\Facades\Hash;
+use App\Entities\Motorista;
+use App\entities\Imagem;
 
 class MotoristaService 
 {
@@ -19,7 +20,7 @@ class MotoristaService
     {
         $motorista = $this->criarInstanciaMotorista($dados);
         
-        $this->motoristaRepository->associarComInstituicao($motorista, $dados['instituicoesEnsino']);        
+        $this->motoristaRepository->cadastrar($motorista, $dados['instituicoesEnsino'], $dados['cidade']['id']);
     }
 
     public function findById($id)
@@ -41,22 +42,11 @@ class MotoristaService
         foreach ($result as $motorista) {
             $motoristas[] = $motorista->toArray();
         }
-
         return $motoristas;
     }
 
     public function update($dados, $id)
     {
-        // $senha = $data['senha'];
-
-        if (Hash::needsRehash($dados['senha']))
-        {
-            $dados['senha'] = Hash::make($dados['senha']);
-        }
-
-//        $usuario = new Usuario($data['nome'], $data['sobrenome'],
-//                $data['numeroCelular'], $senha);
-        
         $motorista = $this->criarInstanciaMotorista($dados);
         $motorista->setId($id);
 
@@ -67,33 +57,49 @@ class MotoristaService
     {
         $this->motoristaRepository->delete($id);
     }
-    
+
+    public function findByCidade($cidadeId)
+    {
+        $result = $this->motoristaRepository->getByCidade($cidadeId);
+
+        $motoristas = array();
+
+        foreach ($result as $motorista)
+        {
+            $motoristas[] = $motorista->toArray();
+        }
+        return $motoristas;
+    }
+
     private function criarInstanciaMotorista($dados)
     {
         $motorista = new Motorista();
         $motorista->setNome($dados['nome']);
         $motorista->setSobrenome($dados['sobrenome']);
         $motorista->setNumeroCelular($dados['numeroCelular']);
+        $motorista->setAtivo(true);
 
         if (isset($dados['senha']) && Hash::needsRehash($dados['senha']))
         {
             $dados['senha'] = Hash::make($dados['senha']);
             $motorista->setSenha($dados['senha']);
         }
-
+        else
+        {
+            $motorista->setSenha(Hash::make(env('SENHA_PADRAO')));
+        }
         $foto = new Imagem();
 
-        if (isset($dados['foto']))
+        if (isset($dados['foto']['id']))
         {
             $foto->setId($dados['foto']['id']);
         }
-        $foto->setCaminhoSistemaArquivos($dados['foto']['caminhoSistemaArquivos']);
-
+        else if (isset($dados['foto']))
+        {
+            $foto->setCaminhoSistemaArquivos($dados['foto']['caminhoSistemaArquivos']);
+        }
         $motorista->setFoto($foto);
 
-        $motorista->setAtivo($dados['ativo']);
-        $motorista->setFoto($dados['foto']);        
-                
         return $motorista;
     }
 }

@@ -9,38 +9,40 @@ use Exception;
 
 class MotoristaRepositoryConcrete extends UsuarioRepositoryConcrete implements MotoristaRepositoryInterface
 {
-    public function  associarComInstituicao($motorista, $nomesInstituicoes)
+    public function cadastrar($motorista, $instituicoesIds, $cidadeId)
     {
         $instituicoesEnsino = [];
-        
         $motoristas = [];
         $motoristas[] = $motorista;
         
         $entityManager = $this->getEntityManager();
         $entityManager->getConnection()->beginTransaction();
-        
-        $repositoryInstituicaoEnsino = $entityManager->getRepository('\App\Entities\InstituicaoEnsino');
-        
+
         try
         {
-            foreach($nomesInstituicoes as $nomeInstituicao) 
+            foreach($instituicoesIds as $instituicaoId)
             {                
-                $instituicaoEnsino = $repositoryInstituicaoEnsino->
-                        findOneBy(['nome' => $nomeInstituicao['nome']]);
+                $instituicaoEnsino = $entityManager->find('\App\Entities\InstituicaoEnsino', $instituicaoId['id']);
 
-                if(!$instituicaoEnsino) 
+                if ($instituicaoEnsino)
                 {
-                    throw new NaoEncontradoException();
-                }
-                
-                $instituicaoEnsino->getMotoristas()->add($motorista);
+                    $instituicaoEnsino->getMotoristas()->add($motorista);
 
-                $instituicoesEnsino[] = $instituicaoEnsino;     
-                
-                $entityManager->merge($instituicaoEnsino);
+                    $instituicoesEnsino[] = $instituicaoEnsino;
+
+                    $entityManager->merge($instituicaoEnsino);
+                }
+            }
+            if (empty($instituicoesEnsino))
+            {
+                throw new NaoEncontradoException();
             }
             $motorista->setInstituicoesEnsino($instituicoesEnsino);
-            
+
+            $cidade = $entityManager->find('App\Entities\Cidade', $cidadeId);
+
+            $motorista->setCidade($cidade);
+
             $entityManager->persist($motorista);            
             $entityManager->flush();
             $entityManager->getConnection()->commit();
@@ -56,7 +58,39 @@ class MotoristaRepositoryConcrete extends UsuarioRepositoryConcrete implements M
             $entityManager->close();
         }
     }
-    
+
+    public function atualizar()
+    {
+
+    }
+
+    public function getByCidade($cidadeId)
+    {
+        $entityManager = $this->getEntityManager();
+
+        try
+        {
+            $query = $entityManager->createQuery(
+                'SELECT m FROM \App\Entities\Motorista m '
+                . 'JOIN m.cidade c '
+                . 'WHERE c.id = :cidadeId'
+            );
+            $query->setParameter('cidadeId', $cidadeId);
+
+            $motoristas = $query->getResult();
+
+            return $motoristas;
+        }
+        catch (Exception $ex)
+        {
+            throw $ex;
+        }
+        finally
+        {
+            $entityManager->close();
+        }
+    }
+
     protected function getTypeObject() 
     {
         return '\App\Entities\Motorista';

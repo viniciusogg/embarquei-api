@@ -15,7 +15,15 @@ Route::apiResource('horarioTrajeto', 'HorarioTrajetoController');
 
 Route::get('usuarios/tipo-usuario/{id}', 'UsuarioController@tipoById')->middleware('auth:api');
 
-Route::apiResource('motoristas', 'MotoristaController')->middleware('auth:api');
+Route::group(['prefix' => 'motoristas', 'middleware' => 'auth:api'], function() {
+    Route::post('/', 'MotoristaController@store');
+    Route::get('/', 'MotoristaController@index');
+    Route::get('/{id}', 'MotoristaController@show');
+    Route::delete('/{id}', 'MotoristaController@destroy');
+    Route::put('/{id}', 'MotoristaController@update');
+    Route::get('/cidade/{cidadeId}', 'MotoristaController@filtrarPorCidade');
+});
+
 
 Route::apiResource('administradores', 'AdministradorController')->middleware('auth:api');
 
@@ -23,7 +31,7 @@ Route::apiResource('instituicoesEnsino', 'InstituicaoEnsinoController');
 
 Route::apiResource('cursos', 'CursoController');
 
-Route::group(['prefix' => 'checkin', 'middleware'=> 'auth:api'], function() //->middleware('auth:api');
+Route::group(['prefix' => 'checkin', 'middleware' => 'auth:api'], function() //->middleware('auth:api');
 {
     Route::post('/', 'CheckinController@store');
     Route::get('/', 'CheckinController@index');

@@ -37,7 +37,6 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
                 {
                     throw new NaoEncontradoException();
                 }
-
                 $pontosParadaEstudante[] = $pontoParadaBuscado;                
             }
             $cidade = $repositoryCidade->findOneBy(['id' => $endereco['cidade']['id']]);

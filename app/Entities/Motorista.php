@@ -13,13 +13,13 @@ class Motorista extends Mensageiro
     use CriaArrayObjetoTrait;
     
     /**
-     * @ORM\JoinColumn(nullable=false, unique=true)
+     * @ORM\JoinColumn(nullable=true, unique=true)
      * @ORM\OneToOne(targetEntity="Imagem", cascade={"all"}, fetch="EAGER")
      */
     protected $foto; // Caminho no sistema de arquivos
 
     /**
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=false)
      * @ORM\ManyToOne(targetEntity="Cidade", fetch="EAGER")
      */
     protected $cidade;
