@@ -27,7 +27,6 @@ class InstituicaoEnsinoController extends Controller
         {
             return response()->json('', 204);
         }
-
         return response()->json($instituicoesEnsino, 200);
     }
 
@@ -60,8 +59,19 @@ class InstituicaoEnsinoController extends Controller
         {
             return response()->json($instituicaoEnsino->toArray(), 200);
         }
-
         return response()->json(['response' => 'Instituição de ensino não encontrada'], 400);
+    }
+
+    public function buscarInstituicoesSemMotorista($cidadeId)
+    {
+//        return response()->json($cidadeId);
+        $instituicoesEnsino = $this->instituicaoEnsinoService->buscarInstituicoesSemMotorista($cidadeId);
+
+        if (empty($instituicoesEnsino))
+        {
+            return response()->json('', 204);
+        }
+        return response()->json($instituicoesEnsino, 200);
     }
 
     /**

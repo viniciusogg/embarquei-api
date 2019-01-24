@@ -78,7 +78,7 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
     
     public function atualizar($estudante, $idsPontosParada, $idCurso, $endereco)    
     {
-        $pontosParadaEstudante = [];
+//        $pontosParadaEstudante = [];
         
         $entityManager = $this->getEntityManager();
         $entityManager->getConnection()->beginTransaction();
@@ -100,11 +100,12 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
                 $idPontoParada = $pontoParada['id'];
                 $pontoParadaBuscado = $repositoryPontoParada->findOneBy(['id' => $idPontoParada]);
                 
-                if(!$pontoParadaBuscado) 
+                if($pontoParadaBuscado)
                 {
-                    throw new NaoEncontradoException();
+                    $estudante->getPontosParada()->add($pontoParadaBuscado);
+//                    throw new NaoEncontradoException();
                 }
-                $pontosParadaEstudante[] = $pontoParadaBuscado;                
+//                $pontosParadaEstudante[] = $pontoParadaBuscado;
             }
             $cidade = $repositoryCidade->findOneBy(['id' => $endereco['cidade']['id']]);
             $curso = $repositoryCurso->findOneBy(['id' => $idCurso]);
@@ -116,13 +117,13 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
             $instanciaEndereco->setCidade($cidade);
             
             $estudante->setEndereco($instanciaEndereco);
-            $estudante->setPontosParada($pontosParadaEstudante);
+//            $estudante->setPontosParada($pontosParadaEstudante);
             $estudante->setCurso($curso);
                         
             $entityManager->clear();
             $estudanteAtualizado = $entityManager->merge($estudante);
                         
-            foreach($pontosParadaEstudante as $pontoParadaEstudante)
+            foreach($estudante->getPontosParada() as $pontoParadaEstudante)
             {
                 $pontoParadaEstudante->getEstudantes()->add($estudanteAtualizado);
                 $repositoryPontoParada->getEntityManager()->merge($pontoParadaEstudante);

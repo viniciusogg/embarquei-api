@@ -50,7 +50,8 @@ class MotoristaService
         $motorista = $this->criarInstanciaMotorista($dados);
         $motorista->setId($id);
 
-        return  $this->motoristaRepository->update($motorista);
+        return $this->motoristaRepository->
+                atualizar($motorista, $dados['instituicoesEnsino'], $dados['cidade']['id']);
     }
 
     public function delete($id)
@@ -97,6 +98,10 @@ class MotoristaService
         else if (isset($dados['foto']))
         {
             $foto->setCaminhoSistemaArquivos($dados['foto']['caminhoSistemaArquivos']);
+        }
+        else
+        {
+            $foto = null;
         }
         $motorista->setFoto($foto);
 

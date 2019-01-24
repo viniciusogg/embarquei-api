@@ -27,7 +27,14 @@ Route::group(['prefix' => 'motoristas', 'middleware' => 'auth:api'], function() 
 
 Route::apiResource('administradores', 'AdministradorController')->middleware('auth:api');
 
-Route::apiResource('instituicoesEnsino', 'InstituicaoEnsinoController');
+Route::get('instituicoesEnsino', 'InstituicaoEnsinoController@index');
+Route::group(['prefix' => 'instituicoesEnsino', 'middleware' => 'auth:api'], function() {
+    Route::post('/', 'InstituicaoEnsinoController@store');
+    Route::get('/{id}', 'InstituicaoEnsinoController@show');
+    Route::get('/semMotorista/{cidadeId}', 'InstituicaoEnsinoController@buscarInstituicoesSemMotorista');
+    Route::delete('/{id}', 'InstituicaoEnsinoController@destroy');
+    Route::put('/{id}', 'InstituicaoEnsinoController@update');
+});
 
 Route::apiResource('cursos', 'CursoController');
 

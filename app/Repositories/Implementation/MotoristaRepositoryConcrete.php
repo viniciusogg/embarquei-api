@@ -5,6 +5,7 @@ namespace App\Repositories\Implementation;
 use App\Repositories\Implementation\UsuarioRepositoryConcrete;
 use App\Repositories\Abstraction\MotoristaRepositoryInterface;
 use App\Exceptions\NaoEncontradoException;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 
 class MotoristaRepositoryConcrete extends UsuarioRepositoryConcrete implements MotoristaRepositoryInterface
@@ -33,10 +34,6 @@ class MotoristaRepositoryConcrete extends UsuarioRepositoryConcrete implements M
                     $entityManager->merge($instituicaoEnsino);
                 }
             }
-            if (empty($instituicoesEnsino))
-            {
-                throw new NaoEncontradoException();
-            }
             $motorista->setInstituicoesEnsino($instituicoesEnsino);
 
             $cidade = $entityManager->find('App\Entities\Cidade', $cidadeId);
@@ -59,9 +56,84 @@ class MotoristaRepositoryConcrete extends UsuarioRepositoryConcrete implements M
         }
     }
 
-    public function atualizar()
+    public function atualizar($motorista, $instituicoesIds, $cidadeId)
     {
+        $entityManager = $this->getEntityManager();
+        $entityManager->getConnection()->beginTransaction();
 
+        try
+        {
+            $cidadeBuscada = $entityManager->find('\App\Entities\Cidade', $cidadeId);
+
+            $motorista->setCidade($cidadeBuscada);
+
+            if ($motorista->getSenha() === null)
+            {
+                $senha = $entityManager->find($this->getTypeObject(), $motorista->getId())->getSenha();
+                $motorista->setSenha($senha);
+            }
+            $this->desassociarMotoristaInstituicoes($entityManager, $motorista);
+
+            if (!empty($instituicoesIds))
+            {
+                $this->associarMotoristaInstituicoes($entityManager, $motorista, $instituicoesIds);
+            }
+            $motoristaAtualizado = $entityManager->merge($motorista);
+            $entityManager->flush();
+            $entityManager->refresh($motoristaAtualizado);
+
+            $entityManager->getConnection()->commit();
+
+            return $motoristaAtualizado;
+        }
+        catch (Exception $ex)
+        {
+            $entityManager->getConnection()->rollback();
+
+            throw $ex;
+        }
+        finally
+        {
+            $entityManager->close();
+        }
+    }
+
+    private function desassociarMotoristaInstituicoes($entityManager, $motorista)
+    {
+        $query = $entityManager->createQuery(
+            'SELECT ie FROM \App\Entities\InstituicaoEnsino ie '
+            . 'JOIN ie.motoristas m '
+            . 'WHERE m.id = :motoristaId'
+        );
+        $query->setParameter('motoristaId', $motorista->getId());
+
+        $instituicoesEnsino = $query->getResult();
+
+        foreach ($instituicoesEnsino as $instituicao)
+        {
+            $instituicao->getMotoristas()->
+                    removeElement($entityManager->getReference($this->getTypeObject(), $motorista->getId()));
+
+            $entityManager->merge($instituicao);
+            $entityManager->flush();
+        }
+    }
+
+    private function associarMotoristaInstituicoes($entityManager, $motorista, $instituicoesIds)
+    {
+        foreach($instituicoesIds as $instituicao)
+        {
+            $instituicaoBuscada = $entityManager->find('\App\Entities\InstituicaoEnsino', $instituicao['id']);
+
+            if (isset($instituicaoBuscada))
+            {
+                $instituicaoBuscada->getMotoristas()->
+                        add($entityManager->getReference($this->getTypeObject(), $motorista->getId()));
+
+                $entityManager->merge($instituicaoBuscada);
+                $entityManager->flush();
+            }
+        }
     }
 
     public function getByCidade($cidadeId)

@@ -67,13 +67,19 @@ class Motorista extends Mensageiro
 
     public function toArray()
     {
+        $foto = null;
+
+        if ($this->foto !== null)
+        {
+            $foto = $this->foto->toArray();
+        }
         return array(
             'id' => $this->id,
             'nome' => $this->nome,
             'sobrenome' => $this->sobrenome,
             'numeroCelular' => $this->numeroCelular,
             'cidade' => $this->cidade->toArray(),
-            'foto' => $this->foto->toArray(),
+            'foto' => $foto,
             'instituicoesEnsino' => $this->retornarArrayObjetos($this->instituicoesEnsino)
          );
     }

@@ -70,7 +70,6 @@ class EstudanteController extends Controller
         {
             return response()->json('', 204);
         }
-
         return response()->json($estudantes, 200);  
     }
     

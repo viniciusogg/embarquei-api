@@ -6,8 +6,9 @@ use App\Repositories\Abstraction\InstituicaoEnsinoRepositoryInterface;
 use App\Entities\InstituicaoEnsino;
 use App\Entities\Endereco;
 use App\Entities\Curso;
+use App\Services\Service;
 
-class InstituicaoEnsinoService
+class InstituicaoEnsinoService extends Service
 {
     private $instituicaoEnsinoRepository;
 
@@ -20,51 +21,26 @@ class InstituicaoEnsinoService
     {
         $instituicaoEnsino = $this->criarInstanciaInstituicaoEnsino($dados);
 
-        $this->instituicaoEnsinoRepository->associarComCidade($instituicaoEnsino, $dados['endereco']['nomeCidade']);
-    }
-
-    public function findById($id)
-    {
-        return $this->instituicaoEnsinoRepository->getById($id);
-    }
-
-    public function findAll()
-    {
-        $result = $this->instituicaoEnsinoRepository->getAll();
-
-        $instituicoesEnsino = array();
-
-        foreach ($result as $instituicaoEnsino) {
-            $instituicoesEnsino[] = $instituicaoEnsino->toArray();
-        }
-
-        return $instituicoesEnsino;
+        $this->instituicaoEnsinoRepository->cadastrar($instituicaoEnsino, $dados['endereco']['nomeCidade']);
     }
 
     public function findByNome($nome)
     {
-        return $this->instituicaoEnsinoRepository->getByNome($nome);
-    }
-    
-    public function update($data, $id)
-    {
-        $instituicaoEnsino = $this->criarInstanciaInstituicaoEnsino($data);
-        $instituicaoEnsino->setId($id);
-
-        return  $this->instituicaoEnsinoRepository->update($instituicaoEnsino);
+        return $this->getRepository()->getByNome($nome);
     }
 
-    public function delete($id)
+    public function buscarInstituicoesSemMotorista($cidadeId)
     {
-        $this->instituicaoEnsinoRepository->delete($id);
+        $result = $this->getRepository()->buscarInstituicoesSemMotorista($cidadeId);
+        $instituicoes = array();
+
+        foreach ($result as $instituicao) {
+            $instituicoes[] = $instituicao->toArray();
+        }
+        return $instituicoes;
     }
     
-    public function associarComMotorista($dadosMotorista, $nomesInstituicoes)
-    {
-        $this->instituicaoEnsinoRepository->associarComMotorista($dadosMotorista, $nomesInstituicoes);
-    }
-    
-    private function criarInstanciaInstituicaoEnsino($data)
+    protected function criarInstancia($data)
     {
         $endereco = new Endereco();                
         $endereco->setLogradouro($data['endereco']['logradouro']);
@@ -83,10 +59,14 @@ class InstituicaoEnsinoService
             
             $cursos[] = $novoCurso;
         }
-        
         $instituicaoEnsino->setCursos($cursos);
         $instituicaoEnsino->setEndereco($endereco);
         
         return $instituicaoEnsino;
+    }
+
+    protected function getRepository()
+    {
+        return $this->instituicaoEnsinoRepository;
     }
 }

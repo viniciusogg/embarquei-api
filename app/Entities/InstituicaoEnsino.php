@@ -37,6 +37,7 @@ class InstituicaoEnsino
      */
     protected $endereco;
 
+    // inversedBy = DONA DA ASSOCIAÇÃO
     /**
      * @ORM\JoinColumn(nullable=true)
      * @ORM\ManyToMany(targetEntity="Motorista", inversedBy="instituicoesEnsino", fetch="EAGER")
@@ -139,10 +140,24 @@ class InstituicaoEnsino
             'nome' => $this->nome,
             'cursos' => $this->retornarArrayObjetos($this->cursos),
             'endereco' => $this->endereco->toArray(),
-//            'motoristas' => $this->retornarArrayObjetos($this->motoristas),
+//            'motoristas' => $this->retornarArrayObjetos($this->motoristas)
 //            'veiculosTransporte' => $this->retornarArrayObjetos($this->veiculosTransporte),
 //            'listasPresenca' => $this->retornarArrayObjetos($this->listasPresenca)
         ];
+    }
+
+    protected function retornarArrayObjetos($objetos)
+    {
+        $array = [];
+
+        foreach ($objetos as $objeto)
+        {
+            $array[] = [
+                'id' => $objeto->getId(),
+                'nome' => $objeto->getNome()
+            ];
+        }
+        return $array;
     }
     
 }
