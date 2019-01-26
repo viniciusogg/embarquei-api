@@ -27,7 +27,6 @@ class VeiculoTransporteController extends Controller
         {
             return response()->json('', 204);
         }
-
         return response()->json($veiculosTransporte, 200);
     }
 
@@ -60,8 +59,18 @@ class VeiculoTransporteController extends Controller
         {
             return response()->json($veiculoTransporte->toArray(), 200);
         }
+        return response()->json(['response' => 'Veiculo de transporte não encontrado'], 400);
+    }
 
-        return response()->json(['response' => 'Veiculo de transporte de ensino não encontrado'], 400);
+    public function filtrarPorCidade($cidadeId)
+    {
+        $veiculos = $this->veiculoTransporteService->findByCidade($cidadeId);
+
+        if (empty($veiculos))
+        {
+            return response()->json('', 204);
+        }
+        return response()->json($veiculos, 200);
     }
 
     /**

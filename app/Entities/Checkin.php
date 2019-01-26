@@ -96,7 +96,7 @@ class Checkin
         return array(
             'id' => $this->id,
             'status' => $this->status,
-            'dataUltimaAtualizacao' => $this->dataUltimaAtualizacao->format('d/m/Y H:i'),
+            'dataUltimaAtualizacao' => $this->dataUltimaAtualizacao->format('d/m/Y H:i:s'),
             'estudante' => $this->estudante->toArray(),
             'listaPresencaId' => $this->listaPresenca->getId()
          );

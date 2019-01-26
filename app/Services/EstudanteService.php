@@ -123,7 +123,12 @@ class EstudanteService
         if (isset($dados['comprovanteMatricula']['id']))
         {
             $comprovanteMatricula->setId($dados['comprovanteMatricula']['id']);
-            $comprovanteMatricula->setDataEnvio(new DateTime($dados['comprovanteMatricula']['dataEnvio']));
+
+            $dataFormatada = date_create_from_format('d/m/Y H:i:s', $dados['comprovanteMatricula']['dataEnvio']);
+
+            $dataEnvio = Carbon::createFromFormat('Y-m-d H:i:s', $dataFormatada->format('Y-m-d H:i:s'));
+
+            $comprovanteMatricula->setDataEnvio($dataEnvio); // new DateTime($dados['comprovanteMatricula']['dataEnvio'])
         }
         else
         {

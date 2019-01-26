@@ -5,9 +5,10 @@ namespace App\Services;
 use App\Repositories\Abstraction\MotoristaRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
 use App\Entities\Motorista;
-use App\entities\Imagem;
+use App\Entities\Imagem;
+use App\Services\Service;
 
-class MotoristaService 
+class MotoristaService extends Service
 {
     private $motoristaRepository;
     
@@ -18,50 +19,28 @@ class MotoristaService
 
     public function create($dados)
     {
-        $motorista = $this->criarInstanciaMotorista($dados);
+        $motorista = $this->criarInstancia($dados);
         
         $this->motoristaRepository->cadastrar($motorista, $dados['instituicoesEnsino'], $dados['cidade']['id']);
-    }
-
-    public function findById($id)
-    {
-        return $this->motoristaRepository->getById($id);
     }
 
     public function findByNumeroCelular($numeroCelular)
     {
         return $this->motoristaRepository->getByNumeroCelular($numeroCelular);
     }
-    
-    public function findAll()
-    {
-        $result = $this->motoristaRepository->getAll();
-
-        $motoristas = array();
-
-        foreach ($result as $motorista) {
-            $motoristas[] = $motorista->toArray();
-        }
-        return $motoristas;
-    }
 
     public function update($dados, $id)
     {
-        $motorista = $this->criarInstanciaMotorista($dados);
+        $motorista = $this->criarInstancia($dados);
         $motorista->setId($id);
 
-        return $this->motoristaRepository->
+        return $this->getRepository()->
                 atualizar($motorista, $dados['instituicoesEnsino'], $dados['cidade']['id']);
-    }
-
-    public function delete($id)
-    {
-        $this->motoristaRepository->delete($id);
     }
 
     public function findByCidade($cidadeId)
     {
-        $result = $this->motoristaRepository->getByCidade($cidadeId);
+        $result = $this->getRepository()->getByCidade($cidadeId);
 
         $motoristas = array();
 
@@ -72,7 +51,7 @@ class MotoristaService
         return $motoristas;
     }
 
-    private function criarInstanciaMotorista($dados)
+    protected function criarInstancia($dados)
     {
         $motorista = new Motorista();
         $motorista->setNome($dados['nome']);
@@ -106,5 +85,10 @@ class MotoristaService
         $motorista->setFoto($foto);
 
         return $motorista;
+    }
+
+    protected function getRepository()
+    {
+        return $this->motoristaRepository;
     }
 }

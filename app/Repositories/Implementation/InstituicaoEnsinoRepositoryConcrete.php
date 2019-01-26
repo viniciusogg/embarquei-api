@@ -10,7 +10,6 @@ use Exception;
 
 class InstituicaoEnsinoRepositoryConcrete extends Repository implements InstituicaoEnsinoRepositoryInterface 
 {
-    
     public function getByNome($nome) 
     {
         $entityManager = $this->getEntityManager();
@@ -92,6 +91,60 @@ class InstituicaoEnsinoRepositoryConcrete extends Repository implements Institui
                                     'ON iem.motorista_id = m.id ' .
                                     'AND m.cidade_id != ?) ie ' .
                                 'WHERE ie.idMotorista IS NULL) ';
+
+            $rsm = new ResultSetMapping();
+            $rsm->addEntityResult('\App\Entities\InstituicaoEnsino', 'i');
+            $rsm->addFieldResult('i', 'id', 'id'); // alias, coluna-tabela, atributo-entidade
+            $rsm->addFieldResult('i', 'nome', 'nome');
+
+            $rsm->addJoinedEntityResult('\App\Entities\Endereco', 'e', 'i', 'endereco');
+            $rsm->addFieldResult('e', 'endereco_id', 'id');
+            $rsm->addFieldResult('e', 'logradouro', 'logradouro');
+            $rsm->addFieldResult('e', 'bairro', 'bairro');
+
+            $rsm->addJoinedEntityResult('\App\Entities\Cidade', 'c', 'e', 'cidade');
+            $rsm->addFieldResult('c', 'cidade_id', 'id');
+
+            $query = $entityManager->createNativeQuery($sql, $rsm);
+
+            $query->setParameter(1, $cidadeId);
+
+            $instituicoesEncontradas = $query->getResult();
+
+            return $instituicoesEncontradas;
+        }
+        catch (Exception $ex)
+        {
+            throw $ex;
+        }
+        finally
+        {
+            $entityManager->close();
+        }
+    }
+
+    public function buscarInstituicoesSemVeiculo($cidadeId)
+    {
+        $entityManager = $this->getEntityManager();
+
+        try
+        { // CONSULTA DEVE RETORNAR INSTITUIÇÕES QUE NÃO TENHAM VEÍCULO ASSOCIADO AO MUNICÍPIO PASSADO
+            $sql = '
+                SELECT i.id, i.nome, e.id as endereco_id, e.logradouro, e.bairro, c.id as cidade_id ' .
+                    'FROM instituicoes_ensino i ' .
+                    'INNER JOIN enderecos e ' .
+                    'ON i.endereco_id = e.id ' .
+                    'INNER JOIN embarquei.cidades c ' .
+                    'ON c.id = e.cidade_id ' .
+                    'WHERE i.id NOT IN ' .
+                        '(SELECT ie.instituicao_ensino_id ' .
+                            'FROM ' .
+                                '(SELECT iev.instituicao_ensino_id, iev.veiculo_transporte_id, v.id as idVeiculo, v.cidade_id as cidadeIdVeiculo ' .
+                                    'FROM instituicao_ensino_veiculo_transporte iev ' .
+                                    'LEFT JOIN veiculos_transporte v ' .
+                                    'ON iev.veiculo_transporte_id = v.id ' .
+                                    'AND v.cidade_id != ?) ie ' .
+                                'WHERE ie.idVeiculo IS NULL)';
 
             $rsm = new ResultSetMapping();
             $rsm->addEntityResult('\App\Entities\InstituicaoEnsino', 'i');

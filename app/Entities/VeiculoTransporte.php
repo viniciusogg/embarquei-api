@@ -33,7 +33,7 @@ class VeiculoTransporte
     /** @ORM\Column(type="string", nullable=false) */
     protected $tipo;
 
-    /** @ORM\Column(type="string", nullable=false) */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $cor;
 
     /**
@@ -153,9 +153,9 @@ class VeiculoTransporte
             'placa' => $this->placa,
             'tipo' => $this->tipo,
             'cor' => $this->cor,
-            'foto' => $this->foto->toArray(),
+            'imagem' => $this->foto->toArray(),
             'instituicoesEnsino' => $this->retornarArrayObjetos($this->instituicoesEnsino),
-            'cidade' => $this->cidade->id
+            'cidade' => $this->cidade->getId()
          );
     }
 }

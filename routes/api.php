@@ -32,6 +32,7 @@ Route::group(['prefix' => 'instituicoesEnsino', 'middleware' => 'auth:api'], fun
     Route::post('/', 'InstituicaoEnsinoController@store');
     Route::get('/{id}', 'InstituicaoEnsinoController@show');
     Route::get('/semMotorista/{cidadeId}', 'InstituicaoEnsinoController@buscarInstituicoesSemMotorista');
+    Route::get('/semVeiculo/{cidadeId}', 'InstituicaoEnsinoController@buscarInstituicoesSemVeiculo');
     Route::delete('/{id}', 'InstituicaoEnsinoController@destroy');
     Route::put('/{id}', 'InstituicaoEnsinoController@update');
 });
@@ -49,12 +50,11 @@ Route::group(['prefix' => 'checkin', 'middleware' => 'auth:api'], function() //-
 });
 
 Route::get('cidades/comRota', 'CidadeController@buscarCidadesComRotas');
-Route::group(['prefix' => 'cidades', 'middleware'=> 'auth:api'],  function() // , 'middleware'=> 'auth:api'
+Route::group(['prefix' => 'cidades', 'middleware' => 'auth:api'],  function() // , 'middleware'=> 'auth:api'
 {
     Route::post('/', 'CidadeController@store');
     Route::get('/', 'CidadeController@index');
     Route::get('/nome/{nome}', 'CidadeController@showByNome');
-//    Route::get('/comRota', 'CidadeController@buscarCidadesComRotas');
     Route::get('/{id}', 'CidadeController@show');
     Route::put('/{id}', 'CidadeController@update');
     Route::delete('/{id}', 'CidadeController@destroy');
@@ -62,7 +62,16 @@ Route::group(['prefix' => 'cidades', 'middleware'=> 'auth:api'],  function() // 
 
 Route::apiResource('listaPresenca', 'ListaPresencaController')->middleware('auth:api');;
 
-Route::apiResource('veiculosTransporte', 'VeiculoTransporteController')->middleware('auth:api');
+
+Route::group(['prefix' => 'veiculosTransporte', 'middleware' => 'auth:api'], function()
+{
+    Route::post('/', 'VeiculoTransporteController@store');
+    Route::get('/', 'VeiculoTransporteController@index');
+    Route::get('/{id}', 'VeiculoTransporteController@show');
+    Route::get('/cidade/{cidadeId}', 'VeiculoTransporteController@filtrarPorCidade');
+    Route::put('/{id}', 'VeiculoTransporteController@update');
+    Route::delete('/{id}', 'VeiculoTransporteController@destroy');
+});
 
 Route::apiResource('rotas', 'RotaController')->middleware('auth:api');
 

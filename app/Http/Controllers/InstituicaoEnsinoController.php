@@ -64,8 +64,18 @@ class InstituicaoEnsinoController extends Controller
 
     public function buscarInstituicoesSemMotorista($cidadeId)
     {
-//        return response()->json($cidadeId);
         $instituicoesEnsino = $this->instituicaoEnsinoService->buscarInstituicoesSemMotorista($cidadeId);
+
+        if (empty($instituicoesEnsino))
+        {
+            return response()->json('', 204);
+        }
+        return response()->json($instituicoesEnsino, 200);
+    }
+
+    public function buscarInstituicoesSemVeiculo($cidadeId)
+    {
+        $instituicoesEnsino = $this->instituicaoEnsinoService->buscarInstituicoesSemVeiculo($cidadeId);
 
         if (empty($instituicoesEnsino))
         {

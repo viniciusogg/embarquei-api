@@ -13,8 +13,8 @@ class MotoristaRepositoryConcrete extends UsuarioRepositoryConcrete implements M
     public function cadastrar($motorista, $instituicoesIds, $cidadeId)
     {
         $instituicoesEnsino = [];
-        $motoristas = [];
-        $motoristas[] = $motorista;
+//        $motoristas = [];
+//        $motoristas[] = $motorista;
         
         $entityManager = $this->getEntityManager();
         $entityManager->getConnection()->beginTransaction();

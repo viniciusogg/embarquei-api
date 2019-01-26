@@ -113,7 +113,7 @@ class Notificacao
             'titulo' => $this->titulo,
             'descricao' => $this->descricao,
             'tipo' => $this->tipo,
-            'dataEnvio' => $this->dataEnvio,
+            'dataEnvio' => $this->dataEnvio->format('d/m/y H:i:s'),
             'remetente' => $this->remetente
          );
     }

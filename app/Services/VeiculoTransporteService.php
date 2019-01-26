@@ -3,71 +3,72 @@
 namespace App\Services;
 
 use App\Repositories\Abstraction\VeiculoTransporteRepositoryInterface;
-use App\Services\InstituicaoEnsinoService;
 use App\Entities\VeiculoTransporte;
-use App\Entities\InstituicaoEnsino;
+use App\Services\Service;
+use App\Entities\Imagem;
 
-class VeiculoTransporteService 
+class VeiculoTransporteService extends Service
 {
-//    private $instituicaoEnsinoService;
     private $veiculoTransporteRepository;
 
-    public function __construct(VeiculoTransporteRepositoryInterface $veiculoTransporteRepository/*,
-            InstituicaoEnsinoService $instituicaoEnsinoService*/)
+    public function __construct(VeiculoTransporteRepositoryInterface $veiculoTransporteRepository)
     {
-        //$this->instituicaoEnsinoService = $instituicaoEnsinoService;
         $this->veiculoTransporteRepository = $veiculoTransporteRepository;
     }
 
-    public function create($data)
+    public function create($dados)
     {
-        $veiculoTransporte = $this->criarInstanciaVeiculoTransporte($data);
+        $veiculo = $this->criarInstancia($dados);
 
-        $this->veiculoTransporteRepository->create($veiculoTransporte);
+        $this->veiculoTransporteRepository->cadastrar($veiculo, $dados['instituicoesEnsino'], $dados['cidade']['id']);
     }
 
-    public function findById($id)
+    public function update($dados, $id)
     {
-        return $this->veiculoTransporteRepository->getById($id);
+        $veiculo = $this->criarInstancia($dados);
+        $veiculo->setId($id);
+
+        return $this->getRepository()->
+                atualizar($veiculo, $dados['instituicoesEnsino'], $dados['cidade']['id']);
     }
 
-    public function findAll()
+    public function findByCidade($cidadeId)
     {
-        $result = $this->veiculoTransporteRepository->getAll();
+        $result = $this->veiculoTransporteRepository->getByCidade($cidadeId);
 
         $veiculos = array();
 
-        foreach ($result as $veiculo) {
-            $veiculos[] = $veiculo->toArray();
+        foreach ($result as $motorista)
+        {
+            $veiculos[] = $motorista->toArray();
         }
-
         return $veiculos;
     }
 
-    public function update($data, $id)
-    {
-        $veiculos = $this->criarInstanciaVeiculoTransporte($data);
-        $veiculos->setId($id);
-
-        return  $this->veiculoTransporteRepository->update($veiculo);
-    }
-
-    public function delete($id)
-    {
-        $this->veiculoTransporteRepository->delete($id);
-    }
-    
-    private function criarInstanciaVeiculoTransporte($data)
+    protected function criarInstancia($dados)
     {
         $veiculoTransporte = new VeiculoTransporte();                
-        $veiculoTransporte->setCapacidade($data['capacidade']);
-        $veiculoTransporte->setCor($data['cor']);
-        $veiculoTransporte->setImagem($data['imagem']);
-        $veiculoTransporte->setPlaca($data['placa']);
-        $veiculoTransporte->setTipo($data['tipo']); 
-        
-        $veiculoTransporte->setInstituicoesEnsino($data['instituicoesEnsino']);
+        $veiculoTransporte->setCapacidade($dados['capacidade']);
+        $veiculoTransporte->setCor($dados['cor']);
+        $veiculoTransporte->setPlaca($dados['placa']);
+        $veiculoTransporte->setTipo($dados['tipo']);
+
+        $foto = new Imagem();
+
+        if (isset($dados['imagem']['id']))
+        {
+            $foto->setId($dados['imagem']['id']);
+        }
+        $foto->setCaminhoSistemaArquivos($dados['imagem']['caminhoSistemaArquivos']);
+
+        $veiculoTransporte->setFoto($foto);
+        $veiculoTransporte->setInstituicoesEnsino($dados['instituicoesEnsino']);
         
         return $veiculoTransporte;
+    }
+
+    protected function getRepository()
+    {
+        return $this->veiculoTransporteRepository;
     }
 }

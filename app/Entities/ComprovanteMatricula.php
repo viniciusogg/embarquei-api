@@ -90,7 +90,7 @@ class ComprovanteMatricula
             'id' => $this->id,
             'caminhoSistemaArquivos' => $this->caminhoSistemaArquivos,
             'status' => $this->status,
-            'dataEnvio' => $this->dataEnvio->format('d/m/Y H:i'),
+            'dataEnvio' => $this->dataEnvio->format('d/m/Y H:i:s'),
             'justificativa' => $this->justificativa,
          );
     }
