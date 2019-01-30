@@ -84,6 +84,17 @@ class InstituicaoEnsinoController extends Controller
         return response()->json($instituicoesEnsino, 200);
     }
 
+    public function buscarInstituicoesComRota($cidadeId)
+    {
+        $instituicoesEnsino = $this->instituicaoEnsinoService->buscarInstituicoesComRota($cidadeId);
+
+        if (empty($instituicoesEnsino))
+        {
+            return response()->json('', 204);
+        }
+        return response()->json($instituicoesEnsino, 200);
+    }
+
     /**
      * Update the specified resource in storage.
      *

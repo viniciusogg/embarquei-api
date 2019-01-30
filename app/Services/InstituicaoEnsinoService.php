@@ -50,6 +50,17 @@ class InstituicaoEnsinoService extends Service
         }
         return $instituicoes;
     }
+
+    public function buscarInstituicoesComRota($cidadeId)
+    {
+        $result = $this->getRepository()->buscarInstituicoesComRota($cidadeId);
+        $instituicoes = array();
+
+        foreach ($result as $instituicao) {
+            $instituicoes[] = $instituicao->toArray();
+        }
+        return $instituicoes;
+    }
     
     protected function criarInstancia($data)
     {

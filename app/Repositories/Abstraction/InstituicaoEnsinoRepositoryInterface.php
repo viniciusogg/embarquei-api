@@ -11,4 +11,6 @@ interface InstituicaoEnsinoRepositoryInterface
     public function buscarInstituicoesSemMotorista($cidadeId);
 
     public function buscarInstituicoesSemVeiculo($cidadeId);
+
+    public function buscarInstituicoesComRota($cidadeId);
 }

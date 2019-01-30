@@ -177,6 +177,34 @@ class InstituicaoEnsinoRepositoryConcrete extends Repository implements Institui
         }
     }
 
+    public function buscarInstituicoesComRota($cidadeId)
+    {
+        $entityManager = $this->getEntityManager();
+
+        try
+        {
+            $query = $entityManager->createQuery(
+                'SELECT i ' .
+                    'FROM ' . $this->getTypeObject() . ' i ' .
+                    'JOIN \App\Entities\Rota r ' .
+                    'JOIN r.cidade c ' .
+                    'JOIN r.instituicoesEnsino ri ' .
+                    'WHERE ri.id = i.id AND c.id = :cidadeId'
+            );
+            $query->setParameter('cidadeId', $cidadeId);
+
+            return $query->getResult();
+        }
+        catch (Exception $ex)
+        {
+            throw $ex;
+        }
+        finally
+        {
+            $entityManager->close();
+        }
+    }
+
     protected function getTypeObject() 
     {
         return '\App\Entities\InstituicaoEnsino';

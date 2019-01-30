@@ -11,9 +11,15 @@
 |
 */
 
+
+
 Route::apiResource('horarioTrajeto', 'HorarioTrajetoController');
 
+
+
 Route::get('usuarios/tipo-usuario/{id}', 'UsuarioController@tipoById')->middleware('auth:api');
+
+
 
 Route::group(['prefix' => 'motoristas', 'middleware' => 'auth:api'], function() {
     Route::post('/', 'MotoristaController@store');
@@ -25,9 +31,13 @@ Route::group(['prefix' => 'motoristas', 'middleware' => 'auth:api'], function() 
 });
 
 
+
 Route::apiResource('administradores', 'AdministradorController')->middleware('auth:api');
 
+
+
 Route::get('instituicoesEnsino', 'InstituicaoEnsinoController@index');
+Route::get('instituicoesEnsino/comRota/{cidadeId}', 'InstituicaoEnsinoController@buscarInstituicoesComRota');
 Route::group(['prefix' => 'instituicoesEnsino', 'middleware' => 'auth:api'], function() {
     Route::post('/', 'InstituicaoEnsinoController@store');
     Route::get('/{id}', 'InstituicaoEnsinoController@show');
@@ -37,7 +47,11 @@ Route::group(['prefix' => 'instituicoesEnsino', 'middleware' => 'auth:api'], fun
     Route::put('/{id}', 'InstituicaoEnsinoController@update');
 });
 
+
+
 Route::apiResource('cursos', 'CursoController');
+
+
 
 Route::group(['prefix' => 'checkin', 'middleware' => 'auth:api'], function() //->middleware('auth:api');
 {
@@ -48,6 +62,8 @@ Route::group(['prefix' => 'checkin', 'middleware' => 'auth:api'], function() //-
     Route::put('/{id}', 'CheckinController@update');
     Route::delete('/{id}', 'CheckinController@destroy');
 });
+
+
 
 Route::get('cidades/comRota', 'CidadeController@buscarCidadesComRotas');
 Route::group(['prefix' => 'cidades', 'middleware' => 'auth:api'],  function() // , 'middleware'=> 'auth:api'
@@ -60,7 +76,10 @@ Route::group(['prefix' => 'cidades', 'middleware' => 'auth:api'],  function() //
     Route::delete('/{id}', 'CidadeController@destroy');
 });
 
+
+
 Route::apiResource('listaPresenca', 'ListaPresencaController')->middleware('auth:api');;
+
 
 
 Route::group(['prefix' => 'veiculosTransporte', 'middleware' => 'auth:api'], function()
@@ -73,11 +92,19 @@ Route::group(['prefix' => 'veiculosTransporte', 'middleware' => 'auth:api'], fun
     Route::delete('/{id}', 'VeiculoTransporteController@destroy');
 });
 
+
+
 Route::apiResource('rotas', 'RotaController')->middleware('auth:api');
+
+
 
 Route::get('pontosParada/{cidade}/{instituicaoEnsino}/{rota}', 'PontoParadaController@buscarPontosParadaByCidadeInstituicaoRota');
 
+
+
 Route::get('trajetos/{cidade}/{instituicaoEnsino}', 'TrajetoController@buscarTrajetosByCidadeInstituicaoRota');
+
+
 
 Route::post('estudantes', 'EstudanteController@store');
 Route::group(['prefix' => 'estudantes', 'middleware' => 'auth:api'], function()
@@ -91,9 +118,12 @@ Route::group(['prefix' => 'estudantes', 'middleware' => 'auth:api'], function()
 });
 
 
+
 Route::post('authenticate', 'AuthController@auth');
 Route::any('authenticate/refresh', 'AuthController@refresh');
 Route::delete('logout', 'AuthController@logout')->middleware('auth:api');
+
+
 
 /*
  *  quando a autenticação falha (access token inválido), automaticamente
