@@ -66,7 +66,7 @@ Route::group(['prefix' => 'checkin', 'middleware' => 'auth:api'], function() //-
 
 
 Route::get('cidades/comRota', 'CidadeController@buscarCidadesComRotas');
-Route::group(['prefix' => 'cidades', 'middleware' => 'auth:api'],  function() // , 'middleware'=> 'auth:api'
+Route::group(['prefix' => 'cidades'],  function() // , 'middleware'=> 'auth:api'
 {
     Route::post('/', 'CidadeController@store');
     Route::get('/', 'CidadeController@index');

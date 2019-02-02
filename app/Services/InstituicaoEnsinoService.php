@@ -19,7 +19,7 @@ class InstituicaoEnsinoService extends Service
 
     public function create($dados)
     {
-        $instituicaoEnsino = $this->criarInstanciaInstituicaoEnsino($dados);
+        $instituicaoEnsino = $this->criarInstancia($dados);
 
         $this->instituicaoEnsinoRepository->cadastrar($instituicaoEnsino, $dados['endereco']['nomeCidade']);
     }
