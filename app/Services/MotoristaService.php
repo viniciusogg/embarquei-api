@@ -57,7 +57,7 @@ class MotoristaService extends Service
         $motorista->setNome($dados['nome']);
         $motorista->setSobrenome($dados['sobrenome']);
         $motorista->setNumeroCelular($dados['numeroCelular']);
-        $motorista->setAtivo(true);
+        $motorista->setAtivo(false);
 
         if (isset($dados['senha']) && Hash::needsRehash($dados['senha']))
         {
