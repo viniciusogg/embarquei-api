@@ -58,8 +58,11 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
                 $pontoParadaEstudante->getEstudantes()->add($estudante);
                 $repositoryPontoParada->getEntityManager()->merge($pontoParadaEstudante);
             }
-            
+//            $entityManager->clear();
             $entityManager->flush();
+
+            $this->adicionarNaListaDePresenca($estudante, $entityManager);
+
             $entityManager->getConnection()->commit();
 
             return $entityManager->merge($estudante);
