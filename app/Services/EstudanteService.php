@@ -101,7 +101,8 @@ class EstudanteService
         $estudante->setNome($dados['nome']);
         $estudante->setSobrenome($dados['sobrenome']);
         $estudante->setNumeroCelular($dados['numeroCelular']);
- 
+        $estudante->setBeta($dados['beta']);
+
         if (isset($dados['senha']) && Hash::needsRehash($dados['senha']))
         {
             $dados['senha'] = Hash::make($dados['senha']);

@@ -107,5 +107,9 @@ class AuthController extends Controller
         
         return true;
     }
-    
+
+    protected function getService() {}
+
+    protected function getMensagemErro() {}
+
 }

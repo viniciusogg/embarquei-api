@@ -78,6 +78,8 @@ class Motorista extends Mensageiro
             'nome' => $this->nome,
             'sobrenome' => $this->sobrenome,
             'numeroCelular' => $this->numeroCelular,
+            'ativo' => $this->ativo,
+            'beta' => $this->beta,
             'cidade' => $this->cidade->toArray(),
             'foto' => $foto,
             'instituicoesEnsino' => $this->retornarArrayObjetos($this->instituicoesEnsino)

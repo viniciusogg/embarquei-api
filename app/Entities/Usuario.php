@@ -45,6 +45,9 @@ class Usuario implements AuthenticatableContract, CanResetPasswordContract
     /** @ORM\Column(type="boolean", nullable=false) */
     protected $ativo;
 
+    /** @ORM\Column(type="boolean", nullable=false) */
+    protected $beta;
+
     public function getId()
     {
         return $this->id;
@@ -103,6 +106,16 @@ class Usuario implements AuthenticatableContract, CanResetPasswordContract
         $this->ativo = $ativo;
     }
 
+    public function getBeta()
+    {
+        return $this->beta;
+    }
+
+    public function setBeta($beta): void
+    {
+        $this->beta = $beta;
+    }
+
     public function toArray()
     {
         return array(
@@ -110,7 +123,8 @@ class Usuario implements AuthenticatableContract, CanResetPasswordContract
             'nome' => $this->nome,
             'sobrenome' => $this->sobrenome,
             'numeroCelular' => $this->numeroCelular,
-            'ativo' => $this->ativo
+            'ativo' => $this->ativo,
+            'beta' => $this->beta
          );
     }
 

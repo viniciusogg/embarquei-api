@@ -20,6 +20,7 @@ use App\Services\CidadeService;
 use App\Services\HorarioTrajetoService;
 use App\Services\ListaPresencaService;
 use App\Services\CheckinService;
+use App\Services\FeedbackService;
 
 use App\Repositories\Abstraction\UsuarioRepositoryInterface;
 use App\Repositories\Abstraction\EstudanteRepositoryInterface;
@@ -36,6 +37,7 @@ use App\Repositories\Abstraction\CidadeRepositoryInterface;
 use App\Repositories\Abstraction\HorarioTrajetoRepositoryInterface;
 use App\Repositories\Abstraction\ListaPresencaRepositoryInterface;
 use App\Repositories\Abstraction\CheckinRepositoryInterface;
+use App\Repositories\Abstraction\FeedbackRepositoryInterface;
 
 use App\Repositories\Implementation\UsuarioRepositoryConcrete;
 use App\Repositories\Implementation\EstudanteRepositoryConcrete;
@@ -52,6 +54,7 @@ use App\Repositories\Implementation\CidadeRepositoryConcrete;
 use App\Repositories\Implementation\HorarioTrajetoRepositoryConcrete;
 use App\Repositories\Implementation\ListaPresencaRepositoryConcrete;
 use App\Repositories\Implementation\CheckinRepositoryConcrete;
+use App\Repositories\Implementation\FeedbackRepositoryConcrete;
 
 use App\Entities\InstituicaoEnsino;
 use App\Entities\Usuario;
@@ -68,6 +71,7 @@ use App\Entities\Cidade;
 use App\Entities\HorarioTrajeto;
 use App\Entities\ListaPresenca;
 use App\Entities\Checkin;
+use App\Entities\Feedback;
 
 use Laravel\Passport\Passport;
 
@@ -199,6 +203,13 @@ class AppServiceProvider extends ServiceProvider
                 $app['em']->getClassMetaData(Checkin::class)
             );
         });
+
+        $this->app->bind(FeedbackRepositoryInterface::class, function($app) {
+            return new FeedbackRepositoryConcrete(
+                $app['em'],
+                $app['em']->getClassMetaData(Feedback::class)
+            );
+        });
         
         /**
          * SERVICES
@@ -316,6 +327,13 @@ class AppServiceProvider extends ServiceProvider
         {
             return new CheckinService(
                 $app->make('App\Repositories\Abstraction\CheckinRepositoryInterface')
+            );
+        });
+
+        $this->app->bind(FeedbackService::class, function($app)
+        {
+            return new FeedbackService(
+                $app->make('App\Repositories\Abstraction\FeedbackRepositoryInterface')
             );
         });
     }

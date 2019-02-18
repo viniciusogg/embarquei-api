@@ -35,8 +35,9 @@ class Administrador extends Mensageiro
             'sobrenome' => $this->sobrenome,
             'numeroCelular' => $this->numeroCelular,
             'ativo' => $this->ativo,
-            'endereco' => $this->endereco->toArray(),
-         );
+            'beta' => $this->beta,
+            'endereco' => $this->endereco->toArray()
+        );
     }
 
 }

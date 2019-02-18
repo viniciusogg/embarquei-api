@@ -119,6 +119,10 @@ Route::group(['prefix' => 'estudantes', 'middleware' => 'auth:api'], function()
 
 
 
+Route::apiResource('feedbacks', 'FeedbackController')->middleware('auth:api');
+
+
+
 Route::post('authenticate', 'AuthController@auth');
 Route::any('authenticate/refresh', 'AuthController@refresh');
 Route::delete('logout', 'AuthController@logout')->middleware('auth:api');

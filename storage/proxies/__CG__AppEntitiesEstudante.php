@@ -64,10 +64,10 @@ class Estudante extends \App\Entities\Estudante implements \Doctrine\ORM\Proxy\P
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'foto', 'horariosSemanaisEstudante', 'curso', 'endereco', 'comprovanteMatricula', 'pontosParada', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'password', 'rememberToken', 'accessToken'];
+            return ['__isInitialized__', 'foto', 'horariosSemanaisEstudante', 'curso', 'endereco', 'comprovanteMatricula', 'pontosParada', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'beta', 'password', 'rememberToken', 'accessToken'];
         }
 
-        return ['__isInitialized__', 'foto', 'horariosSemanaisEstudante', 'curso', 'endereco', 'comprovanteMatricula', 'pontosParada', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'password', 'rememberToken', 'accessToken'];
+        return ['__isInitialized__', 'foto', 'horariosSemanaisEstudante', 'curso', 'endereco', 'comprovanteMatricula', 'pontosParada', 'id', 'nome', 'sobrenome', 'numeroCelular', 'ativo', 'beta', 'password', 'rememberToken', 'accessToken'];
     }
 
     /**
@@ -461,6 +461,28 @@ class Estudante extends \App\Entities\Estudante implements \Doctrine\ORM\Proxy\P
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAtivo', [$ativo]);
 
         return parent::setAtivo($ativo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getBeta()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getBeta', []);
+
+        return parent::getBeta();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setBeta($beta): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setBeta', [$beta]);
+
+        parent::setBeta($beta);
     }
 
     /**

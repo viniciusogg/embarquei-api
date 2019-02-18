@@ -80,6 +80,7 @@ class AdministradorService
         $administrador->setNumeroCelular($dados['numeroCelular']);
         $administrador->setSenha(Hash::make($dados['senha']));
         $administrador->setAtivo(true);
+        $administrador->setBeta(true);
         
         return $administrador;
     }

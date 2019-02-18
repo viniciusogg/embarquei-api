@@ -13,54 +13,6 @@ class CidadeController extends Controller
     {
         $this->cidadeService = $cidadeService;
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $cidades = $this->cidadeService->findAll();
-
-        if (empty($cidades))
-        {
-            return response()->json('', 204);
-        }
-        return response()->json($cidades, 200);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $cidade = $request->all();
-
-        $this->cidadeService->create($cidade);
-
-        return response()->json(['response' => 'Success'], 201);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $cidade = $this->cidadeService->findById($id);
-
-        if ($cidade)
-        {
-            return response()->json($cidade->toArray(), 200);
-        }
-        return response()->json(['response' => 'Cidade não encontrada'], 400);
-    }
 
     public function showByNome($nome)
     {
@@ -83,33 +35,16 @@ class CidadeController extends Controller
         }
         return response()->json($cidades, 200);
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+
+    protected function getService()
     {
-        $cidade = $request->all();
-
-        $cidadeAtualizada = $this->cidadeService->update($cidade, $id);
-
-        return response()->json([$cidadeAtualizada->toArray()], 200);
+        return $this->cidadeService;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    protected function getMensagemErro()
     {
-        $this->cidadeService->delete($id);
-
-        return response()->json('', 204);
+        return 'Cidade não encontrada';
     }
+
+
 }
