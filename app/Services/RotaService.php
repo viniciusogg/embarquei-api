@@ -8,8 +8,9 @@ use App\Entities\Trajeto;
 use App\Entities\HorarioTrajeto;
 use App\Entities\PontoParada;
 use App\Exceptions\NullFieldException;
+use App\Services;
 
-class RotaService 
+class RotaService extends Service
 {
     private $rotaRepository;
 
@@ -25,44 +26,23 @@ class RotaService
         $this->rotaRepository->associarComEntidades($rota, $dados['nomesInstituicoesEnsino'], $dados['cidade']);        
     }
 
-    public function findById($id)
+    public function findByInstituicaoCidade($instituicaoId, $cidadeId)
     {
-        return $this->rotaRepository->getById($id);
-    }
+        $rota = $this->rotaRepository->getByInstituicaoCidade($instituicaoId, $cidadeId);
 
-    public function findAll()
-    {
-        $result = $this->rotaRepository->getAll();
-
-        $rotas = array();
-
-        foreach ($result as $rota) {
-            $rotas[] = $rota->toArray();
+        if ($rota)
+        {
+            $rota = $rota->toArray();
         }
-
-        return $rotas;
-    }
-
-    public function update($dados, $id)
-    {  
-        $rota = $this->criarInstanciaRota($dados);
-        $rota->setId($id);
-
-        return  $this->rotaRepository->update($rota);
-    }
-
-    public function delete($id)
-    {
-        $this->rotaRepository->delete($id);
+        return $rota;
     }
     
-    private function criarInstanciaRota($dados)
+    protected function criarInstancia($dados)
     {
-        if(empty($dados['nomesInstituicoesEnsino']) || empty($dados['trajetos']))
+        if (empty($dados['nomesInstituicoesEnsino']) || empty($dados['trajetos']))
         {
             throw new NullFieldException();
         }
-        
         $rota = new Rota();
         $rota->setNome($dados['nome']);
 //        $rota->setInstituicoesEnsino(null);   
@@ -98,5 +78,10 @@ class RotaService
         $rota->setTrajetos($trajetos);
                 
         return $rota;
+    }
+
+    protected function getRepository()
+    {
+        return $this->rotaRepository;
     }
 }

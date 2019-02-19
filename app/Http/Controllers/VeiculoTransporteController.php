@@ -25,6 +25,13 @@ class VeiculoTransporteController extends Controller
         return response()->json($veiculos, 200);
     }
 
+    public function filtrarPorInstituicaoCidade($instituicaoId, $cidadeId)
+    {
+        $veiculo = $this->veiculoTransporteService->findByInstituicaoCidade($instituicaoId, $cidadeId);
+
+        return response()->json($veiculo, 200);
+    }
+
     protected function getService()
     {
         return $this->veiculoTransporteService;

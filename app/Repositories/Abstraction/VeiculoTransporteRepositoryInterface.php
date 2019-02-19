@@ -10,4 +10,6 @@ interface VeiculoTransporteRepositoryInterface
     public function atualizar($veiculo, $instituicoesEnsino, $cidadeId);
 
     public function getByCidade($cidadeId);
+
+    public function getByInstituicaoCidade($instituicaoId, $cidadeId);
 }

@@ -45,6 +45,26 @@ class VeiculoTransporteService extends Service
         return $veiculos;
     }
 
+    public function findByInstituicaoCidade($instituicaoId, $cidadeId)
+    {
+        $result = $this->veiculoTransporteRepository->getByInstituicaoCidade($instituicaoId, $cidadeId);
+
+        $veiculoResumido = null;
+
+        if ($result)
+        {
+            $veiculoResumido = array(
+                'id' => $result->getId(),
+                'capacidade' => $result->getCapacidade(),
+                'placa' => $result->getPlaca(),
+                'tipo' => $result->getTipo(),
+                'cor' => $result->getCor(),
+                'imagem' => $result->getFoto()->toArray(),
+            );
+        }
+        return $veiculoResumido;
+    }
+
     protected function criarInstancia($dados)
     {
         $veiculoTransporte = new VeiculoTransporte();                

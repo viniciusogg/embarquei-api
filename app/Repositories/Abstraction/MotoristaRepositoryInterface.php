@@ -11,4 +11,6 @@ interface MotoristaRepositoryInterface
     public function getByNumeroCelular($numeroCelular);
 
     public function getByCidade($idCidade);
+
+    public function getByInstituicaoCidade($instituicaoId, $cidadeId);
 }

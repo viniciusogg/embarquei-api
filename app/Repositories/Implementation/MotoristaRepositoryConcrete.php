@@ -136,6 +136,34 @@ class MotoristaRepositoryConcrete extends UsuarioRepositoryConcrete implements M
         }
     }
 
+    public function getByInstituicaoCidade($instituicaoId, $cidadeId)
+    {
+        $entityManager = $this->getEntityManager();
+
+        try
+        {
+            $query = $entityManager->createQuery(
+                'SELECT m FROM \App\Entities\Motorista m '
+                . 'JOIN m.cidade c '
+                . 'JOIN m.instituicoesEnsino i '
+                . 'WHERE c.id = :cidadeId AND i.id = :instituicaoId'
+            );
+            $query->setParameters(['instituicaoId' => $instituicaoId, 'cidadeId' => $cidadeId]);
+
+            $motorista = $query->getOneOrNullResult();
+
+            return $motorista;
+        }
+        catch (Exception $ex)
+        {
+            throw $ex;
+        }
+        finally
+        {
+            $entityManager->close();
+        }
+    }
+
     public function getByCidade($cidadeId)
     {
         $entityManager = $this->getEntityManager();

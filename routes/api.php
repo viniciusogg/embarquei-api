@@ -25,9 +25,10 @@ Route::group(['prefix' => 'motoristas', 'middleware' => 'auth:api'], function() 
     Route::post('/', 'MotoristaController@store');
     Route::get('/', 'MotoristaController@index');
     Route::get('/{id}', 'MotoristaController@show');
+    Route::get('/cidade/{cidadeId}', 'MotoristaController@filtrarPorCidade');
+    Route::get('/{instituicaoId}/{cidadeId}', 'MotoristaController@filtrarPorInstituicaoCidade');
     Route::delete('/{id}', 'MotoristaController@destroy');
     Route::put('/{id}', 'MotoristaController@update');
-    Route::get('/cidade/{cidadeId}', 'MotoristaController@filtrarPorCidade');
 });
 
 
@@ -88,13 +89,22 @@ Route::group(['prefix' => 'veiculosTransporte', 'middleware' => 'auth:api'], fun
     Route::get('/', 'VeiculoTransporteController@index');
     Route::get('/{id}', 'VeiculoTransporteController@show');
     Route::get('/cidade/{cidadeId}', 'VeiculoTransporteController@filtrarPorCidade');
+    Route::get('/{instituicaoId}/{cidadeId}', 'VeiculoTransporteController@filtrarPorInstituicaoCidade');
     Route::put('/{id}', 'VeiculoTransporteController@update');
     Route::delete('/{id}', 'VeiculoTransporteController@destroy');
 });
 
 
 
-Route::apiResource('rotas', 'RotaController')->middleware('auth:api');
+Route::group(['prefix' => 'rotas', 'middleware' => 'auth:api'], function()
+{
+   Route::post('/', 'RotaController@store');
+   Route::get('/', 'RotaController@index');
+   Route::get('/{id}', 'RotaController@show');
+   Route::get('/{instituicaoId}/{cidadeId}', 'RotaController@filtrarPorInstituicaoCidade');
+   Route::put('/{id}', 'RotaController@update');
+   Route::delete('/{id}', 'RotaController@destroy');
+});
 
 
 

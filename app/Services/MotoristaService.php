@@ -38,6 +38,17 @@ class MotoristaService extends Service
                 atualizar($motorista, $dados['instituicoesEnsino'], $dados['cidade']['id']);
     }
 
+    public function findByInstituicaoCidade($instituicaoId, $cidadeId)
+    {
+        $motorista = $this->motoristaRepository->getByInstituicaoCidade($instituicaoId, $cidadeId);
+
+        if ($motorista)
+        {
+            $motorista = $motorista->toArray();
+        }
+        return $motorista;
+    }
+
     public function findByCidade($cidadeId)
     {
         $result = $this->getRepository()->getByCidade($cidadeId);

@@ -76,7 +76,35 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
             $entityManager->close();
         }  
     }
-    
+
+    public function getByInstituicaoCidade($instituicaoId, $cidadeId)
+    {
+        $entityManager = $this->getEntityManager();
+
+        try
+        {
+            $query = $entityManager->createQuery(
+                'SELECT r FROM \App\Entities\Rota r '
+                . 'JOIN r.cidade c '
+                . 'JOIN r.instituicoesEnsino i '
+                . 'WHERE c.id = :cidadeId AND i.id = :instituicaoId'
+            );
+            $query->setParameters(['instituicaoId' => $instituicaoId, 'cidadeId' => $cidadeId]);
+
+            $rota = $query->getOneOrNullResult();
+
+            return $rota;
+        }
+        catch (Exception $ex)
+        {
+            throw $ex;
+        }
+        finally
+        {
+            $entityManager->close();
+        }
+    }
+
     protected function getTypeObject() 
     {
         return '\App\Entities\Rota';

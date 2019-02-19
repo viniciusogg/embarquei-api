@@ -156,6 +156,34 @@ class VeiculoTransporteRepositoryConcrete extends Repository implements VeiculoT
         }
     }
 
+    public function getByInstituicaoCidade($instituicaoId, $cidadeId)
+    {
+        $entityManager = $this->getEntityManager();
+
+        try
+        {
+            $query = $entityManager->createQuery(
+                'SELECT v FROM \App\Entities\VeiculoTransporte v '
+                . 'JOIN v.cidade c '
+                . 'JOIN v.instituicoesEnsino i '
+                . 'WHERE c.id = :cidadeId AND i.id = :instituicaoId'
+            );
+            $query->setParameters(['instituicaoId' => $instituicaoId, 'cidadeId' => $cidadeId]);
+
+            $veiculos = $query->getOneOrNullResult();
+
+            return $veiculos;
+        }
+        catch (Exception $ex)
+        {
+            throw $ex;
+        }
+        finally
+        {
+            $entityManager->close();
+        }
+    }
+
     protected function getTypeObject() {
         return '\App\Entities\VeiculoTransporte';
     }

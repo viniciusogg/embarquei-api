@@ -25,6 +25,13 @@ class MotoristaController extends Controller
         return response()->json($motoristas, 200);
     }
 
+    public function filtrarPorInstituicaoCidade($instituicaoId, $cidadeId)
+    {
+        $motorista = $this->motoristaService->findByInstituicaoCidade($instituicaoId, $cidadeId);
+
+        return response()->json($motorista, 200);
+    }
+
     protected function getService()
     {
         return $this->motoristaService;
