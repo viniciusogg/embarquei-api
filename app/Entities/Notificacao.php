@@ -37,6 +37,9 @@ class Notificacao
      * @ORM\ManyToOne(targetEntity="Mensageiro", fetch="EAGER") 
      */
     protected $remetente;
+
+    /** @ORM\Column(type="boolean", nullable=false) */
+    protected $lida;
     
     public function getId() 
     {
@@ -66,6 +69,16 @@ class Notificacao
     public function getRemetente() 
     {
         return $this->remetente;
+    }
+
+    public function getLida()
+    {
+        return $this->lida;
+    }
+
+    public function setLida($lida): void
+    {
+        $this->lida = $lida;
     }
 
     public function setId($id) 
@@ -114,7 +127,8 @@ class Notificacao
             'descricao' => $this->descricao,
             'tipo' => $this->tipo,
             'dataEnvio' => $this->dataEnvio->format('d/m/y H:i:s'),
-            'remetente' => $this->remetente
+            'remetente' => $this->remetente,
+            'lida' => $this->lida
          );
     }
 }
