@@ -94,7 +94,7 @@ class Feedback
 
     public function setTipo($tipo): void
     {
-        $tiposFeedback = array(TIPO_FEEDBACK::BUG, TIPO_FEEDBACK::SUGESTAO);
+        $tiposFeedback = array(TIPO_FEEDBACK::BUG, TIPO_FEEDBACK::SUGESTAO, TIPO_FEEDBACK::OUTRO);
 
         if (!in_array($tipo, $tiposFeedback))
         {

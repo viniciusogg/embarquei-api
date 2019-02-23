@@ -117,7 +117,7 @@ class EstudanteService
         $foto->setCaminhoSistemaArquivos($dados['foto']['caminhoSistemaArquivos']);
 
         $estudante->setFoto($foto);
-        $estudante->setAtivo(true); //$dados['ativo']
+        $estudante->setAtivo($dados['ativo']); //$dados['ativo']
                 
         $comprovanteMatricula = new ComprovanteMatricula();
         
