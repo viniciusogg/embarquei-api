@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
+use App\Entities\Geolocalizacao;
 use App\Repositories\Abstraction\InstituicaoEnsinoRepositoryInterface;
 use App\Entities\InstituicaoEnsino;
 use App\Entities\Endereco;
 use App\Entities\Curso;
-use App\Services\Service;
 
 class InstituicaoEnsinoService extends Service
 {
@@ -62,18 +62,22 @@ class InstituicaoEnsinoService extends Service
         return $instituicoes;
     }
     
-    protected function criarInstancia($data)
+    protected function criarInstancia($dados)
     {
-        $endereco = new Endereco();                
-        $endereco->setLogradouro($data['endereco']['logradouro']);
-        $endereco->setBairro($data['endereco']['bairro']);        
-               
         $instituicaoEnsino = new InstituicaoEnsino();
-        $instituicaoEnsino->setNome($data['nome']);
+        $instituicaoEnsino->setNome($dados['nome']);
+
+        $endereco = new Endereco();
+        $endereco->setLogradouro($dados['endereco']['logradouro']);
+        $endereco->setBairro($dados['endereco']['bairro']);
+
+        $geolocalizacao = new Geolocalizacao();
+        $geolocalizacao->setLat($dados['geolocalizacao']['lat']);
+        $geolocalizacao->setLng($dados['geolocalizacao']['lng']);
 
         $cursos = [];
         
-        foreach($data['cursos'] as $curso) 
+        foreach($dados['cursos'] as $curso)
         {
             $novoCurso = new Curso();
             $novoCurso->setNome($curso['nome']);
@@ -83,7 +87,8 @@ class InstituicaoEnsinoService extends Service
         }
         $instituicaoEnsino->setCursos($cursos);
         $instituicaoEnsino->setEndereco($endereco);
-        
+        $instituicaoEnsino->setGeolocalizacao($geolocalizacao);
+
         return $instituicaoEnsino;
     }
 

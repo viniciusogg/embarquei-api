@@ -56,6 +56,12 @@ class InstituicaoEnsino
      */
     protected $listasPresenca;
 
+    /**
+     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity="Geolocalizacao", cascade={"all"}, fetch="EAGER")
+     */
+    protected $geolocalizacao;
+
     public function __construct()
     {
         $this->cursos = new ArrayCollection();
@@ -98,6 +104,16 @@ class InstituicaoEnsino
         return $this->listasPresenca;
     }
 
+    public function getGeolocalizacao()
+    {
+        return $this->geolocalizacao;
+    }
+
+    public function setGeolocalizacao($geolocalizacao)
+    {
+        $this->geolocalizacao = $geolocalizacao;
+    }
+
     public function setId($id)
     {
         $this->id = $id;
@@ -138,15 +154,16 @@ class InstituicaoEnsino
         return [
             'id' => $this->id,
             'nome' => $this->nome,
-            'cursos' => $this->retornarArrayObjetos($this->cursos),
+            'cursos' => $this->retornarArrayCursos($this->cursos),
             'endereco' => $this->endereco->toArray(),
+            'geolocalizacao' => $this->geolocalizacao()->toArray()
 //            'motoristas' => $this->retornarArrayObjetos($this->motoristas)
 //            'veiculosTransporte' => $this->retornarArrayObjetos($this->veiculosTransporte),
 //            'listasPresenca' => $this->retornarArrayObjetos($this->listasPresenca)
         ];
     }
 
-    protected function retornarArrayObjetos($objetos)
+    protected function retornarArrayCursos($objetos)
     {
         $array = [];
 

@@ -28,11 +28,11 @@ class Feedback
     /** @ORM\Column(type="string", nullable=false) */
     protected $detalhesPlataforma;
 
-    /** @ORM\Column(type="string", nullable=false) */
-    protected $idUsuario;
-
-    /** @ORM\Column(type="string", nullable=false) */
-    protected $idMunicipioUsuario;
+    /**
+     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity="Usuario", fetch="EAGER")
+     */
+    protected $usuario;
 
     /** @ORM\Column(type="string", nullable=false) */
     protected $tipo;
@@ -77,14 +77,14 @@ class Feedback
         $this->detalhesPlataforma = $detalhesPlataforma;
     }
 
-    public function getIdUsuario()
+    public function getUsuario()
     {
-        return $this->idUsuario;
+        return $this->usuario;
     }
 
-    public function setIdUsuario($idUsuario)
+    public function setUsuario($usuario)
     {
-        $this->idUsuario = $idUsuario;
+        $this->usuario = $usuario;
     }
 
     public function getTipo()
@@ -103,16 +103,6 @@ class Feedback
         $this->tipo = $tipo;
     }
 
-    public function getIdMunicipioUsuario()
-    {
-        return $this->idMunicipioUsuario;
-    }
-
-    public function setIdMunicipioUsuario($idMunicipioUsuario)
-    {
-        $this->idMunicipioUsuario = $idMunicipioUsuario;
-    }
-
     public function toArray()
     {
         return array(
@@ -120,8 +110,7 @@ class Feedback
             'data' => $this->data,
             'comentario' => $this->comentario,
             'detalhesPlataforma' => $this->detalhesPlataforma,
-            'idUsuario' => $this->idUsuario,
-            'idMunicipioUsuario' => $this->idMunicipioUsuario,
+            'usuario' => $this->usuario,
             'tipo' => $this->tipo
         );
     }

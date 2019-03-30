@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
+use App\Entities\Geolocalizacao;
 use App\Repositories\Abstraction\RotaRepositoryInterface;
 use App\Entities\Rota;
 use App\Entities\Trajeto;
 use App\Entities\HorarioTrajeto;
 use App\Entities\PontoParada;
 use App\Exceptions\NullFieldException;
-use App\Services;
 
 class RotaService extends Service
 {
@@ -68,6 +68,12 @@ class RotaService extends Service
                 $novoPontoParada->setNome($pontoParada['nome']);
                 $novoPontoParada->setOrdem($pontoParada['ordem']);
                 $novoPontoParada->setTrajeto($novoTrajeto);
+
+                $geolocalizacao = new Geolocalizacao();
+                $geolocalizacao->setLat($pontoParada['geolocalizacao']['lat']);
+                $geolocalizacao->setLng($pontoParada['geolocalizacao']['lng']);
+
+                $novoPontoParada->setGeolocalizacao($geolocalizacao);
 
                 $pontosParada[] = $novoPontoParada;
             }

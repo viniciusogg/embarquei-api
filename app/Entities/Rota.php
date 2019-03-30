@@ -19,6 +19,7 @@ class Rota
      */
     protected $id;
 
+    // NOME DEVE SER ÚNICO ENTRE AS ROTAS DO MUNICÍPIO
     /** @ORM\Column(type="string", nullable=false) */
     protected $nome;
 

@@ -21,6 +21,13 @@ class FeedbackService extends Service
         $this->feedbackRepository = $feedbackRepository;
     }
 
+    public function create($dados)
+    {
+        $feedback = $this->criarInstancia($dados);
+
+        $this->feedbackRepository->cadastrar($feedback, $dados['idUsuario']);
+    }
+
     protected function getRepository()
     {
         return $this->feedbackRepository;
@@ -35,8 +42,7 @@ class FeedbackService extends Service
         $feedback->setComentario($dados['comentario']);
         $feedback->setData(Carbon::now());
         $feedback->setDetalhesPlataforma($dados['detalhesPlataforma']);
-        $feedback->setIdMunicipioUsuario($dados['idMunicipioUsuario']);
-        $feedback->setIdUsuario($dados['idUsuario']);
+//        $feedback->setUsuario($dados['usuario']);
         $feedback->setTipo($dados['tipo']);
 
         return $feedback;

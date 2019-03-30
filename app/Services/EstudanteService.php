@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use DateTime;
 use App\Entities\Imagem;
 
-class EstudanteService 
+class EstudanteService extends Service
 {
     private $estudanteRepository;
     
@@ -23,17 +23,12 @@ class EstudanteService
 
     public function create($dados)
     {
-        $estudante = $this->criarInstanciaEstudante($dados);
+        $estudante = $this->criarInstancia($dados);
 
         $estudanteSalvo = $this->estudanteRepository->
             cadastrar($estudante, $dados['pontosParada'], $dados['curso']['id'], $dados['endereco']);
 
         return $estudanteSalvo;
-    }
-
-    public function findById($id)
-    {
-        return $this->estudanteRepository->getById($id);
     }
 
     public function findByNumeroCelular($numeroCelular)
@@ -54,23 +49,10 @@ class EstudanteService
         
         return $estudantes;
     }
-    
-    public function findAll()
-    {
-        $result = $this->estudanteRepository->getAll();
-
-        $estudantes = array();
-
-        foreach ($result as $estudante) {
-            $estudantes[] = $estudante->toArray();
-        }
-
-        return $estudantes;
-    }
 
     public function update($dados, $id)
     {  
-        $estudante = $this->criarInstanciaEstudante($dados);
+        $estudante = $this->criarInstancia($dados);
         $estudante->setId($id);
   
         $estudante = $this->estudanteRepository->
@@ -79,11 +61,6 @@ class EstudanteService
         return $estudante;
     }
 
-    public function delete($id)
-    {
-        $this->estudanteRepository->delete($id);
-    }
-    
     public function alterarStatus($id, $dados)
     {
         $estudante = $this->estudanteRepository->alterarStatus($id, $dados);
@@ -95,7 +72,7 @@ class EstudanteService
         return $estudante;
     }
     
-    private function criarInstanciaEstudante($dados)
+    protected function criarInstancia($dados)
     {
         $estudante = new Estudante();
         $estudante->setNome($dados['nome']);
@@ -160,5 +137,10 @@ class EstudanteService
         $estudante->setHorariosSemanaisEstudante($horariosSemanaisEstudante);
         
         return $estudante;
+    }
+
+    protected function getRepository()
+    {
+        return $this->estudanteRepository;
     }
 }

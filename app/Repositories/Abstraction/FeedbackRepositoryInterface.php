@@ -11,5 +11,5 @@ namespace App\Repositories\Abstraction;
 
 interface FeedbackRepositoryInterface
 {
-
+    public function cadastrar($feedback, $idUsuario);
 }

@@ -64,10 +64,10 @@ class Cidade extends \App\Entities\Cidade implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'nome', 'enderecos', 'veiculosTransporte'];
+            return ['__isInitialized__', 'id', 'nome', 'enderecos', 'veiculosTransporte', 'geolocalizacao'];
         }
 
-        return ['__isInitialized__', 'id', 'nome', 'enderecos', 'veiculosTransporte'];
+        return ['__isInitialized__', 'id', 'nome', 'enderecos', 'veiculosTransporte', 'geolocalizacao'];
     }
 
     /**
@@ -219,6 +219,28 @@ class Cidade extends \App\Entities\Cidade implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVeiculosTransporte', []);
 
         return parent::getVeiculosTransporte();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getGeolocalizacao()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGeolocalizacao', []);
+
+        return parent::getGeolocalizacao();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setGeolocalizacao($geolocalizacao)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setGeolocalizacao', [$geolocalizacao]);
+
+        return parent::setGeolocalizacao($geolocalizacao);
     }
 
     /**

@@ -23,15 +23,21 @@ class Cidade
     
     /** 
      * @ORM\JoinColumn(unique=true)
-     * @ORM\OneToMany(targetEntity="Endereco", mappedBy="cidade", cascade={"remove"}, fetch="EAGER") 
+     * @ORM\OneToMany(targetEntity="Endereco", mappedBy="cidade", cascade={"remove"}, fetch="LAZY")
      */
     protected $enderecos;
     
     /**
      * @ORM\JoinColumn(nullable=true)
-     * @ORM\OneToMany(targetEntity="VeiculoTransporte", mappedBy="cidade", cascade={"remove"}, fetch="EAGER") 
+     * @ORM\OneToMany(targetEntity="VeiculoTransporte", mappedBy="cidade", cascade={"remove"}, fetch="LAZY")
      */
     protected $veiculosTransporte;
+
+    /**
+     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity="Geolocalizacao", cascade={"all"}, fetch="EAGER")
+     */
+    protected $geolocalizacao;
 
     public function __construct()
     {
@@ -58,7 +64,17 @@ class Cidade
     {
         return $this->veiculosTransporte;
     }
-  
+
+    public function getGeolocalizacao()
+    {
+        return $this->geolocalizacao;
+    }
+
+    public function setGeolocalizacao($geolocalizacao)
+    {
+        $this->geolocalizacao = $geolocalizacao;
+    }
+
     public function setId($id) 
     {
         $this->id = $id;
@@ -83,7 +99,8 @@ class Cidade
     {
         return array(
             'id' => $this->id,
-            'nome' => $this->nome
+            'nome' => $this->nome,
+            'geolocalizacao' => $this->geolocalizacao->toArray()
 //            'enderecos' => $this->retornarArrayObjetos($this->enderecos),
 //            'veiculosTransporte' => $this->retornarArrayObjetos($this->veiculosTransporte)
          );

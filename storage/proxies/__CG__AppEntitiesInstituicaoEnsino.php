@@ -64,10 +64,10 @@ class InstituicaoEnsino extends \App\Entities\InstituicaoEnsino implements \Doct
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'nome', 'cursos', 'endereco', 'motoristas', 'veiculosTransporte', 'listasPresenca'];
+            return ['__isInitialized__', 'id', 'nome', 'cursos', 'endereco', 'motoristas', 'veiculosTransporte', 'listasPresenca', 'geolocalizacao'];
         }
 
-        return ['__isInitialized__', 'id', 'nome', 'cursos', 'endereco', 'motoristas', 'veiculosTransporte', 'listasPresenca'];
+        return ['__isInitialized__', 'id', 'nome', 'cursos', 'endereco', 'motoristas', 'veiculosTransporte', 'listasPresenca', 'geolocalizacao'];
     }
 
     /**
@@ -252,6 +252,28 @@ class InstituicaoEnsino extends \App\Entities\InstituicaoEnsino implements \Doct
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getListasPresenca', []);
 
         return parent::getListasPresenca();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getGeolocalizacao()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGeolocalizacao', []);
+
+        return parent::getGeolocalizacao();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setGeolocalizacao($geolocalizacao)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setGeolocalizacao', [$geolocalizacao]);
+
+        return parent::setGeolocalizacao($geolocalizacao);
     }
 
     /**

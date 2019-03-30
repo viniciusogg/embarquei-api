@@ -64,10 +64,10 @@ class PontoParada extends \App\Entities\PontoParada implements \Doctrine\ORM\Pro
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'nome', 'ordem', 'estudantes', 'trajeto'];
+            return ['__isInitialized__', 'id', 'nome', 'ordem', 'estudantes', 'trajeto', 'geolocalizacao'];
         }
 
-        return ['__isInitialized__', 'id', 'nome', 'ordem', 'estudantes', 'trajeto'];
+        return ['__isInitialized__', 'id', 'nome', 'ordem', 'estudantes', 'trajeto', 'geolocalizacao'];
     }
 
     /**
@@ -230,6 +230,28 @@ class PontoParada extends \App\Entities\PontoParada implements \Doctrine\ORM\Pro
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOrdem', []);
 
         return parent::getOrdem();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getGeolocalizacao()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGeolocalizacao', []);
+
+        return parent::getGeolocalizacao();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setGeolocalizacao($geolocalizacao)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setGeolocalizacao', [$geolocalizacao]);
+
+        return parent::setGeolocalizacao($geolocalizacao);
     }
 
     /**

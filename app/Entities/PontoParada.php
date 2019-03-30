@@ -40,6 +40,12 @@ class PontoParada
      */
     protected $trajeto;
 
+    /**
+     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity="Geolocalizacao", cascade={"all"}, fetch="EAGER")
+     */
+    protected $geolocalizacao;
+
     public function __construct()
     {
         $this->estudantes = new ArrayCollection();
@@ -68,6 +74,16 @@ class PontoParada
     public function getOrdem() 
     {
         return $this->ordem;
+    }
+
+    public function getGeolocalizacao()
+    {
+        return $this->geolocalizacao;
+    }
+
+    public function setGeolocalizacao($geolocalizacao)
+    {
+        $this->geolocalizacao = $geolocalizacao;
     }
     
     public function setId($id)
@@ -100,11 +116,36 @@ class PontoParada
             'id' => $this->id,
             'nome' => $this->nome,
             'ordem' => $this->ordem,
-//            'estudantes' => $this->retornarArrayObjetos($this->estudantes),
+            'estudantes' => $this->retornarArrayEstudantes($this->estudantes),
             'trajeto' => [
                 'id' => $this->trajeto->getId(), 
                 'tipo' => $this->trajeto->getTipo()
-            ]
+            ],
+            'geolocalizacao' => $this->geolocalizacao->toArray()
          );
+    }
+
+    protected function retornarArrayEstudantes($objetos)
+    {
+        $array = [];
+
+
+        foreach ($objetos as $objeto)
+        {
+            $array[] = [
+                'id' => $objeto->getId(),
+                'nome' => $objeto->getNome(),
+                'sobrenome' => $objeto->getSobrenome(),
+                'numeroCelular' => $objeto->getNumeroCelular(),
+                'foto' => $objeto->getFoto()->toArray(),
+                'ativo' => $objeto->getAtivo(),
+                'beta' => $objeto->getBeta(),
+                'horariosSemanaisEstudante' => $this->retornarArrayObjetos($objeto->getHorariosSemanaisEstudante()),
+                'curso' => $objeto->getCurso()->toArray(),
+                'endereco' => $objeto->getEndereco()->toArray(),
+                'comprovanteMatricula' => $objeto->getComprovanteMatricula()->toArray()
+            ];
+        }
+        return $array;
     }
 }

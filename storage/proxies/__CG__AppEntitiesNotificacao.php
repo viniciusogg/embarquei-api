@@ -64,10 +64,10 @@ class Notificacao extends \App\Entities\Notificacao implements \Doctrine\ORM\Pro
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'titulo', 'descricao', 'tipo', 'dataEnvio', 'remetente'];
+            return ['__isInitialized__', 'id', 'titulo', 'descricao', 'tipo', 'dataEnvio', 'remetente', 'lida'];
         }
 
-        return ['__isInitialized__', 'id', 'titulo', 'descricao', 'tipo', 'dataEnvio', 'remetente'];
+        return ['__isInitialized__', 'id', 'titulo', 'descricao', 'tipo', 'dataEnvio', 'remetente', 'lida'];
     }
 
     /**
@@ -241,6 +241,28 @@ class Notificacao extends \App\Entities\Notificacao implements \Doctrine\ORM\Pro
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRemetente', []);
 
         return parent::getRemetente();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLida()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLida', []);
+
+        return parent::getLida();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setLida($lida): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLida', [$lida]);
+
+        parent::setLida($lida);
     }
 
     /**
