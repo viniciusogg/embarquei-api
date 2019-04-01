@@ -21,8 +21,6 @@ class Trajeto
      */
     protected $id;
 
-    /** @ORM\Column(type="string", nullable=false, name="url_mapa", unique=true) */
-    protected $URLMapa;
 
     /** @ORM\Column(type="string", nullable=false) */
     protected $tipo;
@@ -55,11 +53,6 @@ class Trajeto
         return $this->id;
     }
 
-    public function getURLMapa()
-    {
-        return $this->URLMapa;
-    }
-
     public function getTipo()
     {
         return $this->tipo;
@@ -83,11 +76,6 @@ class Trajeto
     public function setId($id)
     {
         $this->id = $id;
-    }
-
-    public function setURLMapa($URLMapa)
-    {
-        $this->URLMapa = $URLMapa;
     }
 
     public function setTipo($tipo)
@@ -120,7 +108,6 @@ class Trajeto
     {
         return array(
             'id' => $this->id,
-            'URLMapa' => $this->URLMapa,
             'tipo' => $this->tipo,
             'horarioTrajeto' => $this->horarioTrajeto->toArray(),
             'rota' => $this->rota->getId(),

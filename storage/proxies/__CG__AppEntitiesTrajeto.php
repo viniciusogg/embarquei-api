@@ -64,10 +64,10 @@ class Trajeto extends \App\Entities\Trajeto implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'URLMapa', 'tipo', 'horarioTrajeto', 'pontosParada', 'rota'];
+            return ['__isInitialized__', 'id', 'tipo', 'horarioTrajeto', 'pontosParada', 'rota'];
         }
 
-        return ['__isInitialized__', 'id', 'URLMapa', 'tipo', 'horarioTrajeto', 'pontosParada', 'rota'];
+        return ['__isInitialized__', 'id', 'tipo', 'horarioTrajeto', 'pontosParada', 'rota'];
     }
 
     /**
@@ -191,17 +191,6 @@ class Trajeto extends \App\Entities\Trajeto implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function getURLMapa()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getURLMapa', []);
-
-        return parent::getURLMapa();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getTipo()
     {
 
@@ -252,17 +241,6 @@ class Trajeto extends \App\Entities\Trajeto implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setId', [$id]);
 
         return parent::setId($id);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setURLMapa($URLMapa)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setURLMapa', [$URLMapa]);
-
-        return parent::setURLMapa($URLMapa);
     }
 
     /**

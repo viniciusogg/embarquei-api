@@ -23,7 +23,7 @@ class RotaService extends Service
     {
         $rota = $this->criarInstanciaRota($dados);
 
-        $this->rotaRepository->associarComEntidades($rota, $dados['nomesInstituicoesEnsino'], $dados['cidade']);        
+        $this->rotaRepository->associarEPersistir($rota, $dados['instituicoesEnsino'], $dados['cidade']);
     }
 
     public function findByInstituicaoCidade($instituicaoId, $cidadeId)
@@ -39,7 +39,7 @@ class RotaService extends Service
     
     protected function criarInstancia($dados)
     {
-        if (empty($dados['nomesInstituicoesEnsino']) || empty($dados['trajetos']))
+        if (empty($dados['instituicoesEnsino']) || empty($dados['trajetos']))
         {
             throw new NullFieldException();
         }
@@ -57,8 +57,7 @@ class RotaService extends Service
             $horarioTrajeto->setChegada(new \DateTime($trajeto['horarioTrajeto']['chegada']));//  Horário calculado a partir do horario de partida até chegar ao destino
 
             $novoTrajeto = new Trajeto();
-            $novoTrajeto->setURLMapa($trajeto['urlMapa']);
-            $novoTrajeto->setTipo($trajeto['tipoTrajeto']);
+            $novoTrajeto->setTipo($trajeto['tipo']);
             $novoTrajeto->setHorarioTrajeto($horarioTrajeto);
             $novoTrajeto->setRota($rota);
             

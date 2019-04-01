@@ -18,10 +18,10 @@ class Geolocalizacao
      */
     protected $id;
 
-    /** @ORM\Column(type="integer", nullable=false) */
+    /** @ORM\Column(type="decimal", nullable=false, precision=10, scale=8) */
     protected $lat;
 
-    /** @ORM\Column(type="integer", nullable=false) */
+    /** @ORM\Column(type="decimal", nullable=false, precision=11, scale=8) */
     protected $lng;
 
     public function __construct() {}

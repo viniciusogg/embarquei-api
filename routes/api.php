@@ -33,7 +33,7 @@ Route::group(['prefix' => 'motoristas', 'middleware' => 'auth:api'], function() 
 
 
 
-Route::apiResource('administradores', 'AdministradorController');//->middleware('auth:api');
+Route::apiResource('administradores', 'AdministradorController')->middleware('auth:api');
 
 
 

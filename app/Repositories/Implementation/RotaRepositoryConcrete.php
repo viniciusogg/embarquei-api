@@ -9,7 +9,7 @@ use App\Exceptions\NullFieldException;
 
 class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterface
 {
-    public function associarComEntidades($rota, $nomesInstituicoesEnsino, $nomeCidade)
+    public function associarEPersistir($rota, $nomesInstituicoesEnsino, $nomeCidade)
     {
         $instituicoesEnsino = [];                
         
@@ -22,7 +22,7 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
         
         try
         {  
-            foreach($nomesInstituicoesEnsino as $nomeInstituicao) 
+            foreach($nomesInstituicoesEnsino as $nomeInstituicao)
             {
                 $instituicaoEnsino = $repositoryInstituicaoEnsino->findOneBy(['nome' => $nomeInstituicao['nome']]);
 
@@ -31,7 +31,6 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
                     $instituicoesEnsino[] = $instituicaoEnsino;
                 }
             }
-            
             if (empty($instituicoesEnsino) || empty($rota->getTrajetos()))
             {
                 throw new NullFieldException();
@@ -40,8 +39,7 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
             {
                 $rota->setInstituicoesEnsino($instituicoesEnsino);
             }
-
-            $cidade = $repositoryCidade->findOneBy(['nome' => $nomeCidade]);
+            $cidade = $repositoryCidade->findOneBy(['nome' => $nomeCidade['nome']]);
             
             if (empty($cidade))
             {
@@ -51,17 +49,12 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
             {
                 $rota->setCidade($cidade);
             }
-            
             $entityManager->persist($rota);
-                        
-//            if(!empty($rota->getTrajetos()))
-//            {
+
             foreach ($rota->getTrajetos() as $trajeto)
             {
                 $repositoryTrajeto->getEntityManager()->persist($trajeto);
             }
-//            }
-            
             $entityManager->flush();
             $entityManager->getConnection()->commit();
         }
