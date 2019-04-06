@@ -7,4 +7,6 @@ interface RotaRepositoryInterface
     public function associarEPersistir($rota, $nomesInstituicoesEnsino, $nomeCidade);
 
     public function getByInstituicaoCidade($instituicaoId, $cidadeId);
+
+    public function getByCidade($cidadeId);
 }

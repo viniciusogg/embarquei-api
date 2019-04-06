@@ -21,7 +21,7 @@ class RotaService extends Service
 
     public function create($dados)
     {
-        $rota = $this->criarInstanciaRota($dados);
+        $rota = $this->criarInstancia($dados);
 
         $this->rotaRepository->associarEPersistir($rota, $dados['instituicoesEnsino'], $dados['cidade']);
     }
@@ -35,6 +35,17 @@ class RotaService extends Service
             $rota = $rota->toArray();
         }
         return $rota;
+    }
+
+    public function findByCidade($cidadeId)
+    {
+        $resultado = $this->rotaRepository->getByCidade($cidadeId);
+        $rotas = array();
+
+        foreach ($resultado as $rota) {
+            $rotas[] = $rota->toArray();
+        }
+        return $rotas;
     }
     
     protected function criarInstancia($dados)

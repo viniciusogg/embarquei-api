@@ -156,7 +156,7 @@ class InstituicaoEnsino
             'nome' => $this->nome,
             'cursos' => $this->retornarArrayCursos($this->cursos),
             'endereco' => $this->endereco->toArray(),
-            'geolocalizacao' => $this->geolocalizacao()->toArray()
+            'geolocalizacao' => $this->geolocalizacao->toArray()
 //            'motoristas' => $this->retornarArrayObjetos($this->motoristas)
 //            'veiculosTransporte' => $this->retornarArrayObjetos($this->veiculosTransporte),
 //            'listasPresenca' => $this->retornarArrayObjetos($this->listasPresenca)

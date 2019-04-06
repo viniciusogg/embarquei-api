@@ -70,6 +70,33 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
         }  
     }
 
+    public function getByCidade($cidadeId)
+    {
+        $entityManager = $this->getEntityManager();
+
+        try
+        {
+            $query = $entityManager->createQuery(
+                'SELECT r FROM \App\Entities\Rota r '
+                . 'JOIN r.cidade c '
+                . 'WHERE c.id = :cidadeId'
+            );
+            $query->setParameters(['cidadeId' => $cidadeId]);
+
+            $rota = $query->getResult();
+
+            return $rota;
+        }
+        catch (Exception $ex)
+        {
+            throw $ex;
+        }
+        finally
+        {
+            $entityManager->close();
+        }
+    }
+
     public function getByInstituicaoCidade($instituicaoId, $cidadeId)
     {
         $entityManager = $this->getEntityManager();
@@ -84,7 +111,7 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
             );
             $query->setParameters(['instituicaoId' => $instituicaoId, 'cidadeId' => $cidadeId]);
 
-            $rota = $query->getOneOrNullResult();
+            $rota = $query->getResult();
 
             return $rota;
         }

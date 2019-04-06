@@ -100,6 +100,7 @@ Route::group(['prefix' => 'rotas', 'middleware' => 'auth:api'], function()
 {
    Route::post('/', 'RotaController@store');
    Route::get('/', 'RotaController@index');
+   Route::get('/cidade/{cidadeId}', 'RotaController@filtrarPorCidade');
    Route::get('/{id}', 'RotaController@show');
    Route::get('/{instituicaoId}/{cidadeId}', 'RotaController@filtrarPorInstituicaoCidade');
    Route::put('/{id}', 'RotaController@update');
