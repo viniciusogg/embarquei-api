@@ -61,7 +61,7 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
 //            $entityManager->clear();
             $entityManager->flush();
 
-            $this->adicionarNaListaDePresenca($estudante, $entityManager);
+//            $this->adicionarNaListaDePresenca($estudante, $entityManager);
 
             $entityManager->getConnection()->commit();
 
@@ -165,11 +165,11 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
 
             $entityManager->flush();
 
-            if ($dados['ativo']) /* ADICIONANDO ESTUDANTE NA LISTA DE PRESENÇA */
+            if ($dados['ativo'] ) /* ADICIONANDO ESTUDANTE NA LISTA DE PRESENÇA */
             {
                 $this->adicionarNaListaDePresenca($estudanteAtualizado, $entityManager);
             }
-            else{ /* REMOVENDO ESTUDANTE DA LISTA DE PRESENÇA */
+            else { /* REMOVENDO ESTUDANTE DA LISTA DE PRESENÇA */
                 $this->removerDaListaDePresenca($estudanteAtualizado, $entityManager);
             }            
             $entityManager->getConnection()->commit();
