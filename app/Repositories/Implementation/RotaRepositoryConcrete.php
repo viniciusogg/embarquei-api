@@ -9,7 +9,7 @@ use App\Exceptions\NullFieldException;
 
 class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterface
 {
-    public function associarEPersistir($rota, $nomesInstituicoesEnsino, $nomeCidade)
+    public function associarEPersistir($rota, $nomesInstituicoesEnsino, $idCidade)
     {
         $instituicoesEnsino = [];                
         
@@ -39,7 +39,7 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
             {
                 $rota->setInstituicoesEnsino($instituicoesEnsino);
             }
-            $cidade = $repositoryCidade->findOneBy(['nome' => $nomeCidade['nome']]);
+            $cidade = $repositoryCidade->findOneBy(['id' => $idCidade['id']]);
             
             if (empty($cidade))
             {
@@ -51,6 +51,7 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
             }
             $entityManager->persist($rota);
 
+            // TALVEZ ESSE FOR SEJA DESNECESSÁRIO
             foreach ($rota->getTrajetos() as $trajeto)
             {
                 $repositoryTrajeto->getEntityManager()->persist($trajeto);
@@ -68,6 +69,76 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
         {
             $entityManager->close();
         }  
+    }
+
+    public function atualizar($rota, $instituicoesEnsino, $idCidade)
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->getConnection()->beginTransaction();
+
+        $repositoryCidade = $entityManager->getRepository('\App\Entities\Cidade');
+
+        try
+        {
+            $cidade = $repositoryCidade->findOneBy(['id' => $idCidade]);
+
+            if (empty($cidade))
+            {
+                throw new NullFieldException();
+            }
+            else
+            {
+                $rota->setCidade($cidade);
+            }
+            $this->desassociarRotaInstituicoes($entityManager, $rota->getId(), $instituicoesEnsino);
+
+            if (!empty($instituicoesEnsino))
+            {
+                $this->associarRotaInstituicoes($entityManager, $rota, $instituicoesEnsino);
+            }
+            $rotaAtualizada = $entityManager->merge($rota);
+
+            $entityManager->flush();
+            $entityManager->refresh($rotaAtualizada);
+            $entityManager->getConnection()->commit();
+
+            return $rotaAtualizada;
+        }
+        catch (Exception $ex)
+        {
+            $entityManager->getConnection()->rollback();
+
+            throw $ex;
+        }
+        finally
+        {
+            $entityManager->close();
+        }
+    }
+
+    private function associarRotaInstituicoes($entityManager, $rota, $instituicoes)
+    {
+        foreach($instituicoes as $instituicao)
+        {
+            $rota->getInstituicoesEnsino()->add($entityManager->getReference('\App\Entities\InstituicaoEnsino', $instituicao['id']));
+            error_log(json_encode($rota->toArray()));
+            $entityManager->merge($rota);
+            $entityManager->flush();
+        }
+    }
+
+    private function desassociarRotaInstituicoes($entityManager, $rotaId, $instituicoesEnsino)
+    {
+        $rota = $entityManager->find($this->getTypeObject(), $rotaId);
+
+        foreach ($instituicoesEnsino as $instituicao)
+        {
+            $rota->getInstituicoesEnsino()->
+                    removeElement($entityManager->getReference('\App\Entities\InstituicaoEnsino', $instituicao['id']));
+
+            $entityManager->merge($rota);
+            $entityManager->flush();
+        }
     }
 
     public function getByCidade($cidadeId)

@@ -129,23 +129,26 @@ class PontoParada
     {
         $array = [];
 
-
-        foreach ($objetos as $objeto)
+        if ($objetos)
         {
-            $array[] = [
-                'id' => $objeto->getId(),
-                'nome' => $objeto->getNome(),
-                'sobrenome' => $objeto->getSobrenome(),
-                'numeroCelular' => $objeto->getNumeroCelular(),
-                'foto' => $objeto->getFoto()->toArray(),
-                'ativo' => $objeto->getAtivo(),
-                'beta' => $objeto->getBeta(),
-                'horariosSemanaisEstudante' => $this->retornarArrayObjetos($objeto->getHorariosSemanaisEstudante()),
-                'curso' => $objeto->getCurso()->toArray(),
-                'endereco' => $objeto->getEndereco()->toArray(),
-                'comprovanteMatricula' => $objeto->getComprovanteMatricula()->toArray()
-            ];
+            foreach ($objetos as $objeto)
+            {
+                $array[] = [
+                    'id' => $objeto->getId(),
+                    'nome' => $objeto->getNome(),
+                    'sobrenome' => $objeto->getSobrenome(),
+                    'numeroCelular' => $objeto->getNumeroCelular(),
+                    'foto' => $objeto->getFoto()->toArray(),
+                    'ativo' => $objeto->getAtivo(),
+                    'beta' => $objeto->getBeta(),
+                    'horariosSemanaisEstudante' => $this->retornarArrayObjetos($objeto->getHorariosSemanaisEstudante()),
+                    'curso' => $objeto->getCurso()->toArray(),
+                    'endereco' => $objeto->getEndereco()->toArray(),
+                    'comprovanteMatricula' => $objeto->getComprovanteMatricula()->toArray()
+                ];
+            }
+            return $array;
         }
-        return $array;
+        return null;
     }
 }

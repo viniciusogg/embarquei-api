@@ -41,7 +41,7 @@ class Rota
      */
     protected $cidade;
     
-    public function __construnct()
+    public function __construct()
     {
         $this->instituicoesEnsino = new ArrayCollection();
         $this->trajetos = new ArrayCollection();

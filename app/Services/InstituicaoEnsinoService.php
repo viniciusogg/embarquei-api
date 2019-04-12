@@ -34,7 +34,8 @@ class InstituicaoEnsinoService extends Service
         $result = $this->getRepository()->buscarInstituicoesSemMotorista($cidadeId);
         $instituicoes = array();
 
-        foreach ($result as $instituicao) {
+        foreach ($result as $instituicao)
+        {
             $instituicoes[] = $instituicao->toArray();
         }
         return $instituicoes;
@@ -45,7 +46,8 @@ class InstituicaoEnsinoService extends Service
         $result = $this->getRepository()->buscarInstituicoesSemVeiculo($cidadeId);
         $instituicoes = array();
 
-        foreach ($result as $instituicao) {
+        foreach ($result as $instituicao)
+        {
             $instituicoes[] = $instituicao->toArray();
         }
         return $instituicoes;
@@ -56,7 +58,8 @@ class InstituicaoEnsinoService extends Service
         $result = $this->getRepository()->buscarInstituicoesComRota($cidadeId);
         $instituicoes = array();
 
-        foreach ($result as $instituicao) {
+        foreach ($result as $instituicao)
+        {
             $instituicoes[] = $instituicao->toArray();
         }
         return $instituicoes;

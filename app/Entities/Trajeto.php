@@ -110,7 +110,9 @@ class Trajeto
             'id' => $this->id,
             'tipo' => $this->tipo,
             'horarioTrajeto' => $this->horarioTrajeto->toArray(),
-            'rota' => $this->rota->getId(),
+            'rota' => [
+                'id' => $this->rota->getId()
+            ],
             'pontosParada' => $this->retornarArrayObjetos($this->pontosParada)
          );
     }

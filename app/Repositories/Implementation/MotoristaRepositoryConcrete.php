@@ -13,8 +13,6 @@ class MotoristaRepositoryConcrete extends UsuarioRepositoryConcrete implements M
     public function cadastrar($motorista, $instituicoesIds, $cidadeId)
     {
         $instituicoesEnsino = [];
-//        $motoristas = [];
-//        $motoristas[] = $motorista;
         
         $entityManager = $this->getEntityManager();
         $entityManager->getConnection()->beginTransaction();
@@ -79,9 +77,9 @@ class MotoristaRepositoryConcrete extends UsuarioRepositoryConcrete implements M
                 $this->associarMotoristaInstituicoes($entityManager, $motorista, $instituicoesIds);
             }
             $motoristaAtualizado = $entityManager->merge($motorista);
+
             $entityManager->flush();
             $entityManager->refresh($motoristaAtualizado);
-
             $entityManager->getConnection()->commit();
 
             return $motoristaAtualizado;

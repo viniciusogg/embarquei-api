@@ -47,7 +47,16 @@ class RotaService extends Service
         }
         return $rotas;
     }
-    
+
+    public function update($dados, $id)
+    {
+        $rota = $this->criarInstancia($dados);
+        $rota->setId($id);
+
+        return $this->getRepository()->
+                atualizar($rota, $dados['instituicoesEnsino'], $dados['cidade']['id']);
+    }
+
     protected function criarInstancia($dados)
     {
         if (empty($dados['instituicoesEnsino']) || empty($dados['trajetos']))
@@ -56,7 +65,6 @@ class RotaService extends Service
         }
         $rota = new Rota();
         $rota->setNome($dados['nome']);
-//        $rota->setInstituicoesEnsino(null);   
 
         $pontosParada = [];
         $trajetos = [];
@@ -78,6 +86,7 @@ class RotaService extends Service
                 $novoPontoParada->setNome($pontoParada['nome']);
                 $novoPontoParada->setOrdem($pontoParada['ordem']);
                 $novoPontoParada->setTrajeto($novoTrajeto);
+                $novoPontoParada->setEstudantes(null);
 
                 $geolocalizacao = new Geolocalizacao();
                 $geolocalizacao->setLat($pontoParada['geolocalizacao']['lat']);

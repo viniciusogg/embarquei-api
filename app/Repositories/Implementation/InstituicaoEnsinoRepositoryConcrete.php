@@ -76,12 +76,14 @@ class InstituicaoEnsinoRepositoryConcrete extends Repository implements Institui
         try
         { // CONSULTA DEVE RETORNAR INSTITUIÇÕES QUE NÃO TENHAM MOTORISTA ASSOCIADO AO MUNICÍPIO PASSADO
             $sql = '
-                SELECT i.id, i.nome, e.id as endereco_id, e.logradouro, e.bairro, c.id as cidade_id ' .
+                SELECT i.id, i.nome, e.id as endereco_id, e.logradouro, e.bairro, c.id as cidade_id, g.id as geolocalizacao_id, g.lat, g.lng ' .
                     'FROM instituicoes_ensino i ' .
                     'INNER JOIN enderecos e ' .
                     'ON i.endereco_id = e.id ' .
-                    'INNER JOIN embarquei.cidades c ' .
+                    'INNER JOIN cidades c ' .
                     'ON c.id = e.cidade_id ' .
+                    'INNER JOIN geolocalizacoes g ' .
+                    'ON i.geolocalizacao_id = g.id ' .
                     'WHERE i.id NOT IN ' .
                         '(SELECT ie.instituicao_ensino_id ' .
                             'FROM ' .
@@ -104,6 +106,11 @@ class InstituicaoEnsinoRepositoryConcrete extends Repository implements Institui
 
             $rsm->addJoinedEntityResult('\App\Entities\Cidade', 'c', 'e', 'cidade');
             $rsm->addFieldResult('c', 'cidade_id', 'id');
+
+            $rsm->addJoinedEntityResult('\App\Entities\Geolocalizacao', 'g', 'i', 'geolocalizacao');
+            $rsm->addFieldResult('g', 'geolocalizacao_id', 'id');
+            $rsm->addFieldResult('g', 'lat', 'lat');
+            $rsm->addFieldResult('g', 'lng', 'lng');
 
             $query = $entityManager->createNativeQuery($sql, $rsm);
 
@@ -130,12 +137,14 @@ class InstituicaoEnsinoRepositoryConcrete extends Repository implements Institui
         try
         { // CONSULTA DEVE RETORNAR INSTITUIÇÕES QUE NÃO TENHAM VEÍCULO ASSOCIADO AO MUNICÍPIO PASSADO
             $sql = '
-                SELECT i.id, i.nome, e.id as endereco_id, e.logradouro, e.bairro, c.id as cidade_id ' .
+                SELECT i.id, i.nome, e.id as endereco_id, e.logradouro, e.bairro, c.id as cidade_id, g.id as geolocalizacao_id, g.lat, g.lng ' .
                     'FROM instituicoes_ensino i ' .
                     'INNER JOIN enderecos e ' .
                     'ON i.endereco_id = e.id ' .
-                    'INNER JOIN embarquei.cidades c ' .
+                    'INNER JOIN cidades c ' .
                     'ON c.id = e.cidade_id ' .
+                    'INNER JOIN geolocalizacoes g ' .
+                    'ON i.geolocalizacao_id = g.id ' .
                     'WHERE i.id NOT IN ' .
                         '(SELECT ie.instituicao_ensino_id ' .
                             'FROM ' .
@@ -158,6 +167,11 @@ class InstituicaoEnsinoRepositoryConcrete extends Repository implements Institui
 
             $rsm->addJoinedEntityResult('\App\Entities\Cidade', 'c', 'e', 'cidade');
             $rsm->addFieldResult('c', 'cidade_id', 'id');
+
+            $rsm->addJoinedEntityResult('\App\Entities\Geolocalizacao', 'g', 'i', 'geolocalizacao');
+            $rsm->addFieldResult('g', 'geolocalizacao_id', 'id');
+            $rsm->addFieldResult('g', 'lat', 'lat');
+            $rsm->addFieldResult('g', 'lng', 'lng');
 
             $query = $entityManager->createNativeQuery($sql, $rsm);
 
