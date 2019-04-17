@@ -15,7 +15,11 @@ class VeiculoTransporteRepositoryConcrete extends Repository implements VeiculoT
 
         try
         {
-            $instituicoesEnsino = [];
+            $cidade = $entityManager->find('\App\Entities\Cidade', $cidadeId);
+
+            $veiculo->setCidade($cidade);
+
+            $entityManager->persist($veiculo);
 
             foreach($instituicoesEnsino as $instituicao)
             {
@@ -25,19 +29,13 @@ class VeiculoTransporteRepositoryConcrete extends Repository implements VeiculoT
                 {
                     $instituicaoEnsino->getVeiculosTransporte()->add($veiculo);
 
-                    $instituicoesEnsino[] = $instituicaoEnsino;
+                    $veiculo->getInstituicoesEnsino()->add($instituicaoEnsino);
 
                     $entityManager->merge($instituicaoEnsino);
                     $entityManager->flush();
                 }
             }
-            $veiculo->setInstituicoesEnsino($instituicoesEnsino);
-
-            $cidade = $entityManager->find('\App\Entities\Cidade', $cidadeId);
-
-            $veiculo->setCidade($cidade);
-
-            $entityManager->persist($veiculo);
+            $entityManager->merge($veiculo);
             $entityManager->flush();
             $entityManager->getConnection()->commit();
         }
@@ -71,9 +69,9 @@ class VeiculoTransporteRepositoryConcrete extends Repository implements VeiculoT
                 $this->associarVeiculoInstituicoes($entityManager, $veiculo, $instituicoesEnsino);
             }
             $veiculoAtualizado = $entityManager->merge($veiculo);
+
             $entityManager->flush();
             $entityManager->refresh($veiculoAtualizado);
-
             $entityManager->getConnection()->commit();
 
             return $veiculoAtualizado;

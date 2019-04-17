@@ -39,13 +39,14 @@ class Trajeto
 
     /** 
      * @ORM\JoinColumn(nullable=false, name="rota_id")
-     * @ORM\ManyToOne(targetEntity="Rota", inversedBy="trajetos", fetch="EAGER") 
+     * @ORM\ManyToOne(targetEntity="Rota", inversedBy="trajetos", cascade={"all"}, fetch="EAGER")
      */
     protected $rota;
 
     public function __construct()
     {
         $this->pontosParada = new ArrayCollection();
+//        $this->pontosParada->
     }
 
     public function getId()
@@ -101,7 +102,8 @@ class Trajeto
     
     public function setPontosParada($pontosParada)
     {
-        $this->pontosParada = $pontosParada;
+        $this->pontosParada = new ArrayCollection($pontosParada);
+//        $this->getPontosParada()->filter();
     }
 
     public function toArray()

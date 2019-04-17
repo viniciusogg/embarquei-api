@@ -127,7 +127,6 @@ class Handler extends ExceptionHandler
             return response()->json(['devError' => $this->dataExceptionDev($exception),
                     'userError' => $exception->getMessage()], 400);
         }
-
         return parent::render($request, $exception);
     }
     
@@ -136,9 +135,9 @@ class Handler extends ExceptionHandler
         $data = [
             'message' => $exception->getMessage(),
             'file' => $exception->getFile(),
-            'line' => $exception->getLine()
+            'line' => $exception->getLine(),
+            'trace' => $exception->getTrace()
         ];
-        
         return $data;
     }
 }

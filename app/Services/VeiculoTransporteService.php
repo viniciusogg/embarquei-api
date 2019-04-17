@@ -82,7 +82,7 @@ class VeiculoTransporteService extends Service
         $foto->setCaminhoSistemaArquivos($dados['imagem']['caminhoSistemaArquivos']);
 
         $veiculoTransporte->setFoto($foto);
-        $veiculoTransporte->setInstituicoesEnsino($dados['instituicoesEnsino']);
+//        $veiculoTransporte->setInstituicoesEnsino($dados['instituicoesEnsino']);
         
         return $veiculoTransporte;
     }

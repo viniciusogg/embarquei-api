@@ -176,17 +176,6 @@ class Rota extends \App\Entities\Rota implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function __construnct()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__construnct', []);
-
-        return parent::__construnct();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getId()
     {
         if ($this->__isInitialized__ === false) {

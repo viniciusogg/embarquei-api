@@ -15,7 +15,6 @@ class Version20190329020114 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-
         // GEOLOCALIZAÇÕES
         $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("39504157-a148-449f-99e0-8aa113089b04", -8.070750, -37.267320);'); // SERTANIA
         $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("535e937f-fea7-4960-972c-4d4e6cdb2f34", -7.891030, -37.122749);'); // MONTEIRO
@@ -23,6 +22,7 @@ class Version20190329020114 extends AbstractMigration
         $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("1796be9a-bff4-4900-93d9-2626fa88051a", -7.892480, -37.126719);'); // UEPB
         $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("cf6f1ffe-cd28-4dcb-a2a1-7f85af7a39d9", -7.889224211010037, -37.119112704429995);'); // INTELECTUS
 
+        // GEOLOCALIZAÇÕES DOS PONTOS DA ROTA IFPB
         $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("7cd1d3e6-1ce0-4919-ade2-d11fb8ad2d69", -8.06990700, -37.26875960);'); // IDA PONTO 1
         $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("293ffe32-106d-4648-b583-3e2a025b3be9", -8.07102688, -37.26792906);'); // IDA PONTO 2
         $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("3c9c81fa-29a4-41cc-9ef9-714103c0f358", -8.07244427, -37.26613998);'); // IDA PONTO 3
@@ -33,7 +33,6 @@ class Version20190329020114 extends AbstractMigration
         $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("ed625d7d-ad5b-4aa4-a8c8-7f049eba92f2", -7.953845937820276, -37.209186023405266);'); // IDA PONTO 8
         $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("321a464f-1de8-4a80-902d-2040155cd661", -7.904956274069717, -37.12007761001587);'); // IDA PONTO 9
         $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("9f68e0c6-0738-4424-b23a-b6d12e4f3500", -7.889224211010037, -37.119112704429995);'); // IDA PONTO 10
-
         $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("57106f1c-b14f-465e-9f44-d9293f4daf72", -7.889224211010037, -37.119112704429995);'); // VOLTA PONTO 1
         $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("910f9226-0694-4e97-8a1c-73a106a47976", -7.904956274069717, -37.12007761001587);'); // VOLTA PONTO 2
         $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("c22badd2-9ee5-41ee-baf7-773a6f45f313", -7.953845937820276, -37.209186023405266);'); // VOLTA PONTO 3
@@ -49,6 +48,12 @@ class Version20190329020114 extends AbstractMigration
         $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("d0b4c531-1f41-4873-81fc-433de947b859", -8.08226990881991, -37.26480232662243);'); // VOLTA PONTO 13
         $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("fdffb027-5a30-4e6e-98d4-9049ad5214b7", -8.072858545563456, -37.27020621299744);'); // VOLTA PONTO 14
         $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("9751cd11-f37c-4c16-b85a-4134078d4b96", -8.068416095781885, -37.2748221185941);'); // VOLTA PONTO 15
+
+        // GEOLOCALIZAÇÕES DOS PONTOS DA ROTA UEPB
+        $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("b5492215-1052-460f-803e-ebc8b3b86a45", -8.069682400664927, -37.26832866668701);'); // IDA PONTO 1
+        $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("cb8f3373-5e99-472f-aecb-c0abd9df674c", -7.89278933943231, -37.12642680078898);'); // IDA PONTO 2
+        $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("9bbc437d-ea50-417f-b525-3c73530b9862", -8.069682400664927, -37.26832866668701);'); // VOLTA PONTO 1
+        $this->addSql('INSERT INTO geolocalizacoes (id, lat, lng) VALUES ("1ca31f29-8f5c-4cc6-9ca8-cb0090a453bf", -7.89278933943231, -37.12642680078898);'); // VOLTA PONTO 2
 
 
         // CIDADES
@@ -89,25 +94,33 @@ class Version20190329020114 extends AbstractMigration
 
 
         // HORARIO TRAJETO
-        $this->addSql('INSERT INTO horarios_trajeto (id, partida, chegada) VALUES ("0b204261-bbf8-44d7-8e1d-ca08a5f4d2db", "18:00:00", "18:10:00")');
-        $this->addSql('INSERT INTO horarios_trajeto (id, partida, chegada) VALUES ("78c2bd16-f730-4fa4-8e9c-1599c83332c7", "22:00:00", "22:10:00")');
+        $this->addSql('INSERT INTO horarios_trajeto (id, partida, chegada) VALUES ("0b204261-bbf8-44d7-8e1d-ca08a5f4d2db", "18:00:00", "18:10:00")'); // TRAJETO IDA IFPB
+        $this->addSql('INSERT INTO horarios_trajeto (id, partida, chegada) VALUES ("78c2bd16-f730-4fa4-8e9c-1599c83332c7", "22:00:00", "22:10:00")'); // TRAJETO VOLTA IFPB
+
+        $this->addSql('INSERT INTO horarios_trajeto (id, partida, chegada) VALUES ("9993c253-2441-4bf4-83de-e7f59834fa52", "17:00:00", "17:30:00")'); // TRAJETO IDA UEPB
+        $this->addSql('INSERT INTO horarios_trajeto (id, partida, chegada) VALUES ("8a45bc61-2eda-42a9-a2c1-8d2df04a1904", "22:00:00", "22:31:00")'); // TRAJETO VOLTA UEPB
 
 
-        // ROTA
-        $this->addSql('INSERT INTO rotas (id, cidade_id, nome) VALUES ("e9e5dcfd-113e-4bc5-b3bd-4540c887e487", "2114d2e6-f3ca-4dba-9b04-982268d3aa38", "Rota principal");');
+        // ROTAS
+        $this->addSql('INSERT INTO rotas (id, cidade_id, nome) VALUES ("e9e5dcfd-113e-4bc5-b3bd-4540c887e487", "2114d2e6-f3ca-4dba-9b04-982268d3aa38", "Rota principal IFPB e Intelectus");');
+        $this->addSql('INSERT INTO rotas (id, cidade_id, nome) VALUES ("23101811-2fab-49cd-9d8f-6e4b0027914d", "2114d2e6-f3ca-4dba-9b04-982268d3aa38", "Rota principal UEPB");');
 
 
         // INSTITUICAO_ENSINO_ROTA
         $this->addSql('INSERT INTO instituicao_ensino_rota (rota_id, instituicao_ensino_id) VALUES ("e9e5dcfd-113e-4bc5-b3bd-4540c887e487", "4861bc24-1480-484b-a811-b8a37d40e6c7");');
         $this->addSql('INSERT INTO instituicao_ensino_rota (rota_id, instituicao_ensino_id) VALUES ("e9e5dcfd-113e-4bc5-b3bd-4540c887e487", "db0819c5-a09a-4bfb-b1b2-78f5c75e46b5");');
+        $this->addSql('INSERT INTO instituicao_ensino_rota (rota_id, instituicao_ensino_id) VALUES ("23101811-2fab-49cd-9d8f-6e4b0027914d", "2b2c4c33-7026-40a7-a605-c034407b2195");');
 
 
-        // TRAJETO
-        $this->addSql('INSERT INTO trajetos (id, horario_trajeto_id, rota_id, tipo) VALUES ("b685cdbd-f113-4a45-813b-4f8ecbe086c2", "0b204261-bbf8-44d7-8e1d-ca08a5f4d2db", "e9e5dcfd-113e-4bc5-b3bd-4540c887e487", "IDA");');
-        $this->addSql('INSERT INTO trajetos (id, horario_trajeto_id, rota_id, tipo) VALUES ("ca2dfc27-d237-4217-a9e1-9dfe0b0ca099", "78c2bd16-f730-4fa4-8e9c-1599c83332c7", "e9e5dcfd-113e-4bc5-b3bd-4540c887e487", "VOLTA");');
+        // TRAJETOS
+        $this->addSql('INSERT INTO trajetos (id, horario_trajeto_id, rota_id, tipo) VALUES ("b685cdbd-f113-4a45-813b-4f8ecbe086c2", "0b204261-bbf8-44d7-8e1d-ca08a5f4d2db", "e9e5dcfd-113e-4bc5-b3bd-4540c887e487", "IDA");');  // TRAJETO IDA IFPB
+        $this->addSql('INSERT INTO trajetos (id, horario_trajeto_id, rota_id, tipo) VALUES ("ca2dfc27-d237-4217-a9e1-9dfe0b0ca099", "78c2bd16-f730-4fa4-8e9c-1599c83332c7", "e9e5dcfd-113e-4bc5-b3bd-4540c887e487", "VOLTA");'); // TRAJETO VOLTA IFPB
+
+        $this->addSql('INSERT INTO trajetos (id, horario_trajeto_id, rota_id, tipo) VALUES ("81b16248-c5f0-4f29-b1db-bb36bd795910", "9993c253-2441-4bf4-83de-e7f59834fa52", "23101811-2fab-49cd-9d8f-6e4b0027914d", "IDA");'); // TRAJETO IDA UEPB
+        $this->addSql('INSERT INTO trajetos (id, horario_trajeto_id, rota_id, tipo) VALUES ("7fdd9e6d-d5dd-48bf-b93f-77fd02d06985", "8a45bc61-2eda-42a9-a2c1-8d2df04a1904", "23101811-2fab-49cd-9d8f-6e4b0027914d", "VOLTA");'); // TRAJETO VOLTA UEPB
 
 
-        // PONTOS PARADA IDA
+        // PONTOS PARADA IDA IFPB
         $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("2430b5f9-aea5-4238-ae53-67447f696368", "b685cdbd-f113-4a45-813b-4f8ecbe086c2", "7cd1d3e6-1ce0-4919-ade2-d11fb8ad2d69", "INSS", 1)');
         $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("e9fe7367-08c0-49d4-a2fe-e80faa808603", "b685cdbd-f113-4a45-813b-4f8ecbe086c2", "293ffe32-106d-4648-b583-3e2a025b3be9", "-", 2)');
         $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("b8630d5f-47b2-4da7-9f28-0aedea05ce00", "b685cdbd-f113-4a45-813b-4f8ecbe086c2", "3c9c81fa-29a4-41cc-9ef9-714103c0f358", "Escola Jorge de Menezes", 3)');
@@ -119,7 +132,7 @@ class Version20190329020114 extends AbstractMigration
         $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("a96fa654-29c9-495a-a6b7-255c75e97d15", "b685cdbd-f113-4a45-813b-4f8ecbe086c2", "321a464f-1de8-4a80-902d-2040155cd661", "IFPB - Monteiro", 9)');
         $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("2c47fc01-c3db-4f86-8f08-c54e47b60f7c", "b685cdbd-f113-4a45-813b-4f8ecbe086c2", "9f68e0c6-0738-4424-b23a-b6d12e4f3500", "Centro de ensino Intelectus", 10)');
 
-        // PONTOS PARADA VOLTA
+        // PONTOS PARADA VOLTA IFPB
         $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("8f0975c4-c963-4254-bc96-ac0db0d35f6b", "ca2dfc27-d237-4217-a9e1-9dfe0b0ca099", "57106f1c-b14f-465e-9f44-d9293f4daf72", "Centro de ensino Intelectus", 1);');
         $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("b1bc0ae4-db52-4630-98b0-f8cc93ef0b18", "ca2dfc27-d237-4217-a9e1-9dfe0b0ca099", "910f9226-0694-4e97-8a1c-73a106a47976", "IFPB", 2);');
         $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("82f8f4b2-8a39-41bc-b4d8-e05d01358dde", "ca2dfc27-d237-4217-a9e1-9dfe0b0ca099", "c22badd2-9ee5-41ee-baf7-773a6f45f313", "Pernambuquinho", 3);');
@@ -135,6 +148,14 @@ class Version20190329020114 extends AbstractMigration
         $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("bf8995a2-51d0-4209-a2c6-7f2ea345ed9a", "ca2dfc27-d237-4217-a9e1-9dfe0b0ca099", "d0b4c531-1f41-4873-81fc-433de947b859", "Alto do rio branco", 13);');
         $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("60a8ca94-f48a-4502-9700-27c175e31120", "ca2dfc27-d237-4217-a9e1-9dfe0b0ca099", "fdffb027-5a30-4e6e-98d4-9049ad5214b7", "Casa das balanças", 14);');
         $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("20c14d96-6ab4-43f2-804b-3939a295247a", "ca2dfc27-d237-4217-a9e1-9dfe0b0ca099", "9751cd11-f37c-4c16-b85a-4134078d4b96", "Posto de gasolina, hospital", 15);');
+
+        // PONTOS PARADA IDA UEPB
+        $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("4f3de033-a9a4-4cfc-9a63-a4d819bacd09", "81b16248-c5f0-4f29-b1db-bb36bd795910", "b5492215-1052-460f-803e-ebc8b3b86a45", "INSS", 1);');
+        $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("f05d4d7d-5fc8-4da9-8a41-105e3fb47835", "81b16248-c5f0-4f29-b1db-bb36bd795910", "cb8f3373-5e99-472f-aecb-c0abd9df674c", "UEPB", 2);');
+
+        // PONTOS PARADA VOLTA UEPB
+        $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("4a99cda0-70b5-4993-96d9-ecd96a02ce77", "7fdd9e6d-d5dd-48bf-b93f-77fd02d06985", "9bbc437d-ea50-417f-b525-3c73530b9862", "UEPB", 1);');
+        $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("3fc57037-d951-4863-b32a-ea484a8fbd33", "7fdd9e6d-d5dd-48bf-b93f-77fd02d06985", "1ca31f29-8f5c-4cc6-9ca8-cb0090a453bf", "Hospital", 2);');
 
 
         // OAUTH

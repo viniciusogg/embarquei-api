@@ -30,13 +30,13 @@ class PontoParada
     
     /** 
      * @ORM\JoinColumn(nullable=true)
-     * @ORM\ManyToMany(targetEntity="Estudante",  mappedBy="pontosParada", fetch="EAGER") 
+     * @ORM\ManyToMany(targetEntity="Estudante", mappedBy="pontosParada", fetch="EAGER")
      */
     protected $estudantes;
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="Trajeto", inversedBy="pontosParada", fetch="EAGER") 
+     * @ORM\ManyToOne(targetEntity="Trajeto", inversedBy="pontosParada", cascade={"all"}, fetch="EAGER")
      */
     protected $trajeto;
 

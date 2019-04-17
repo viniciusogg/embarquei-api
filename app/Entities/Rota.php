@@ -31,7 +31,7 @@ class Rota
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\OneToMany(targetEntity="Trajeto", mappedBy="rota", cascade={"all"}, fetch="EAGER") 
+     * @ORM\OneToMany(targetEntity="Trajeto", mappedBy="rota", cascade={"all"}, fetch="EAGER")
      */
     protected $trajetos;
 
@@ -84,12 +84,12 @@ class Rota
 
     public function setInstituicoesEnsino($instituicoesEnsino)
     {
-        $this->instituicoesEnsino = $instituicoesEnsino;
+        $this->instituicoesEnsino = new ArrayCollection($instituicoesEnsino);
     }
 
     public function setTrajetos($trajetos)
     {
-        $this->trajetos = $trajetos;
+        $this->trajetos = new ArrayCollection($trajetos);
     }
 
     public function setCidade($cidade) 
