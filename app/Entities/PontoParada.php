@@ -36,13 +36,13 @@ class PontoParada
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="Trajeto", inversedBy="pontosParada", cascade={"all"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Trajeto", inversedBy="pontosParada", fetch="EAGER")
      */
     protected $trajeto;
 
     /**
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\OneToOne(targetEntity="Geolocalizacao", cascade={"all"}, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="Geolocalizacao", cascade={"all"}, fetch="EAGER", orphanRemoval=true)
      */
     protected $geolocalizacao;
 

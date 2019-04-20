@@ -26,7 +26,7 @@ class EstudanteService extends Service
         $estudante = $this->criarInstancia($dados);
 
         $estudanteSalvo = $this->estudanteRepository->
-            cadastrar($estudante, $dados['pontosParada'], $dados['curso']['id'], $dados['endereco']);
+            cadastrar($estudante, $dados['curso']['id'], $dados['endereco']);
 
         return $estudanteSalvo;
     }
@@ -56,7 +56,7 @@ class EstudanteService extends Service
         $estudante->setId($id);
   
         $estudante = $this->estudanteRepository->
-            atualizar($estudante, $dados['pontosParada'], $dados['curso']['id'], $dados['endereco']);
+            atualizar($estudante, $dados['curso']['id'], $dados['endereco']);
 
         return $estudante;
     }

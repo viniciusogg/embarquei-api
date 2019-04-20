@@ -154,8 +154,8 @@ class Version20190329020114 extends AbstractMigration
         $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("f05d4d7d-5fc8-4da9-8a41-105e3fb47835", "81b16248-c5f0-4f29-b1db-bb36bd795910", "cb8f3373-5e99-472f-aecb-c0abd9df674c", "UEPB", 2);');
 
         // PONTOS PARADA VOLTA UEPB
-        $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("4a99cda0-70b5-4993-96d9-ecd96a02ce77", "7fdd9e6d-d5dd-48bf-b93f-77fd02d06985", "9bbc437d-ea50-417f-b525-3c73530b9862", "UEPB", 1);');
-        $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("3fc57037-d951-4863-b32a-ea484a8fbd33", "7fdd9e6d-d5dd-48bf-b93f-77fd02d06985", "1ca31f29-8f5c-4cc6-9ca8-cb0090a453bf", "Hospital", 2);');
+        $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("3fc57037-d951-4863-b32a-ea484a8fbd33", "7fdd9e6d-d5dd-48bf-b93f-77fd02d06985", "1ca31f29-8f5c-4cc6-9ca8-cb0090a453bf", "UEPB", 1);');
+        $this->addSql('INSERT INTO pontos_parada (id, trajeto_id, geolocalizacao_id, nome, ordem) VALUES ("4a99cda0-70b5-4993-96d9-ecd96a02ce77", "7fdd9e6d-d5dd-48bf-b93f-77fd02d06985", "9bbc437d-ea50-417f-b525-3c73530b9862", "Hospital", 2);');
 
 
         // OAUTH

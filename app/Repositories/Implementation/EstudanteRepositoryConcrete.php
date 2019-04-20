@@ -15,7 +15,7 @@ use Carbon\Carbon;
 
 class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements EstudanteRepositoryInterface
 {
-    public function cadastrar($estudante, $idsPontosParada, $idCurso, $endereco)
+    public function cadastrar($estudante, $idCurso, $endereco)
     {        
         $pontosParadaEstudante = [];
         
@@ -28,17 +28,6 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
 
         try
         {
-            foreach($idsPontosParada as $pontoParada)
-            {
-                $idPontoParada = $pontoParada['id'];
-                $pontoParadaBuscado = $repositoryPontoParada->findOneBy(['id' => $idPontoParada]);
-                
-                if(!$pontoParadaBuscado) 
-                {
-                    throw new NaoEncontradoException();
-                }
-                $pontosParadaEstudante[] = $pontoParadaBuscado;                
-            }
             $cidade = $repositoryCidade->findOneBy(['id' => $endereco['cidade']['id']]);
             $curso = $repositoryCurso->findOneBy(['id' => $idCurso]);
             
@@ -79,7 +68,7 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
         }
     }
     
-    public function atualizar($estudante, $idsPontosParada, $idCurso, $endereco)    
+    public function atualizar($estudante, $idCurso, $endereco)
     {
 //        $pontosParadaEstudante = [];
         
@@ -96,19 +85,6 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
             {
                 $senha = $entityManager->find($this->getTypeObject(), $estudante->getId())->getSenha();
                 $estudante->setSenha($senha);
-            }
-
-            foreach($idsPontosParada as $pontoParada)
-            {
-                $idPontoParada = $pontoParada['id'];
-                $pontoParadaBuscado = $repositoryPontoParada->findOneBy(['id' => $idPontoParada]);
-                
-                if($pontoParadaBuscado)
-                {
-                    $estudante->getPontosParada()->add($pontoParadaBuscado);
-//                    throw new NaoEncontradoException();
-                }
-//                $pontosParadaEstudante[] = $pontoParadaBuscado;
             }
             $cidade = $repositoryCidade->findOneBy(['id' => $endereco['cidade']['id']]);
             $curso = $repositoryCurso->findOneBy(['id' => $idCurso]);

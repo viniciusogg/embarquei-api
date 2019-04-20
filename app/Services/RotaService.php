@@ -51,12 +51,20 @@ class RotaService extends Service
 
     public function update($dados, $id)
     {
+        $rota = $this->criarInstancia($dados);
+        $rota->setId($dados['id']);
+
+        return $this->getRepository()->
+                atualizar($rota, $dados['instituicoesEnsino'], $dados['cidade']['id']);
+    }
+
+    protected function criarInstancia($dados)
+    {
         if (empty($dados['instituicoesEnsino']) || empty($dados['trajetos']))
         {
             throw new NullFieldException();
         }
         $rota = new Rota();
-        $rota->setId($id);
         $rota->setNome($dados['nome']);
 
         foreach ($dados['trajetos'] as $trajeto)
@@ -116,55 +124,6 @@ class RotaService extends Service
             }
             $rota->getTrajetos()->add($novoTrajeto);
         }
-        return $this->getRepository()->
-                atualizar($rota, $dados['instituicoesEnsino'], $dados['cidade']['id']);
-    }
-
-    protected function criarInstancia($dados)
-    {
-        if (empty($dados['instituicoesEnsino']) || empty($dados['trajetos']))
-        {
-            throw new NullFieldException();
-        }
-        $rota = new Rota();
-        $rota->setNome($dados['nome']);
-
-        $pontosParada = [];
-        $trajetos = [];
-        
-        foreach ($dados['trajetos'] as $trajeto)
-        {
-            $horarioTrajeto = new HorarioTrajeto();
-            $horarioTrajeto->setPartida(new \DateTime($trajeto['horarioTrajeto']['partida']));
-            $horarioTrajeto->setChegada(new \DateTime($trajeto['horarioTrajeto']['chegada']));
-
-            $novoTrajeto = new Trajeto();
-            $novoTrajeto->setTipo($trajeto['tipo']);
-            $novoTrajeto->setHorarioTrajeto($horarioTrajeto);
-            $novoTrajeto->setRota($rota);
-            
-            foreach ($trajeto['pontosParada'] as $pontoParada) 
-            {
-                $novoPontoParada = new PontoParada();
-                $novoPontoParada->setNome($pontoParada['nome']);
-                $novoPontoParada->setOrdem($pontoParada['ordem']);
-                $novoPontoParada->setTrajeto($novoTrajeto);
-                $novoPontoParada->setEstudantes(null);
-
-                $geolocalizacao = new Geolocalizacao();
-                $geolocalizacao->setLat($pontoParada['geolocalizacao']['lat']);
-                $geolocalizacao->setLng($pontoParada['geolocalizacao']['lng']);
-
-                $novoPontoParada->setGeolocalizacao($geolocalizacao);
-
-                $pontosParada[] = $novoPontoParada;
-            }
-            $novoTrajeto->setPontosParada($pontosParada);
-            
-            $trajetos[] = $novoTrajeto;
-        }        
-        $rota->setTrajetos($trajetos);
-                
         return $rota;
     }
 

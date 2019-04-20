@@ -34,7 +34,7 @@ abstract class Service
         $objeto = $this->criarInstancia($dados);
         $objeto->setId($id);
 
-        return  $this->getRepository()->update($objeto);
+        return $this->getRepository()->update($objeto);
     }
 
     public function delete($id)

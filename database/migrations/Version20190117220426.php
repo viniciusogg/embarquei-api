@@ -42,7 +42,6 @@ class Version20190117220426 extends AbstractMigration
         $this->addSql('CREATE TABLE checkins (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', estudante_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', lista_presenca_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', status VARCHAR(255) NOT NULL, data_ultima_atualizacao DATETIME NOT NULL, UNIQUE INDEX UNIQ_9CE70FC53B4690DB (estudante_id), INDEX IDX_9CE70FC5A58DDEE9 (lista_presenca_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE listas_presenca (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', instituicao_ensino_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', cidade_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', INDEX IDX_F8161059CFA13933 (instituicao_ensino_id), INDEX IDX_F81610599586CC8 (cidade_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE feedbacks (id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', usuario_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', data DATETIME NOT NULL, comentario VARCHAR(255) NOT NULL, detalhes_plataforma VARCHAR(255) NOT NULL, tipo VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_7E6C3F89DB38439E (usuario_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-
         $this->addSql('ALTER TABLE estudantes ADD CONSTRAINT FK_E590D4DD7ABFA656 FOREIGN KEY (foto_id) REFERENCES imagens (id)');
         $this->addSql('ALTER TABLE estudantes ADD CONSTRAINT FK_E590D4DD87CB4A1F FOREIGN KEY (curso_id) REFERENCES cursos (id)');
         $this->addSql('ALTER TABLE estudantes ADD CONSTRAINT FK_E590D4DD1BB76823 FOREIGN KEY (endereco_id) REFERENCES enderecos (id)');
@@ -134,7 +133,6 @@ class Version20190117220426 extends AbstractMigration
         $this->addSql('ALTER TABLE instituicao_ensino_veiculo_transporte DROP FOREIGN KEY FK_14D7541BCFA13933');
         $this->addSql('ALTER TABLE listas_presenca DROP FOREIGN KEY FK_F8161059CFA13933');
         $this->addSql('ALTER TABLE checkins DROP FOREIGN KEY FK_9CE70FC5A58DDEE9');
-
         $this->addSql('DROP TABLE horarios_trajeto');
         $this->addSql('DROP TABLE imagens');
         $this->addSql('DROP TABLE usuarios');

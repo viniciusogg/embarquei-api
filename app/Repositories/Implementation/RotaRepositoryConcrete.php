@@ -5,6 +5,9 @@ namespace App\Repositories\Implementation;
 use App\Repositories\Abstraction\Repository;
 use App\Repositories\Abstraction\RotaRepositoryInterface;
 use App\Exceptions\NullFieldException;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\ResultSetMapping;
+use Exception;
 
 class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterface
 {
@@ -70,137 +73,213 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
         }  
     }
 
-    public function atualizar($rotaAtualizada, $instituicoesEnsino, $idCidade)
+//    public function atualizar($rotaAtualizada, $instituicoesEnsino, $idCidade)
+//    {
+//        $entityManager = $this->getEntityManager();
+//        $entityManager->getConnection()->beginTransaction();
+//
+//        try
+//        {
+//////            $rotaDesatualizada = $entityManager->find($this->getTypeObject(), $rotaAtualizada->getId());
+////
+//////            $rotaDesatualizada->setNome($rotaAtualizada->getNome());
+////
+////            $rotaSemTrajetos = $this->desassociarRotaTrajetos($entityManager, $rotaAtualizada->getId());
+////
+//////            $entityManager->clear('\App\Entities\Rota');
+////
+////            $rotaComTrajetos = $this->
+////                    associarRotaTrajetos($entityManager, $rotaSemTrajetos->getId(), $rotaAtualizada->getTrajetos());
+////
+////            $trajetosSemPontos = [];
+////
+////            $entityManager->clear('\App\Entities\Trajeto');
+////
+////            foreach ($rotaComTrajetos->getTrajetos() as $trajetoDesatualizado)
+////            {
+////                $trajetoSemPonto = $this->desassociarTrajetoPontosParada($entityManager, $trajetoDesatualizado->getId());
+////
+////                $trajetosSemPontos[] = $trajetoSemPonto;
+////
+////                $entityManager->clear('\App\Entities\Trajeto');
+////            }
+////            $trajetosComPontos = [];
+////
+////            $cont = 0;
+////
+////            foreach ($trajetosSemPontos as $trajetoSemPonto)
+////            {
+////                $trajetoComPonto = $this->
+////                        associarTrajetoPontosParada($entityManager, $trajetoSemPonto->getId(), $rotaAtualizada->getTrajetos()->get($cont));
+////                $trajetosComPontos[] = $trajetoComPonto;
+////
+////                $cont++;
+////            }
+////            $rotaComTrajetos->setTrajetos($trajetosComPontos);
+////
+////            $this->desassociarRotaInstituicoes($entityManager, $rotaComTrajetos->getId());
+////
+////            $rotaComInstituicoes = $this->associarRotaInstituicoes($entityManager, $rotaComTrajetos, $instituicoesEnsino);
+////
+////            $cidade = $entityManager->find('\App\Entities\Cidade', $idCidade);
+////
+////            if (empty($cidade))
+////            {
+////                throw new NullFieldException();
+////            }
+////            else
+////            {
+////                $rotaComInstituicoes->setCidade($cidade);
+////            }
+////            $rotaComInstituicoes->setNome($rotaAtualizada->getNome());
+////
+////            $rotaFinal = $this->atualizarHorarioTrajetos($entityManager, $rotaComInstituicoes);
+////
+////            $entityManager->getConnection()->commit();
+////
+////            return $rotaFinal;
+//            $cidade = $entityManager->find('\App\Entities\Cidade', $idCidade);
+//
+//            $rotaAtualizada->setCidade($cidade);
+//
+//            $entityManager->merge($rotaAtualizada);
+//
+////            $rotaDesatualizada = $entityManager->find($this->getTypeObject(), $rotaAtualizada->getId());
+////
+////            $entityManager->detach($rotaDesatualizada);
+////
+////            $rotaDesatualizada->getTrajetos()->clear();
+////
+////            foreach ($instituicoesEnsino as $instituicao)
+////            {
+////                $rotaDesatualizada->getInstituicoesEnsino()->add($instituicao);
+////            }
+////            $entityManager->merge($rotaDesatualizada);
+////
+////            $entityManager->detach($rotaDesatualizada);
+////
+////            $rotaDesatualizada->getTrajetos()->clear();
+////
+////            foreach ($rotaAtualizada->getTrajetos() as $trajeto)
+////            {
+////                $rotaDesatualizada->getTrajetos()->add($trajeto);
+////
+////                $trajeto->setRota($rotaDesatualizada);
+////
+////                $entityManager->merge($trajeto);
+////            }
+//              // -------------------------------------------------------------------- ATUALIZANDO PONTOS DE PARADA
+////            foreach ($rotaAtualizada->getTrajetos() as $trajeto)
+////            {
+////                $trajetoDesatualizado = $entityManager->find('\App\Entities\Trajeto', $trajeto->getId());
+////
+////                  // -------------------------------------------------------------------------------------------
+////                $pontosRemovidos = new ArrayCollection($trajetoDesatualizado->getPontosParada()->toArray());
+////
+////                foreach ($trajeto->getPontosParada() as $novoPonto)
+////                {
+////                    $pontosRemovidos->removeElement($novoPonto);
+////                }
+////                foreach ($pontosRemovidos as $pontoRemovido)
+////                {
+////                    $trajetoDesatualizado->getPontosParada()->removeElement($pontoRemovido);
+////
+////                    $pontoRemovido->setTrajeto(null);
+////                }
+////                $novosPontos = new ArrayCollection($trajeto->getPontosParada()->toArray());
+////
+////                foreach ($trajetoDesatualizado->getPontosParada() as $pontoDesatualizado)
+////                {
+////                    $novosPontos->removeElement($pontoDesatualizado);
+////                }
+////                foreach ($novosPontos as $novoPonto)
+////                {
+////                    $trajeto->getPontosParada()->removeElement($novoPonto);
+////                }
+////                foreach ($trajeto->getPontosParada() as $ponto)
+////                {
+////                    $ponto->setTrajeto($trajetoDesatualizado);
+////
+////                    $pontoAtualizado = $entityManager->merge($ponto);
+////
+////                    $trajetoDesatualizado->
+////                            getPontosParada()->
+////                            set($trajetoDesatualizado->getPontosParada()->indexOf($pontoAtualizado), $pontoAtualizado);
+////                }
+////                foreach ($novosPontos as $novoPonto)
+////                {
+////                    $trajetoDesatualizado->getPontosParada()->add($novoPonto);
+////
+////                    $novoPonto->setTrajeto($trajetoDesatualizado);
+////                }
+//                // --------------------------------------------------------------------------------------------
+////                $entityManager->detach($trajetoDesatualizado);
+////
+////                $trajetoDesatualizado->getPontosParada()->clear();
+////
+////                foreach ($trajeto->getPontosParada() as $ponto)
+////                {
+////                    $trajetoDesatualizado->getPontosParada()->add($ponto);
+////                }
+////                $entityManager->merge($trajetoDesatualizado);
+////            }
+//            $entityManager->flush();
+//
+//            $rotaFinal = $entityManager->find($this->getTypeObject(), $rotaAtualizada->getId());
+//
+//            $entityManager->getConnection()->commit();
+//
+//            return $rotaFinal;
+//        }
+//        catch (Exception $ex)
+//        {
+//            $entityManager->getConnection()->rollback();
+//
+//            throw $ex;
+//        }
+//        finally
+//        {
+//            $entityManager->close();
+//        }
+//    }
+
+    public function atualizar($rota, $instituicoesEnsino, $idCidade)
     {
         $entityManager = $this->getEntityManager();
         $entityManager->getConnection()->beginTransaction();
 
         try
         {
-////            $rotaDesatualizada = $entityManager->find($this->getTypeObject(), $rotaAtualizada->getId());
-//
-////            $rotaDesatualizada->setNome($rotaAtualizada->getNome());
-//
-//            $rotaSemTrajetos = $this->desassociarRotaTrajetos($entityManager, $rotaAtualizada->getId());
-//
-////            $entityManager->clear('\App\Entities\Rota');
-//
-//            $rotaComTrajetos = $this->
-//                    associarRotaTrajetos($entityManager, $rotaSemTrajetos->getId(), $rotaAtualizada->getTrajetos());
-//
-//            $trajetosSemPontos = [];
-//
-//            $entityManager->clear('\App\Entities\Trajeto');
-//
-//            foreach ($rotaComTrajetos->getTrajetos() as $trajetoDesatualizado)
-//            {
-//                $trajetoSemPonto = $this->desassociarTrajetoPontosParada($entityManager, $trajetoDesatualizado->getId());
-//
-//                $trajetosSemPontos[] = $trajetoSemPonto;
-//
-//                $entityManager->clear('\App\Entities\Trajeto');
-//            }
-//            $trajetosComPontos = [];
-//
-//            $cont = 0;
-//
-//            foreach ($trajetosSemPontos as $trajetoSemPonto)
-//            {
-//                $trajetoComPonto = $this->
-//                        associarTrajetoPontosParada($entityManager, $trajetoSemPonto->getId(), $rotaAtualizada->getTrajetos()->get($cont));
-//                $trajetosComPontos[] = $trajetoComPonto;
-//
-//                $cont++;
-//            }
-//            $rotaComTrajetos->setTrajetos($trajetosComPontos);
-//
-//            $this->desassociarRotaInstituicoes($entityManager, $rotaComTrajetos->getId());
-//
-//            $rotaComInstituicoes = $this->associarRotaInstituicoes($entityManager, $rotaComTrajetos, $instituicoesEnsino);
-//
-//            $cidade = $entityManager->find('\App\Entities\Cidade', $idCidade);
-//
-//            if (empty($cidade))
-//            {
-//                throw new NullFieldException();
-//            }
-//            else
-//            {
-//                $rotaComInstituicoes->setCidade($cidade);
-//            }
-//            $rotaComInstituicoes->setNome($rotaAtualizada->getNome());
-//
-//            $rotaFinal = $this->atualizarHorarioTrajetos($entityManager, $rotaComInstituicoes);
-//
-//            $entityManager->getConnection()->commit();
-//
-//            return $rotaFinal;
+            $rotaNoBanco = $entityManager->find($this->getTypeObject(), $rota->getId());
+
+            $rotaSemInstituicoes = $this->desassociarRotaInstituicoes($entityManager, $rotaNoBanco);
+
+            $this->associarRotaInstituicoes($entityManager, $rotaSemInstituicoes, $instituicoesEnsino);
+
+            foreach ($rotaNoBanco->getTrajetos() as $trajetoNoBanco)
+            {
+               $this->removerPontosParada($entityManager, $trajetoNoBanco);
+            }
+            foreach ($rota->getTrajetos() as $trajeto)
+            {
+                $this->adicionarPontosParada($entityManager, $trajeto, $trajeto->getPontosParada());
+            }
             $cidade = $entityManager->find('\App\Entities\Cidade', $idCidade);
 
-            $rotaAtualizada->setCidade($cidade);
-
-//            error_log(json_encode($rotaAtualizada->toArray(), JSON_PRETTY_PRINT));
-
-            $entityManager->merge($rotaAtualizada);
-//            $rotaComInstituicoes = $this->
-//                    atualizarRotaInstituicoes($entityManager, $rotaAtualizada->getId(), $instituicoesEnsino);
-//
-//            $rotaComTrajetos = $this->
-//                    atualizarRotaTrajetos($entityManager, $rotaComInstituicoes->getId(), $rotaAtualizada->getTrajetos());
-//
-//            foreach ($rotaAtualizada->getTrajetos() as $trajeto)
-//            {
-//                $this->atualizarTrajetoPontosParada($entityManager, $trajeto->getId(), $trajeto->getPontosParada());
-//            }
-            $rotaDesatualizada = $entityManager->find($this->getTypeObject(), $rotaAtualizada->getId());
-
-            $entityManager->detach($rotaDesatualizada);
-
-            $rotaDesatualizada->getTrajetos()->clear();
-
-            foreach ($instituicoesEnsino as $instituicao)
+            if (empty($cidade))
             {
-                $rotaDesatualizada->getInstituicoesEnsino()->add($instituicao);
+                throw new NullFieldException();
             }
-            $entityManager->merge($rotaDesatualizada);
-
-            $entityManager->detach($rotaDesatualizada);
-
-            $rotaDesatualizada->getTrajetos()->clear();
-
-            foreach ($rotaAtualizada->getTrajetos() as $trajeto)
+            else
             {
-                $rotaDesatualizada->getTrajetos()->add($trajeto);
-
-                $trajeto->setRota($rotaDesatualizada);
-
-                $entityManager->merge($trajeto);
+                $rota->setCidade($cidade);
             }
-            // ------------ ATUALIZANDO PONTOS DE PARADA
-            foreach ($rotaAtualizada->getTrajetos() as $trajeto)
-            {
-                $trajetoDesatualizado = $entityManager->find('\App\Entities\Trajeto', $trajeto->getId());
-
-                $entityManager->detach($trajetoDesatualizado);
-
-                $trajetoDesatualizado->getPontosParada()->clear();
-
-                foreach ($trajeto->getPontosParada() as $ponto)
-                {
-                    $trajetoDesatualizado->getPontosParada()->add($ponto);
-
-                    $ponto->setTrajeto($trajetoDesatualizado);
-
-                    $entityManager->merge($ponto);
-                }
-            }
-            $rotaFinal = $entityManager->find($this->getTypeObject(), $rotaDesatualizada->getId());
-
+            $entityManager->merge($rota);
             $entityManager->flush();
-
+            $entityManager->clear('\App\Entities\Rota');
             $entityManager->getConnection()->commit();
 
-            return $rotaFinal;
+            return $entityManager->find($this->getTypeObject(), $rota->getId());
         }
         catch (Exception $ex)
         {
@@ -214,195 +293,71 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
         }
     }
 
-
-
-
-
-
-    private function atualizarRotaInstituicoes($entityManager, $rotaId, $instituicoes)
+    private function adicionarPontosParada($entityManager, $trajeto, $pontosParada)
     {
-        $rota = $entityManager->find($this->getTypeObject(), $rotaId);
-
-        $entityManager->detach($rota);
-
-        $rota->getTrajetos()->clear();
-
-        foreach ($instituicoes as $instituicao)
+        foreach ($pontosParada as $pontoParada)
         {
-            $rota->getInstituicoesEnsino()->add($instituicao);
+            $trajeto->getPontosParada()->add($pontoParada);
+
+            $pontoParada->setTrajeto($trajeto);
+
+            $entityManager->persist($pontoParada);
         }
-        $entityManager->merge($rota);
-        $entityManager->flush();
-
-        return $rota;
-    }
-
-    private function atualizarRotaTrajetos($entityManager, $rotaId, $trajetos)
-    {
-        $rota = $entityManager->find($this->getTypeObject(), $rotaId);
-
-        $entityManager->detach($rota);
-
-        $rota->getTrajetos()->clear();
-
-        foreach ($trajetos as $trajeto)
-        {
-            $rota->getTrajetos()->add($trajeto);
-
-            $trajeto->setRota($rota);
-
-            $entityManager->merge($trajeto->getHorarioTrajeto());
-            $entityManager->merge($trajeto);
-        }
-        $entityManager->flush();
-
-        return $rota;
-    }
-
-    private function atualizarTrajetoPontosParada($entityManager, $trajetoId, $pontosParada)
-    {
-        $trajeto = $entityManager->find('\App\Entities\Trajeto', $trajetoId);
-
-        $entityManager->detach($trajeto);
-
-        $trajeto->getPontosParada()->clear();
-
-        foreach ($pontosParada as $ponto)
-        {
-            $trajeto->getPontos()->add($ponto);
-
-            $ponto->setTrajeto($trajeto);
-
-            $entityManager->merge($ponto);
-        }
-        $entityManager->flush();
-
         return $trajeto;
     }
 
-
-
-
-
-
-    private function associarRotaInstituicoes($entityManager, $rota, $instituicoes)
+    private function removerPontosParada($entityManager, $trajeto)
     {
-        $trajetos = [];
-
-        foreach ($instituicoes as $instituicao)
-        {
-            $rota->getInstituicoesEnsino()->
-                    add($entityManager->getReference('\App\Entities\InstituicaoEnsino', $instituicao['id']));
-        }
-        foreach ($rota->getTrajetos() as $trajeto)
-        {
-            $trajeto->setRota($rota);
-
-            $trajetos[] = $entityManager->merge($trajeto);
-
-            $entityManager->flush();
-        }
-        $rota->setTrajetos($trajetos);
-
-        return $rota;
-    }
-
-    private function desassociarRotaInstituicoes($entityManager, $rotaId)
-    {
-        $rota = $entityManager->find($this->getTypeObject(), $rotaId);
-
-        foreach ($rota->getInstituicoesEnsino() as $instituicao)
-        {
-            $rota->getInstituicoesEnsino()->
-                    removeElement($entityManager->getReference('\App\Entities\InstituicaoEnsino', $instituicao->getId()));
-        }
-        foreach ($rota->getTrajetos() as $trajeto)
-        {
-            $trajeto->setRota($rota);
-
-            $trajetos[] = $entityManager->merge($trajeto);
-
-            $entityManager->flush();
-        }
-        $rota->setTrajetos($trajetos);
-
-        return $rota;
-    }
-
-    private function associarRotaTrajetos($entityManager, $rotaId, $trajetos)
-    {
-        $rota = $entityManager->find($this->getTypeObject(), $rotaId);
-
-        foreach ($trajetos as $trajeto)
-        {
-            $rota->getTrajetos()->add($trajeto);
-
-//            $entityManager->persist($trajeto);
-        }
-        foreach ($trajetos as $trajeto)
-        {
-            $trajeto->setRota($rota);
-
-            $entityManager->merge($trajeto);
-        }
-        $entityManager->flush();
-
-        return $rota;
-    }
-
-    private function desassociarRotaTrajetos($entityManager, $rotaId)
-    {
-        $rota = $entityManager->find($this->getTypeObject(), $rotaId);
-
-        foreach ($rota->getTrajetos() as $trajeto)
-        {
-            $entityManager->remove($trajeto);
-            $entityManager->flush();
-
-            $rota->getTrajetos()->removeElement($trajeto, $trajeto->getId());
-        }
-        return $rota;
-    }
-
-    private function associarTrajetoPontosParada($entityManager, $trajetoDesatualizadoId, $trajetoAtualizado)
-    {
-        $trajetoDesatualizado = $entityManager->find('\App\Entities\Trajeto', $trajetoDesatualizadoId);
-
-        foreach ($trajetoAtualizado->getPontosParada() as $pontoParada)
-        {
-            $trajetoDesatualizado->getPontosParada()->add($pontoParada);
-
-            $pontoParada->setTrajeto($trajetoDesatualizado);
-
-            $entityManager->merge($pontoParada);
-            $entityManager->flush();
-        }
-        return $trajetoDesatualizado;
-    }
-
-    private function desassociarTrajetoPontosParada($entityManager, $trajetoId)
-    {
-        $trajeto = $entityManager->find('\App\Entities\Trajeto', $trajetoId);
-
         foreach ($trajeto->getPontosParada() as $pontoParada)
         {
-            $entityManager->remove($pontoParada);
-            $entityManager->flush();
+            $trajeto->getPontosParada()->removeElement($pontoParada);
 
-            $trajeto->getPontosParada()->removeElement($pontoParada, $pontoParada->getId());
+            $entityManager->remove($pontoParada);
         }
-        return $trajeto;
     }
 
-    private function atualizarHorarioTrajetos($entityManager, $rota)
+    private function desassociarRotaInstituicoes($entityManager, $rota)
     {
-        foreach($rota->getTrajetos() as $trajeto)
+        $sql = '
+            SELECT ie.id ' .
+                'FROM instituicoes_ensino ie ' .
+            'WHERE ie.id IN ' .
+                '(SELECT ir.instituicao_ensino_id ' .
+                    'FROM instituicao_ensino_rota ir ' .
+                'WHERE ir.rota_id = ?)';
+
+        $rsm = new ResultSetMapping();
+        $rsm->addEntityResult('\App\Entities\InstituicaoEnsino', 'ie');
+        $rsm->addFieldResult('ie', 'id', 'id');
+
+        $query = $entityManager->createNativeQuery($sql, $rsm);
+        $query->setParameter(1, $rota->getId());
+
+        $idsInstituicoesEncontradas = $query->getResult();
+        $instituicoesEnsino = [];
+
+        foreach ($idsInstituicoesEncontradas as $idInstituicao)
         {
-            $horarioAtualizado = $entityManager->merge($trajeto->getHorarioTrajeto());
+            $instituicoesEnsino[] = $entityManager->find('\App\Entities\InstituicaoEnsino', $idInstituicao);
+        }
+        foreach ($instituicoesEnsino as $instituicao)
+        {
+            $rota->getInstituicoesEnsino()->removeElement($instituicao);
 
-            $trajeto->setHorarioTrajeto($horarioAtualizado);
+            $entityManager->merge($rota);
+        }
+        return $rota;
+    }
 
-            $entityManager->flush();
+    private function associarRotaInstituicoes($entityManager, $rota, $instituicoesEnsino)
+    {
+        foreach($instituicoesEnsino as $instituicao)
+        {
+            $instituicaoBuscada = $entityManager->find('\App\Entities\InstituicaoEnsino', $instituicao['id']);
+
+            $rota->getInstituicoesEnsino()->add($instituicaoBuscada);
+
+            $entityManager->merge($instituicaoBuscada);
         }
         return $rota;
     }

@@ -27,19 +27,19 @@ class Trajeto
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\OneToOne(targetEntity="HorarioTrajeto", cascade={"all"}, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="HorarioTrajeto", cascade={"all"}, fetch="EAGER", orphanRemoval=true)
      */
     protected $horarioTrajeto;
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\OneToMany(targetEntity="PontoParada", mappedBy="trajeto", cascade={"all"}, fetch="EAGER") 
+     * @ORM\OneToMany(targetEntity="PontoParada", mappedBy="trajeto", cascade={"all"}, fetch="EAGER")
      */
     protected $pontosParada;
 
     /** 
      * @ORM\JoinColumn(nullable=false, name="rota_id")
-     * @ORM\ManyToOne(targetEntity="Rota", inversedBy="trajetos", cascade={"all"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Rota", inversedBy="trajetos", fetch="EAGER")
      */
     protected $rota;
 

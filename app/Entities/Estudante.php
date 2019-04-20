@@ -32,18 +32,18 @@ class Estudante extends Usuario
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\OneToOne(targetEntity="Endereco",  cascade={"all"}, fetch="EAGER") 
+     * @ORM\OneToOne(targetEntity="Endereco", cascade={"all"}, fetch="EAGER")
      */
     protected $endereco;
 
     /** 
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\OneToOne(targetEntity="ComprovanteMatricula",  cascade={"all"}, fetch="EAGER") 
+     * @ORM\OneToOne(targetEntity="ComprovanteMatricula", cascade={"all"}, fetch="EAGER")
      */
     protected $comprovanteMatricula;
 
     /** 
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      * @ORM\ManyToMany(targetEntity="PontoParada", inversedBy="estudantes", fetch="EAGER") 
      */
     protected $pontosParada;
