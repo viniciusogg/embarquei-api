@@ -102,8 +102,8 @@ class Version20190329020114 extends AbstractMigration
 
 
         // ROTAS
-        $this->addSql('INSERT INTO rotas (id, cidade_id, nome) VALUES ("e9e5dcfd-113e-4bc5-b3bd-4540c887e487", "2114d2e6-f3ca-4dba-9b04-982268d3aa38", "Rota principal IFPB e Intelectus");');
-        $this->addSql('INSERT INTO rotas (id, cidade_id, nome) VALUES ("23101811-2fab-49cd-9d8f-6e4b0027914d", "2114d2e6-f3ca-4dba-9b04-982268d3aa38", "Rota principal UEPB");');
+        $this->addSql('INSERT INTO rotas (id, cidade_id) VALUES ("e9e5dcfd-113e-4bc5-b3bd-4540c887e487", "2114d2e6-f3ca-4dba-9b04-982268d3aa38");');
+        $this->addSql('INSERT INTO rotas (id, cidade_id) VALUES ("23101811-2fab-49cd-9d8f-6e4b0027914d", "2114d2e6-f3ca-4dba-9b04-982268d3aa38");');
 
 
         // INSTITUICAO_ENSINO_ROTA
@@ -113,11 +113,11 @@ class Version20190329020114 extends AbstractMigration
 
 
         // TRAJETOS
-        $this->addSql('INSERT INTO trajetos (id, horario_trajeto_id, rota_id, tipo) VALUES ("b685cdbd-f113-4a45-813b-4f8ecbe086c2", "0b204261-bbf8-44d7-8e1d-ca08a5f4d2db", "e9e5dcfd-113e-4bc5-b3bd-4540c887e487", "IDA");');  // TRAJETO IDA IFPB
-        $this->addSql('INSERT INTO trajetos (id, horario_trajeto_id, rota_id, tipo) VALUES ("ca2dfc27-d237-4217-a9e1-9dfe0b0ca099", "78c2bd16-f730-4fa4-8e9c-1599c83332c7", "e9e5dcfd-113e-4bc5-b3bd-4540c887e487", "VOLTA");'); // TRAJETO VOLTA IFPB
+        $this->addSql('INSERT INTO trajetos (id, horario_trajeto_id, rota_id, tipo, descricao, ativado) VALUES ("b685cdbd-f113-4a45-813b-4f8ecbe086c2", "0b204261-bbf8-44d7-8e1d-ca08a5f4d2db", "e9e5dcfd-113e-4bc5-b3bd-4540c887e487", "IDA", "Trajeto de ida principal IFPB e Intelectus", true);');  // TRAJETO IDA IFPB
+        $this->addSql('INSERT INTO trajetos (id, horario_trajeto_id, rota_id, tipo, descricao, ativado) VALUES ("ca2dfc27-d237-4217-a9e1-9dfe0b0ca099", "78c2bd16-f730-4fa4-8e9c-1599c83332c7", "e9e5dcfd-113e-4bc5-b3bd-4540c887e487", "VOLTA", "Trajeto de volta principal IFPB e Intelectus", true);'); // TRAJETO VOLTA IFPB
 
-        $this->addSql('INSERT INTO trajetos (id, horario_trajeto_id, rota_id, tipo) VALUES ("81b16248-c5f0-4f29-b1db-bb36bd795910", "9993c253-2441-4bf4-83de-e7f59834fa52", "23101811-2fab-49cd-9d8f-6e4b0027914d", "IDA");'); // TRAJETO IDA UEPB
-        $this->addSql('INSERT INTO trajetos (id, horario_trajeto_id, rota_id, tipo) VALUES ("7fdd9e6d-d5dd-48bf-b93f-77fd02d06985", "8a45bc61-2eda-42a9-a2c1-8d2df04a1904", "23101811-2fab-49cd-9d8f-6e4b0027914d", "VOLTA");'); // TRAJETO VOLTA UEPB
+        $this->addSql('INSERT INTO trajetos (id, horario_trajeto_id, rota_id, tipo, descricao, ativado) VALUES ("81b16248-c5f0-4f29-b1db-bb36bd795910", "9993c253-2441-4bf4-83de-e7f59834fa52", "23101811-2fab-49cd-9d8f-6e4b0027914d", "IDA", "Trajeto de ida principal UEPB", true);'); // TRAJETO IDA UEPB
+        $this->addSql('INSERT INTO trajetos (id, horario_trajeto_id, rota_id, tipo, descricao, ativado) VALUES ("7fdd9e6d-d5dd-48bf-b93f-77fd02d06985", "8a45bc61-2eda-42a9-a2c1-8d2df04a1904", "23101811-2fab-49cd-9d8f-6e4b0027914d", "VOLTA", "Trajeto de volta principal UEPB", true);'); // TRAJETO VOLTA UEPB
 
 
         // PONTOS PARADA IDA IFPB

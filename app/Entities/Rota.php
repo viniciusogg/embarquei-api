@@ -19,10 +19,6 @@ class Rota
      */
     protected $id;
 
-    // NOME DEVE SER ÚNICO ENTRE AS ROTAS DO MUNICÍPIO
-    /** @ORM\Column(type="string", nullable=false) */
-    protected $nome;
-
     /** 
      * @ORM\JoinColumn(nullable=false)
      * @ORM\ManyToMany(targetEntity="InstituicaoEnsino", fetch="EAGER") 
@@ -52,11 +48,6 @@ class Rota
         return $this->id;
     }
 
-    public function getNome()
-    {
-        return $this->nome;
-    }
-
     public function getInstituicoesEnsino()
     {
         return $this->instituicoesEnsino;
@@ -75,11 +66,6 @@ class Rota
     public function setId($id)
     {
         $this->id = $id;
-    }
-
-    public function setNome($nome)
-    {
-        $this->nome = $nome;
     }
 
     public function setInstituicoesEnsino($instituicoesEnsino)
@@ -101,7 +87,6 @@ class Rota
     {
         return array(
             'id' => $this->id,
-            'nome' => $this->nome,
             'instituicoesEnsino' => $this->retornarArrayObjetos($this->instituicoesEnsino),
             'trajetos' => $this->retornarArrayObjetos($this->trajetos),
             'cidade' => [

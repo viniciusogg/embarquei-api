@@ -4,7 +4,7 @@ namespace App\Repositories\Abstraction;
 
 interface RotaRepositoryInterface 
 {
-    public function associarEPersistir($rota, $nomesInstituicoesEnsino, $idCidade);
+    public function associarEPersistir($rota, $instituicoesEnsino, $idCidade);
 
     public function atualizar($rota, $instituicoesEnsino, $idCidade);
 

@@ -24,7 +24,7 @@ class RotaService extends Service
     {
         $rota = $this->criarInstancia($dados);
 
-        $this->rotaRepository->associarEPersistir($rota, $dados['instituicoesEnsino'], $dados['cidade']);
+        $this->rotaRepository->associarEPersistir($rota, $dados['instituicoesEnsino'], $dados['cidade']['id']);
     }
 
     public function findByInstituicaoCidade($instituicaoId, $cidadeId)
@@ -65,7 +65,6 @@ class RotaService extends Service
             throw new NullFieldException();
         }
         $rota = new Rota();
-        $rota->setNome($dados['nome']);
 
         foreach ($dados['trajetos'] as $trajeto)
         {
@@ -93,6 +92,8 @@ class RotaService extends Service
             {
                 $novoTrajeto->setId($trajeto['id']);
             }
+            $novoTrajeto->setDescricao($trajeto['descricao']);
+            $novoTrajeto->setAtivado($trajeto['ativado']);
             $novoTrajeto->setTipo($trajeto['tipo']);
             $novoTrajeto->setHorarioTrajeto($horarioTrajeto);
             $novoTrajeto->setRota($rota);

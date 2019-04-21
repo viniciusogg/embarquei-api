@@ -21,6 +21,13 @@ class Trajeto
      */
     protected $id;
 
+    // NOME DEVE SER ÚNICO ENTRE OS TRAJETOS DO MUNICÍPIO
+    /** @ORM\Column(type="string", nullable=false) */
+    protected $descricao;
+
+    // APENAS UM TRAJETO PODE ESTAR ATIVADO EM CADA ROTA
+    /** @ORM\Column(type="boolean", nullable=false) */
+    protected $ativado;
 
     /** @ORM\Column(type="string", nullable=false) */
     protected $tipo;
@@ -46,12 +53,34 @@ class Trajeto
     public function __construct()
     {
         $this->pontosParada = new ArrayCollection();
-//        $this->pontosParada->
     }
 
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescricao()
+    {
+        return $this->descricao;
+    }
+
+    public function setDescricao($descricao): void
+    {
+        $this->descricao = $descricao;
+    }
+
+    public function getAtivado()
+    {
+        return $this->ativado;
+    }
+
+    public function setAtivado($ativado): void
+    {
+        $this->ativado = $ativado;
     }
 
     public function getTipo()
@@ -110,6 +139,8 @@ class Trajeto
     {
         return array(
             'id' => $this->id,
+            'descricao' => $this->descricao,
+            'ativado' => $this->ativado,
             'tipo' => $this->tipo,
             'horarioTrajeto' => $this->horarioTrajeto->toArray(),
             'rota' => [
