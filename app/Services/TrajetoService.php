@@ -2,13 +2,17 @@
 
 namespace App\Services;
 
+use App\Entities\Cidade;
+use App\Entities\Geolocalizacao;
+use App\Entities\Rota;
 use App\Repositories\Abstraction\TrajetoRepositoryInterface;
 use App\Entities\Trajeto;
 //use App\Entities\Enums\TIPO_TRAJETO;
 use App\Entities\PontoParada;
 use \App\Entities\HorarioTrajeto;
+use Carbon\Carbon;
 
-class TrajetoService 
+class TrajetoService extends Service
 {
     private $trajetoRepository;
 
@@ -19,69 +23,11 @@ class TrajetoService
 
     public function create($dados)
     {
-        $trajeto = $this->criarInstanciaTrajeto($dados);
+        $trajeto = $this->criarInstancia($dados);
 
-        $this->trajetoRepository->associarComRota($trajeto, $dados['rota']);        
+        return $this->trajetoRepository->cadastrar($trajeto);
     }
 
-    public function findById($id)
-    {
-        return $this->trajetoRepository->getById($id);
-    }
-
-    public function findAll()
-    {
-        $result = $this->trajetoRepository->getAll();
-
-        $trajetos = array();
-
-        foreach ($result as $trajeto) {
-            $trajetos[] = $trajeto->toArray();
-        }
-
-        return $trajetos;
-    }
-
-    public function update($dados, $id)
-    {  
-        $trajeto = $this->criarInstanciaTrajeto($dados);
-        $trajeto->setId($id);
-
-        return  $this->trajetoRepository->update($estudante);
-    }
-
-    public function delete($id)
-    {
-        $this->trajetoRepository->delete($id);
-    }
-    
-    private function criarInstanciaTrajeto($dados)
-    {
-        $horarioTrajeto = new HorarioTrajeto();
-        $horarioTrajeto->setPartida($dados['horarioTrajeto']['partida']);
-        $horarioTrajeto->setChegada($dados['horarioTrajeto']['chegada']);
-        
-        $trajeto = new Trajeto();
-        $trajeto->setURLMapa($dados['urlMapa']);
-        $trajeto->setTipo($dados['tipoTrajeto']);
-        $trajeto->setHorarioTrajeto($horarioTrajeto);
-        
-        $pontosParada = [];
-                
-        foreach ($dados['pontosParada'] as $pontoParada) 
-        {
-            $novoPontoParada = new PontoParada();
-            $novoPontoParada->setNome($pontoParada['nome']);
-            $novoPontoParada->setTrajeto($trajeto);
-            
-            $pontosParada[] = $novoPontoParada;
-        }
-        
-        $trajeto->setPontosParada($pontosParada);
-                
-        return $trajeto;
-    }
-    
     public function getTrajetosByCidadeInstituicaoRota($cidadeId, $instituicaoId)
     {  
         $result = $this->trajetoRepository->getTrajetosByCidadeInstituicaoRota($cidadeId, $instituicaoId);
@@ -90,10 +36,76 @@ class TrajetoService
         
         foreach ($result as $trajeto) 
         {
-//            error_log($pontoParada->toArray());
             $trajetos[] = $trajeto->toArray();
         }
         
         return $trajetos;
+    }
+
+    protected function criarInstancia($dados)
+    {
+        $rota = new Rota();
+        $rota->setId($dados['rota']['id']);
+
+        $cidade = new Cidade();
+        $cidade->setId($dados['rota']['cidade']['id']);
+
+        $rota->setCidade($cidade);
+
+        $horaPartida = explode(':', $dados['horarioTrajeto']['partida'])[0];
+        $minutoPartida = explode(':', $dados['horarioTrajeto']['partida'])[1];
+
+        $horaChegada = explode(':', $dados['horarioTrajeto']['chegada'])[0];
+        $minutoChegada = explode(':', $dados['horarioTrajeto']['chegada'])[1];
+
+        $partida = Carbon::createFromTime($horaPartida, $minutoPartida);
+        $chegada = Carbon::createFromTime($horaChegada, $minutoChegada);
+
+        $horarioTrajeto = new HorarioTrajeto();
+
+        if (isset($dados['horarioTrajeto']['id']))
+        {
+            $horarioTrajeto->setId($dados['horarioTrajeto']['id']);
+        }
+        $horarioTrajeto->setChegada($chegada);
+        $horarioTrajeto->setPartida($partida);
+
+        $trajeto = new Trajeto();
+        $trajeto->setTipo($dados['tipo']);
+        $trajeto->setDescricao($dados['descricao']);
+        $trajeto->setAtivado($dados['ativado']);
+        $trajeto->setHorarioTrajeto($horarioTrajeto);
+        $trajeto->setRota($rota);
+
+        foreach ($dados['pontosParada'] as $pontoParada)
+        {
+            $novoPontoParada = new PontoParada();
+            $novoPontoParada->setNome($pontoParada['nome']);
+            $novoPontoParada->setOrdem($pontoParada['ordem']);
+            $novoPontoParada->setTrajeto($trajeto);
+
+            if (isset($pontoParada['id']))
+            {
+                $novoPontoParada->setId($pontoParada['id']);
+            }
+            $geolocalizacao = new Geolocalizacao();
+
+            if (isset($pontoParada['geolocalizacao']['id']))
+            {
+                $geolocalizacao->setId($pontoParada['geolocalizacao']['id']);
+            }
+            $geolocalizacao->setLat($pontoParada['geolocalizacao']['lat']);
+            $geolocalizacao->setLng($pontoParada['geolocalizacao']['lng']);
+
+            $novoPontoParada->setGeolocalizacao($geolocalizacao);
+
+            $trajeto->getPontosParada()->add($novoPontoParada);
+        }
+        return $trajeto;
+    }
+
+    protected function getRepository()
+    {
+        return $this->trajetoRepository;
     }
 }

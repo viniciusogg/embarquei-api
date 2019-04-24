@@ -75,6 +75,7 @@ class Endereco {
             'bairro' => $this->bairro,
             'cidade' => [
                 'id' => $this->cidade->getId(),
+                'nome' => $this->cidade->getNome(),
                 'geolocalizacao' => $this->cidade->getGeolocalizacao()->toArray()
             ]
          );

@@ -73,7 +73,7 @@ abstract class Controller extends BaseController
 
         $objetoAtualizado = $this->getService()->update($objeto, $id);
 
-        return response()->json([$objetoAtualizado->toArray()], 200);
+        return response()->json($objetoAtualizado->toArray(), 200);
     }
 
     /**

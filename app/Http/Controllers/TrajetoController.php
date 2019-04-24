@@ -14,6 +14,15 @@ class TrajetoController extends Controller
         $this->trajetoService = $trajetoService;
     }
 
+    public function store(Request $request)
+    {
+        $trajeto = $request->all();
+
+        $novoTrajeto = $this->getService()->create($trajeto);
+
+        return response()->json($novoTrajeto->toArray(), 200);
+    }
+
     public function buscarTrajetosByCidadeInstituicaoRota($cidade, $instituicaoEnsino)
     {  
         $trajetos = $this->trajetoService->

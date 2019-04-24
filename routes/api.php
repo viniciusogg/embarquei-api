@@ -114,6 +114,7 @@ Route::get('pontosParada/{cidade}/{instituicaoEnsino}/{rota}', 'PontoParadaContr
 
 
 Route::get('trajetos/{cidade}/{instituicaoEnsino}', 'TrajetoController@buscarTrajetosByCidadeInstituicaoRota');
+Route::apiResource('trajetos', 'TrajetoController')->middleware('auth:api');
 
 
 
