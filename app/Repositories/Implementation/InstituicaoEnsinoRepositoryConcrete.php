@@ -76,29 +76,51 @@ class InstituicaoEnsinoRepositoryConcrete extends Repository implements Institui
         try
         { // CONSULTA DEVE RETORNAR INSTITUIÇÕES QUE NÃO TENHAM MOTORISTA ASSOCIADO AO MUNICÍPIO PASSADO
             $sql = '
-                SELECT i.id, i.nome, ' .
-                    'e.id as endereco_id, e.logradouro, e.bairro, ' .
-                    'c.id as cidade_id, ' .
-                    'gc.lat as cidade_geolocalizacao_lat, gc.lng as cidade_geolocalizacao_lng, gc.id as cidade_geolocalizacao_id, ' .
-                    'g.id as instituicao_geolocalizacao_id, g.lat as instituicao_geolocalizacao_lat, g.lng as instituicao_geolocalizacao_lng ' .
-                'FROM instituicoes_ensino i ' .
-                'INNER JOIN enderecos e ' .
-                'ON e.id = i.endereco_id ' .
-                'INNER JOIN cidades c ' .
-                'ON c.id = e.cidade_id ' .
-                'INNER JOIN geolocalizacoes g ' .
-                'ON g.id = i.geolocalizacao_id ' .
-                'INNER JOIN geolocalizacoes gc ' .
-                'ON gc.id = c.geolocalizacao_id ' .
-                'WHERE i.id NOT IN ' .
-                    '(SELECT ie.instituicao_ensino_id ' .
+                SELECT ' .
+                    'i.id,' .
+                    'i.nome, ' .
+                    'e.id AS endereco_id, ' .
+                    'e.logradouro, ' .
+                    'e.bairro, ' .
+                    'c.id AS cidade_id, ' .
+                    'gc.lat AS cidade_geolocalizacao_lat, ' .
+                    'gc.lng AS cidade_geolocalizacao_lng, ' .
+                    'gc.id AS cidade_geolocalizacao_id, ' .
+                    'g.id AS instituicao_geolocalizacao_id, ' .
+                    'g.lat AS instituicao_geolocalizacao_lat, ' .
+                    'g.lng AS instituicao_geolocalizacao_lng ' .
+                'FROM ' .
+                    'instituicoes_ensino i ' .
+                    'INNER JOIN ' .
+                        'enderecos e ' .
+                        'ON e.id = i.endereco_id ' .
+                    'INNER JOIN ' .
+                        'cidades c ' .
+                        'ON c.id = e.cidade_id ' .
+                    'INNER JOIN ' .
+                        'geolocalizacoes g ' .
+                        'ON g.id = i.geolocalizacao_id ' .
+                    'INNER JOIN ' .
+                        'geolocalizacoes gc ' .
+                        'ON gc.id = c.geolocalizacao_id ' .
+                'WHERE ' .
+                    'i.id NOT IN ' .
+                    '(SELECT ' .
+                            'ie.instituicao_ensino_id ' .
                         'FROM ' .
-                            '(SELECT iem.instituicao_ensino_id, iem.motorista_id, m.id as idMotorista, m.cidade_id as cidadeIdMotorista ' .
-                                'FROM instituicao_ensino_motorista iem ' .
-                                'LEFT JOIN motoristas m ' .
-                                'ON iem.motorista_id = m.id ' .
-                                'AND m.cidade_id != ?) ie ' .
-                        'WHERE ie.idMotorista IS NULL) ';
+                            '(SELECT ' .
+                                    'iem.instituicao_ensino_id, ' .
+                                    'iem.motorista_id, ' .
+                                    'm.id AS idMotorista, ' .
+                                    'm.cidade_id AS cidadeIdMotorista ' .
+                                'FROM ' .
+                                    'instituicao_ensino_motorista iem ' .
+                                    'LEFT JOIN ' .
+                                        'motoristas m ' .
+                                        'ON iem.motorista_id = m.id ' .
+                                        'AND m.cidade_id != ? ) ie ' .
+                        'WHERE ' .
+                            'ie.idMotorista IS NULL)';
 
             $rsm = new ResultSetMapping();
             $rsm->addEntityResult('\App\Entities\InstituicaoEnsino', 'i');
@@ -148,29 +170,51 @@ class InstituicaoEnsinoRepositoryConcrete extends Repository implements Institui
         try
         { // CONSULTA DEVE RETORNAR INSTITUIÇÕES QUE NÃO TENHAM VEÍCULO ASSOCIADO AO MUNICÍPIO PASSADO
             $sql = '
-                SELECT i.id, i.nome, ' .
-                    'e.id as endereco_id, e.logradouro, e.bairro, ' .
-                    'c.id as cidade_id, ' .
-                    'gc.lat as cidade_geolocalizacao_lat, gc.lng as cidade_geolocalizacao_lng, gc.id as cidade_geolocalizacao_id, ' .
-                    'g.id as instituicao_geolocalizacao_id, g.lat as instituicao_geolocalizacao_lat, g.lng as instituicao_geolocalizacao_lng ' .
-                'FROM instituicoes_ensino i ' .
-                'INNER JOIN enderecos e ' .
-                'ON e.id = i.endereco_id ' .
-                'INNER JOIN cidades c ' .
-                'ON c.id = e.cidade_id ' .
-                'INNER JOIN geolocalizacoes g ' .
-                'ON g.id = i.geolocalizacao_id ' .
-                'INNER JOIN geolocalizacoes gc ' .
-                'ON gc.id = c.geolocalizacao_id ' .
-                'WHERE i.id NOT IN ' .
-                    '(SELECT ie.instituicao_ensino_id ' .
+                SELECT ' .
+                    'i.id, ' .
+                    'i.nome, ' .
+                    'e.id AS endereco_id, ' .
+                    'e.logradouro, ' .
+                    'e.bairro, ' .
+                    'c.id AS cidade_id, ' .
+                    'gc.lat AS cidade_geolocalizacao_lat, ' .
+                    'gc.lng AS cidade_geolocalizacao_lng, ' .
+                    'gc.id AS cidade_geolocalizacao_id, ' .
+                    'g.id AS instituicao_geolocalizacao_id, ' .
+                    'g.lat AS instituicao_geolocalizacao_lat, ' .
+                    'g.lng AS instituicao_geolocalizacao_lng ' .
+                'FROM ' .
+                    'instituicoes_ensino i ' .
+                    'INNER JOIN ' .
+                        'enderecos e ' .
+                        'ON e.id = i.endereco_id ' .
+                    'INNER JOIN ' .
+                        'cidades c ' .
+                        'ON c.id = e.cidade_id ' .
+                    'INNER JOIN ' .
+                        'geolocalizacoes g ' .
+                        'ON g.id = i.geolocalizacao_id ' .
+                    'INNER JOIN ' .
+                        'geolocalizacoes gc ' .
+                        'ON gc.id = c.geolocalizacao_id ' .
+                'WHERE ' .
+                    'i.id NOT IN ' .
+                    '(SELECT ' .
+                            'ie.instituicao_ensino_id ' .
                         'FROM ' .
-                            '(SELECT iev.instituicao_ensino_id, iev.veiculo_transporte_id, v.id as idVeiculo, v.cidade_id as cidadeIdVeiculo ' .
-                                'FROM instituicao_ensino_veiculo_transporte iev ' .
-                                'LEFT JOIN veiculos_transporte v ' .
-                                'ON iev.veiculo_transporte_id = v.id ' .
-                                'AND v.cidade_id != ?) ie ' .
-                        'WHERE ie.idVeiculo IS NULL)';
+                            '(SELECT ' .
+                                    'iev.instituicao_ensino_id, ' .
+                                    'iev.veiculo_transporte_id, ' .
+                                    'v.id AS idVeiculo, ' .
+                                    'v.cidade_id AS cidadeIdVeiculo ' .
+                                'FROM ' .
+                                    'instituicao_ensino_veiculo_transporte iev ' .
+                                    'LEFT JOIN ' .
+                                        'veiculos_transporte v ' .
+                                        'ON iev.veiculo_transporte_id = v.id ' .
+                                        'AND v.cidade_id != ? ) ie ' .
+                        'WHERE ' .
+                            'ie.idVeiculo IS NULL)';
 
             $rsm = new ResultSetMapping();
             $rsm->addEntityResult('\App\Entities\InstituicaoEnsino', 'i');
@@ -220,29 +264,51 @@ class InstituicaoEnsinoRepositoryConcrete extends Repository implements Institui
         try
         { // CONSULTA DEVE RETORNAR INSTITUIÇÕES QUE NÃO TENHAM VEÍCULO ASSOCIADO AO MUNICÍPIO PASSADO
             $sql = '
-                SELECT i.id, i.nome, ' .
-                    'e.id as endereco_id, e.logradouro, e.bairro, ' .
-                    'c.id as cidade_id, ' .
-                    'gc.lat as cidade_geolocalizacao_lat, gc.lng as cidade_geolocalizacao_lng, gc.id as cidade_geolocalizacao_id, ' .
-                    'g.id as instituicao_geolocalizacao_id, g.lat as instituicao_geolocalizacao_lat, g.lng as instituicao_geolocalizacao_lng ' .
-                'FROM instituicoes_ensino i ' .
-                'INNER JOIN enderecos e ' .
-                'ON e.id = i.endereco_id ' .
-                'INNER JOIN cidades c ' .
-                'ON c.id = e.cidade_id ' .
-                'INNER JOIN geolocalizacoes g ' .
-                'ON g.id = i.geolocalizacao_id ' .
-                'INNER JOIN geolocalizacoes gc ' .
-                'ON gc.id = c.geolocalizacao_id ' .
-                'WHERE i.id NOT IN ' .
-                    '(SELECT ie.instituicao_ensino_id ' .
+                SELECT ' .
+                    'i.id, ' .
+                    'i.nome, ' .
+                    'e.id AS endereco_id, ' .
+                    'e.logradouro, ' .
+                    'e.bairro, ' .
+                    'c.id AS cidade_id, ' .
+                    'gc.lat AS cidade_geolocalizacao_lat, ' .
+                    'gc.lng AS cidade_geolocalizacao_lng, ' .
+                    'gc.id AS cidade_geolocalizacao_id, ' .
+                    'g.id AS instituicao_geolocalizacao_id, ' .
+                    'g.lat AS instituicao_geolocalizacao_lat, ' .
+                    'g.lng AS instituicao_geolocalizacao_lng ' .
+                'FROM ' .
+                    'instituicoes_ensino i ' .
+                    'INNER JOIN ' .
+                        'enderecos e ' .
+                        'ON e.id = i.endereco_id ' .
+                    'INNER JOIN ' .
+                        'cidades c ' .
+                        'ON c.id = e.cidade_id ' .
+                    'INNER JOIN ' .
+                        'geolocalizacoes g ' .
+                        'ON g.id = i.geolocalizacao_id ' .
+                    'INNER JOIN ' .
+                        'geolocalizacoes gc ' .
+                        'ON gc.id = c.geolocalizacao_id ' .
+                'WHERE ' .
+                    'i.id NOT IN ' .
+                    '(SELECT ' .
+                            'ie.instituicao_ensino_id ' .
                         'FROM ' .
-                            '(SELECT ier.instituicao_ensino_id, ier.rota_id, r.id as idRota, r.cidade_id as cidadeIdRota ' .
-                                'FROM instituicao_ensino_rota ier ' .
-                                'LEFT JOIN rota r ' .
-                                'ON ier.rota_id = r.id ' .
-                                'AND r.cidade_id != ?) ie ' .
-                        'WHERE ie.idVeiculo IS NULL)';
+                            '(SELECT ' .
+                                    'ier.instituicao_ensino_id, ' .
+                                    'ier.rota_id, ' .
+                                    'r.id AS idRota, ' .
+                                    'r.cidade_id AS cidadeIdRota ' .
+                                'FROM ' .
+                                    'instituicao_ensino_rota ier ' .
+                                    'LEFT JOIN ' .
+                                        'rotas r ' .
+                                        'ON ier.rota_id = r.id ' .
+                                        'AND r.cidade_id != ?) ie ' .
+                        'WHERE ' .
+                            'ie.idRota IS NULL)';
 
             $rsm = new ResultSetMapping();
             $rsm->addEntityResult('\App\Entities\InstituicaoEnsino', 'i');

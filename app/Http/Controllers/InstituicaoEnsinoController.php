@@ -36,6 +36,17 @@ class InstituicaoEnsinoController extends Controller
         return response()->json($instituicoesEnsino, 200);
     }
 
+    public function buscarInstituicoesSemRota($cidadeId)
+    {
+        $instituicoesEnsino = $this->instituicaoEnsinoService->buscarInstituicoesSemRota($cidadeId);
+
+        if (empty($instituicoesEnsino))
+        {
+            return response()->json('', 204);
+        }
+        return response()->json($instituicoesEnsino, 200);
+    }
+
     public function buscarInstituicoesComRota($cidadeId)
     {
         $instituicoesEnsino = $this->instituicaoEnsinoService->buscarInstituicoesComRota($cidadeId);

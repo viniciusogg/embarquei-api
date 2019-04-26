@@ -53,6 +53,7 @@ class Trajeto
     public function __construct()
     {
         $this->pontosParada = new ArrayCollection();
+//        $this->pontosParada->ma
     }
 
     public function getId()

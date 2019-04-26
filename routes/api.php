@@ -44,6 +44,7 @@ Route::group(['prefix' => 'instituicoesEnsino', 'middleware' => 'auth:api'], fun
     Route::get('/{id}', 'InstituicaoEnsinoController@show');
     Route::get('/semMotorista/{cidadeId}', 'InstituicaoEnsinoController@buscarInstituicoesSemMotorista');
     Route::get('/semVeiculo/{cidadeId}', 'InstituicaoEnsinoController@buscarInstituicoesSemVeiculo');
+    Route::get('/semRota/{cidadeId}', 'InstituicaoEnsinoController@buscarInstituicoesSemRota');
     Route::delete('/{id}', 'InstituicaoEnsinoController@destroy');
     Route::put('/{id}', 'InstituicaoEnsinoController@update');
 });
@@ -114,6 +115,7 @@ Route::get('pontosParada/{cidade}/{instituicaoEnsino}/{rota}', 'PontoParadaContr
 
 
 Route::get('trajetos/{cidade}/{instituicaoEnsino}', 'TrajetoController@buscarTrajetosByCidadeInstituicaoRota');
+Route::put('trajetos/ativado/{id}', 'TrajetoController@atualizarStatus');
 Route::apiResource('trajetos', 'TrajetoController')->middleware('auth:api');
 
 

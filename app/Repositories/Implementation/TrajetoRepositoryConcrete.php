@@ -42,6 +42,102 @@ class TrajetoRepositoryConcrete extends Repository implements TrajetoRepositoryI
         }
     }
 
+    public function atualizarStatus($trajeto)
+    {
+        return $this->update($trajeto);
+    }
+
+    public function atualizar($trajeto)
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->getConnection()->beginTransaction();
+
+        try
+        {
+            $this->removerPontosParada($entityManager, $trajeto);
+
+            $this->adicionarPontosParada($entityManager, $trajeto, $trajeto->getPontosParada());
+
+            $rota = $entityManager->find('\App\Entities\Rota', $trajeto->getRota()->getId());
+
+            $trajeto->setRota($rota);
+
+            $entityManager->merge($trajeto);
+            $entityManager->flush();
+//            $entityManager->refresh($trajeto);
+
+            $trajetoSalvo = $entityManager->merge($trajeto);
+
+            $entityManager->getConnection()->commit();
+
+            return $trajetoSalvo;
+        }
+        catch (Exception $ex)
+        {
+            $entityManager->getConnection()->rollBack();
+
+            throw $ex;
+        }
+        finally
+        {
+            $entityManager->close();
+        }
+    }
+
+    private function adicionarPontosParada($entityManager, $trajeto, $pontosParada) // NOVOS TRAJETO E PONTOS
+    {
+        $trajetoBanco = $entityManager->find('\App\Entities\Trajeto', $trajeto->getId());
+
+        foreach ($pontosParada as $pontoAtualizado)
+        {
+            $existe = false;
+
+            foreach ($trajetoBanco->getPontosParada() as $velhoPonto)
+            {
+                if ($velhoPonto->getId() == $pontoAtualizado->getId())
+                {
+                    $existe = true;
+
+                    break;
+                }
+            }
+            if ($existe == false)
+            {
+                $entityManager->persist($pontoAtualizado);
+            }
+            else
+            {
+                $entityManager->merge($pontoAtualizado);
+            }
+        }
+    }
+
+    private function removerPontosParada($entityManager, $trajeto) // NOVO TRAJETO
+    {
+        $trajetoBanco = $entityManager->find('\App\Entities\Trajeto', $trajeto->getId());
+
+        foreach ($trajetoBanco->getPontosParada() as $velhoPonto) // VELHOS PONTOS DE PARADA
+        {
+            $existe = false;
+
+            foreach ($trajeto->getPontosParada() as $novoPonto)
+            {
+                if ($novoPonto->getId() == $velhoPonto->getId())
+                {
+                    $existe = true;
+
+                    break;
+                }
+            }
+            if ($existe == false) // SE NÃO EXISTIR NA LISTA
+            {
+                $trajetoBanco->getPontosParada()->removeElement($velhoPonto);
+
+                $entityManager->remove($velhoPonto);
+            }
+        }
+    }
+
     protected function getTypeObject() 
     {
         return '\App\Entities\Trajeto';

@@ -13,13 +13,11 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
 {
     public function associarEPersistir($rota, $instituicoesEnsino, $idCidade)
     {
-        $instituicoesEnsino = [];
-        
         $entityManager = $this->getEntityManager();
         $entityManager->getConnection()->beginTransaction();
         
 //        $repositoryInstituicaoEnsino = $entityManager->getRepository('\App\Entities\InstituicaoEnsino');
-        $repositoryTrajeto = $entityManager->getRepository('\App\Entities\Trajeto');
+//        $repositoryTrajeto = $entityManager->getRepository('\App\Entities\Trajeto');
 //        $repositoryCidade = $entityManager->getRepository('\App\Entities\Cidade');
         
         try
@@ -41,10 +39,10 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
 //            {
 //                $rota->setInstituicoesEnsino($instituicoesEnsino);
 //            }
-            $rota = $this->associarRotaInstituicoes($rota, $instituicoesEnsino);
+            $rota = $this->associarRotaInstituicoes($entityManager, $rota, $instituicoesEnsino);
 
             $cidade = $entityManager->find('\App\Entities\Cidade', $idCidade);
-            
+
             if (empty($cidade))
             {
                 throw new NullFieldException();
@@ -54,12 +52,6 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
                 $rota->setCidade($cidade);
             }
             $entityManager->persist($rota);
-
-            // TALVEZ ESSE FOR SEJA DESNECESSÁRIO
-//            foreach ($rota->getTrajetos() as $trajeto)
-//            {
-//                $repositoryTrajeto->getEntityManager()->persist($trajeto);
-//            }
             $entityManager->flush();
             $entityManager->getConnection()->commit();
         }
@@ -88,9 +80,13 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
 
             $this->associarRotaInstituicoes($entityManager, $rotaSemInstituicoes, $instituicoesEnsino);
 
-            foreach ($rotaNoBanco->getTrajetos() as $trajetoNoBanco)
+//            foreach ($rotaNoBanco->getTrajetos() as $trajetoNoBanco)
+//            {
+//               $this->removerPontosParada($entityManager, $trajetoNoBanco);
+//            }
+            foreach ($rota->getTrajetos() as $novoTrajeto)
             {
-               $this->removerPontosParada($entityManager, $trajetoNoBanco);
+                $this->removerPontosParada($entityManager, $novoTrajeto);
             }
             foreach ($rota->getTrajetos() as $trajeto)
             {
@@ -125,26 +121,61 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
         }
     }
 
-    private function adicionarPontosParada($entityManager, $trajeto, $pontosParada)
+    private function adicionarPontosParada($entityManager, $trajeto, $pontosParada) // NOVOS TRAJETO E PONTOS
     {
-        foreach ($pontosParada as $pontoParada)
+        $trajetoBanco = $entityManager->find('\App\Entities\Trajeto', $trajeto->getId());
+
+        foreach ($pontosParada as $pontoAtualizado)
         {
-            $trajeto->getPontosParada()->add($pontoParada);
+//            $trajeto->getPontosParada()->add($pontoParada);
 
-            $pontoParada->setTrajeto($trajeto);
+//            $pontoParada->setTrajeto($trajeto);
 
-            $entityManager->persist($pontoParada);
+            $existe = false;
+
+            foreach ($trajetoBanco->getPontosParada() as $velhoPonto)
+            {
+                if ($velhoPonto->getId() == $pontoAtualizado->getId())
+                {
+                    $existe = true;
+
+//                    break;
+                }
+            }
+            if ($existe == false)
+            {
+                $entityManager->persist($pontoAtualizado);
+            }
+            else
+            {
+                $entityManager->merge($pontoAtualizado);
+            }
         }
-        return $trajeto;
     }
 
-    private function removerPontosParada($entityManager, $trajeto)
+    private function removerPontosParada($entityManager, $trajeto) // NOVO TRAJETO
     {
-        foreach ($trajeto->getPontosParada() as $pontoParada)
-        {
-            $trajeto->getPontosParada()->removeElement($pontoParada);
+        $trajetoBanco = $entityManager->find('\App\Entities\Trajeto', $trajeto->getId());
 
-            $entityManager->remove($pontoParada);
+        foreach ($trajetoBanco->getPontosParada() as $velhoPonto) // VELHOS PONTOS DE PARADA
+        {
+            $existe = false;
+
+            foreach ($trajeto->getPontosParada() as $novoPonto)
+            {
+                if ($novoPonto->getId() == $velhoPonto->getId())
+                {
+                    $existe = true;
+
+//                    break;
+                }
+            }
+            if ($existe == false) // SE NÃO EXISTIR NA LISTA
+            {
+                $trajetoBanco->getPontosParada()->removeElement($velhoPonto);
+
+                $entityManager->remove($velhoPonto);
+            }
         }
     }
 
@@ -191,7 +222,6 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
 
             $rota->getInstituicoesEnsino()->add($instituicaoBuscada);
 
-//            $entityManager->merge($instituicaoBuscada);
             if (isset($idRota))
             {
                 $entityManager->merge($rota);

@@ -20,7 +20,7 @@ class Rota
     protected $id;
 
     /** 
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      * @ORM\ManyToMany(targetEntity="InstituicaoEnsino", fetch="EAGER") 
      */
     protected $instituicoesEnsino;

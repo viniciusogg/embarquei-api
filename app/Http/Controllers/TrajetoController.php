@@ -23,6 +23,15 @@ class TrajetoController extends Controller
         return response()->json($novoTrajeto->toArray(), 200);
     }
 
+    public function atualizarStatus(Request $request, $id)
+    {
+        $trajeto = $request->all();
+
+        $trajetoAtualizado = $this->getService()->atualizarStatus($trajeto, $id);
+
+        return response()->json($trajetoAtualizado->toArray(), 200);
+    }
+
     public function buscarTrajetosByCidadeInstituicaoRota($cidade, $instituicaoEnsino)
     {  
         $trajetos = $this->trajetoService->

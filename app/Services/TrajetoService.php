@@ -28,6 +28,22 @@ class TrajetoService extends Service
         return $this->trajetoRepository->cadastrar($trajeto);
     }
 
+    public function atualizarStatus($dados, $id)
+    {
+        $trajeto = $this->criarInstancia($dados);
+        $trajeto->setId($id);
+
+        return $this->getRepository()->atualizarStatus($trajeto);
+    }
+
+    public function update($dados, $id)
+    {
+        $trajeto = $this->criarInstancia($dados);
+        $trajeto->setId($id);
+
+        return $this->getRepository()->atualizar($trajeto);
+    }
+
     public function getTrajetosByCidadeInstituicaoRota($cidadeId, $instituicaoId)
     {  
         $result = $this->trajetoRepository->getTrajetosByCidadeInstituicaoRota($cidadeId, $instituicaoId);
