@@ -23,40 +23,30 @@ class ListaPresencaService extends Service
         $this->listaPresencaRepository->cadastrar($listaPresenca, $dados['cidadeId'], $dados['instituicaoId']);
     }
 
-//    public function findById($id)
-//    {
-//        return $this->listaPresencaRepository->getById($id);
-//    }
-
-//    public function findAll()
-//    {
-//        $result = $this->listaPresencaRepository->getAll();
-//
-//        $listasPresenca = array();
-//
-//        foreach ($result as $listaPresenca) {
-//            $listasPresenca[] = $listaPresenca->toArray();
-//        }
-//
-//        return $listasPresenca;
-//    }
-    
-    public function update($dados, $id)
+    public function filtrarPorInstituicaoMotorista($idMotorista)
     {
-//        $listaPresenca = $this->criarInstanciaListaPresencaRepository();
-//        $listaPresenca->setId($id);
-//
-//        return  $this->listaPresencaRepository->update($dados, $listaPresenca);
+        $result = $this->getRepository()->filtrarPorInstituicaoMotorista($idMotorista);
+
+        $listasPresenca = array();
+
+        foreach ($result as $listaPresenca)
+        {
+            $listasPresenca[] = $listaPresenca;
+        }
+        return $listasPresenca;
     }
 
-    public function delete($id)
+    public function filtrarPorInstituicaoRota($idInstituicao)
     {
-//        $this->listaPresencaRepository->delete($id);
-    }
-    
-    public function adicionarAluno($checkinAluno, $cidadeId, $instituicaoId)
-    {
-        $this->listaPresencaRepository->adicionarAluno($checkinAluno, $cidadeId, $instituicaoId);
+        $result = $this->getRepository()->filtrarPorInstituicaoRota($idInstituicao);
+
+        $listasPresenca = array();
+
+        foreach ($result as $listaPresenca)
+        {
+            $listasPresenca[] = $listaPresenca;
+        }
+        return $listasPresenca;
     }
 
     protected function getRepository()

@@ -14,6 +14,28 @@ class ListaPresencaController extends Controller
         $this->listaPresencaService = $listaPresencaService;
     }
 
+    public function filtrarPorInstituicaoMotorista($idMotorista)
+    {
+        $listasPresenca = $this->listaPresencaService->filtrarPorInstituicaoMotorista($idMotorista);
+
+        if (empty($listasPresenca))
+        {
+            return response()->json('', 204);
+        }
+        return response()->json($listasPresenca, 200);
+    }
+
+    public function filtrarPorInstituicaoRota($idInstituicao)
+    {
+        $listasPresenca = $this->listaPresencaService->filtrarPorInstituicaoRota($idInstituicao);
+
+        if (empty($listasPresenca))
+        {
+            return response()->json('', 204);
+        }
+        return response()->json($listasPresenca, 200);
+    }
+
     protected function getService()
     {
         return $this->listaPresencaService;

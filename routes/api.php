@@ -80,7 +80,11 @@ Route::group(['prefix' => 'cidades'],  function() // , 'middleware'=> 'auth:api'
 
 
 
-Route::apiResource('listaPresenca', 'ListaPresencaController')->middleware('auth:api');;
+Route::apiResource('listaPresenca', 'ListaPresencaController')->middleware('auth:api');
+Route::get('listaPresenca/filtrarPorMotorista/{idMotorista}', 'ListaPresencaController@filtrarPorInstituicaoMotorista')->
+    middleware('auth:api');
+Route::get('listaPresenca/filtrarPorInstituicaoRota/{idInstituicao}', 'ListaPresencaController@filtrarPorInstituicaoRota')->
+    middleware('auth:api');
 
 
 

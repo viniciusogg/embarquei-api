@@ -18,7 +18,7 @@ class RotaController extends Controller
     {
         $rota = $this->rotaService->findByInstituicaoCidade($instituicaoId, $cidadeId);
 
-        return response()->json($rota, 200);
+        return response()->json($rota->toArray(), 200);
     }
 
     public function filtrarPorCidade($cidadeId)

@@ -91,7 +91,8 @@ class Rota
             'trajetos' => $this->retornarArrayObjetos($this->trajetos),
             'cidade' => [
                 'id' => $this->cidade->getId(), 
-                'nome' => $this->cidade->getNome()
+                'nome' => $this->cidade->getNome(),
+                'geolocalizacao' => $this->cidade->getGeolocalizacao()->toArray()
             ]
          );
     }

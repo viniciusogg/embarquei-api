@@ -30,11 +30,7 @@ class RotaService extends Service
     public function findByInstituicaoCidade($instituicaoId, $cidadeId)
     {
         $rota = $this->rotaRepository->getByInstituicaoCidade($instituicaoId, $cidadeId);
-
-        if ($rota)
-        {
-            $rota = $rota->toArray();
-        }
+//        error_log(json_encode($rota->toArray(), JSON_PRETTY_PRINT));
         return $rota;
     }
 
@@ -60,7 +56,7 @@ class RotaService extends Service
 
     protected function criarInstancia($dados)
     {
-        if (empty($dados['instituicoesEnsino']) || empty($dados['trajetos']))
+        if (empty($dados['trajetos']))
         {
             throw new NullFieldException();
         }

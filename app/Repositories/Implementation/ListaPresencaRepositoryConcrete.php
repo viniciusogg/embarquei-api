@@ -4,35 +4,40 @@ namespace App\Repositories\Implementation;
 
 use App\Repositories\Abstraction\Repository;
 use App\Repositories\Abstraction\ListaPresencaRepositoryInterface;
-use App\Entities\ListaPresenca;
 use Exception;
 
 class ListaPresencaRepositoryConcrete extends Repository implements ListaPresencaRepositoryInterface
 {
-    public function cadastrar($listaPresenca, $cidadeId, $instituicaoId)
+    public function filtrarPorInstituicaoMotorista($idMotorista)
     {
         $entityManager = $this->getEntityManager();
-        $entityManager->getConnection()->beginTransaction();
-        
-        $repositoryInstituicaoEnsino = $entityManager->getRepository('\App\Entities\InstituicaoEnsino');
-        $repositoryCidade = $entityManager->getRepository('\App\Entities\Cidade');
-        
+
         try
         {
-            $instituicaoEnsino = $repositoryInstituicaoEnsino->findOneBy(['id' => $instituicaoId]);
-            $cidade = $repositoryCidade->findOneBy(['id' => $cidadeId]);
-            
-            $listaPresenca->setInstituicaoEnsino($instituicaoEnsino);
-            $listaPresenca->setCidade($cidade);
-            
-            $entityManager->persist($listaPresenca);
-            $entityManager->flush();
-            $entityManager->getConnection()->commit();
+            $listasPresenca = [];
+
+            $motorista = $entityManager->find('\App\Entities\Motorista', $idMotorista);
+
+            foreach ($motorista->getInstituicoesEnsino() as $instituicao)
+            {
+                $query = $entityManager->createQuery(
+                    'SELECT lp FROM \App\Entities\ListaPresenca lp '
+                    . 'JOIN lp.instituicaoEnsino i '
+                    . 'WHERE i.id = :instituicaoId'
+                );
+                $query->setParameters(['instituicaoId' => $instituicao->getId()]);
+
+                $listaPresenca = $query->getOneOrNullResult();
+
+                if (isset($listaPresenca))
+                {
+                    $listasPresenca[] = $listaPresenca->toArray();
+                }
+            }
+            return $listasPresenca;
         }
         catch (Exception $ex)
         {
-            $entityManager->getConnection()->rollback();
-
             throw $ex;
         }
         finally
@@ -41,50 +46,44 @@ class ListaPresencaRepositoryConcrete extends Repository implements ListaPresenc
         }
     }
 
-    public function adicionarAluno($checkinAluno, $cidadeId, $instituicaoId)
+    public function filtrarPorInstituicaoRota($idInstituicao)
     {
         $entityManager = $this->getEntityManager();
-        $entityManager->getConnection()->beginTransaction();
-        
+
         try
         {
-//            $query = $entityManager->createQuery(
-//                'SELECT lp FROM \App\Entities\ListaPresenca lp '
-//                    . 'JOIN lp.cidade c JOIN lp.instituicaoEnsino ie '
-//                    . 'WHERE c.id = :cidadeId AND ie.id = :instituicaoId'
-//            );
-//            
-//            $query->setParameters(array('cidadeId' => $cidadeId, 'instituicaoId' => $instituicaoId));
-//
-//            $listaEncontrada = $query->getResult();
-//            
-//            if (!$listaEncontrada) // CRIA UMA LISTA DE PRESENÇA
-//            {
-//                $repositoryInstituicaoEnsino = $entityManager->getRepository('\App\Entities\InstituicaoEnsino');
-//                $repositoryCidade = $entityManager->getRepository('\App\Entities\Cidade');
-//
-//                $instituicaoEnsino = $repositoryInstituicaoEnsino->findOneBy(['id' => $instituicaoId]);
-//                $cidade = $repositoryCidade->findOneBy(['id' => $cidadeId]);
-//                
-//                $listaEncontrada = new ListaPresenca();
-//                $listaEncontrada->setInstituicaoEnsino($instituicaoEnsino);
-//                $listaEncontrada->setCidade($cidade);
-//                
-//                $entityManager->getRepository('\App\Entities\ListaPresenca')->
-//                        getEntityManager()->persist($listaEncontrada);
-//            }
-//                
-//            $listaEncontrada->getCheckins()->add($checkinAluno);
-//            $checkinAluno->setListaPresenca($listaEncontrada);
-//            
-//            $entityManager->merge($listaEncontrada);
-//            $entityManager->flush();
-//            $entityManager->getConnection()->commit();
+            $listasPresenca = [];
+
+//            $ = $entityManager->find('\App\Entities\Motorista', $idMotorista);
+            $query = $entityManager->createQuery(
+                'SELECT r FROM \App\Entities\Rota r '
+                . 'JOIN r.instituicoesEnsino ie '
+                . 'WHERE ie.id = :instituicaoId'
+            );
+            $query->setParameters(['instituicaoId' => $idInstituicao]);
+
+            $rota = $query->getOneOrNullResult();
+
+            foreach ($rota->getInstituicoesEnsino() as $instituicao)
+            {
+                $query = $entityManager->createQuery(
+                    'SELECT lp FROM \App\Entities\ListaPresenca lp '
+                    . 'JOIN lp.instituicaoEnsino i '
+                    . 'WHERE i.id = :instituicaoId'
+                );
+                $query->setParameters(['instituicaoId' => $instituicao->getId()]);
+
+                $listaPresenca = $query->getOneOrNullResult();
+
+                if (isset($listaPresenca))
+                {
+                    $listasPresenca[] = $listaPresenca->toArray();
+                }
+            }
+            return $listasPresenca;
         }
         catch (Exception $ex)
         {
-            $entityManager->getConnection()->rollback();
-
             throw $ex;
         }
         finally
@@ -92,7 +91,7 @@ class ListaPresencaRepositoryConcrete extends Repository implements ListaPresenc
             $entityManager->close();
         }
     }
-    
+
     protected function getTypeObject() 
     {
         return '\App\Entities\ListaPresenca';

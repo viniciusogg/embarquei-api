@@ -23,7 +23,8 @@ abstract class Service
 
         $objetos = array();
 
-        foreach ($result as $objeto) {
+        foreach ($result as $objeto)
+        {
             $objetos[] = $objeto->toArray();
         }
         return $objetos;

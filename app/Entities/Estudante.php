@@ -133,7 +133,7 @@ class Estudante extends Usuario
             'curso' => $this->curso->toArray(),
             'endereco' => $this->endereco->toArray(),
             'comprovanteMatricula' => $this->comprovanteMatricula->toArray(),
-            'pontosParada' => $this->retornarArrayObjetos($this->pontosParada)
+//            'pontosParada' => $this->retornarArrayObjetos($this->pontosParada)
          );
     }
 

@@ -15,30 +15,9 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
     {
         $entityManager = $this->getEntityManager();
         $entityManager->getConnection()->beginTransaction();
-        
-//        $repositoryInstituicaoEnsino = $entityManager->getRepository('\App\Entities\InstituicaoEnsino');
-//        $repositoryTrajeto = $entityManager->getRepository('\App\Entities\Trajeto');
-//        $repositoryCidade = $entityManager->getRepository('\App\Entities\Cidade');
-        
+
         try
-        {  
-//            foreach($instituicoesEnsino as $instituicao)
-//            {
-//                $instituicaoEnsino = $entityManager->find('\App\Entities\InstituicaoEnsino', $instituicao['id']);
-//
-//                if ($instituicaoEnsino)
-//                {
-//                    $instituicoesEnsino[] = $instituicaoEnsino;
-//                }
-//            }
-//            if (empty($instituicoesEnsino) || empty($rota->getTrajetos()))
-//            {
-//                throw new NullFieldException();
-//            }
-//            else
-//            {
-//                $rota->setInstituicoesEnsino($instituicoesEnsino);
-//            }
+        {
             $rota = $this->associarRotaInstituicoes($entityManager, $rota, $instituicoesEnsino);
 
             $cidade = $entityManager->find('\App\Entities\Cidade', $idCidade);
@@ -80,10 +59,6 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
 
             $this->associarRotaInstituicoes($entityManager, $rotaSemInstituicoes, $instituicoesEnsino);
 
-//            foreach ($rotaNoBanco->getTrajetos() as $trajetoNoBanco)
-//            {
-//               $this->removerPontosParada($entityManager, $trajetoNoBanco);
-//            }
             foreach ($rota->getTrajetos() as $novoTrajeto)
             {
                 $this->removerPontosParada($entityManager, $novoTrajeto);
@@ -127,10 +102,6 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
 
         foreach ($pontosParada as $pontoAtualizado)
         {
-//            $trajeto->getPontosParada()->add($pontoParada);
-
-//            $pontoParada->setTrajeto($trajeto);
-
             $existe = false;
 
             foreach ($trajetoBanco->getPontosParada() as $velhoPonto)
@@ -139,7 +110,7 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
                 {
                     $existe = true;
 
-//                    break;
+                    break;
                 }
             }
             if ($existe == false)
@@ -167,7 +138,7 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
                 {
                     $existe = true;
 
-//                    break;
+                    break;
                 }
             }
             if ($existe == false) // SE NÃO EXISTIR NA LISTA
@@ -271,7 +242,7 @@ class RotaRepositoryConcrete extends Repository implements RotaRepositoryInterfa
             );
             $query->setParameters(['instituicaoId' => $instituicaoId, 'cidadeId' => $cidadeId]);
 
-            $rota = $query->getResult();
+            $rota = $query->getOneOrNullResult();
 
             return $rota;
         }
