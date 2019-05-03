@@ -36,7 +36,7 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
             $instanciaEndereco->setLogradouro($endereco['logradouro']);
             $instanciaEndereco->setCidade($cidade);
 
-            $estudante->setAtivo(true);
+//            $estudante->setAtivo(true);
             $estudante->setEndereco($instanciaEndereco);
             $estudante->setPontosParada($pontosParadaEstudante);
             $estudante->setCurso($curso);
@@ -51,7 +51,7 @@ class EstudanteRepositoryConcrete extends UsuarioRepositoryConcrete implements E
 //            $entityManager->clear();
             $entityManager->flush();
 
-            $this->adicionarNaListaDePresenca($estudante, $entityManager);
+//            $this->adicionarNaListaDePresenca($estudante, $entityManager);
 
             $entityManager->getConnection()->commit();
 
